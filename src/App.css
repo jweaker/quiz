@@ -1,0 +1,12 @@
+.App {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  background: rgb(89, 133, 227);
+  background: radial-gradient(
+    circle,
+    rgba(89, 133, 227, 1) 0%,
+    rgba(20, 37, 74, 1) 100%
+  );
+}
