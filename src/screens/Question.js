@@ -17,6 +17,7 @@ export default function Question() {
   const [isComplete, setIsComplete] = useState(false);
   const [id, setId] = useState(parseInt(params.id));
   const [index, setIndex] = useState(parseInt(params.index));
+  const [zdone, setZdone] = useState(false);
   const type = parseInt(params.type);
   console.log(type, id, index);
   const window = DATA.parts[type - 1][id - 1];
@@ -47,27 +48,36 @@ export default function Question() {
         case "z":
         case "Z":
           if (type === 4) {
-            console.log(index + 1, DATA.parts[3][id - 1].length);
+            console.log(index + 1, DATA.parts[3][id - 1].length, zdone);
             if (index + 1 < DATA.parts[3][id - 1].length) {
+              console.log("id");
+
               setIndex((e) => e + 1);
-              setRightScore((e) => e + marks);
+              if (rightsTurn) setRightScore((e) => e + marks);
+              else setLeftScore((e) => e + marks);
             } else {
               audio.pause();
               setIsPlaying(false);
+            }
+            if (!zdone && index + 1 === DATA.parts[3][id - 1].length) {
+              console.log("zdone");
+              if (rightsTurn) setRightScore((e) => e + marks);
+              else setLeftScore((e) => e + marks);
+              setZdone(true);
             }
           } else {
             audio.pause();
             setIsPlaying(false);
             setIsComplete((e) => !e);
-            if (type === 1) {
-              setRightsTurn(false);
-            } else if (rightsTurn) {
-              setRightScore((e) => e + marks);
-              setRightsTurn((e) => !e);
-            } else {
-              setLeftScore((e) => e + marks);
-              setRightsTurn((e) => !e);
-            }
+            if (type === 1) setRightsTurn(false);
+
+            // else if (rightsTurn) {
+            //   setRightScore((e) => e + marks);
+            //   setRightsTurn((e) => !e);
+            // } else {
+            //   setLeftScore((e) => e + marks);
+            //   setRightsTurn((e) => !e);
+            // }
           }
           break;
         case "x":
@@ -80,12 +90,10 @@ export default function Question() {
               setIsPlaying(false);
             }
           } else {
-            if (type === 1) {
-              setRightsTurn(true);
-            }
             audio.pause();
             setIsPlaying(false);
             setIsComplete((e) => !e);
+            if (type === 1) setRightsTurn(true);
           }
           break;
 
@@ -103,7 +111,6 @@ export default function Question() {
           break;
         case "2":
           if (type !== 3) break;
-
           setDuration(120);
           setIsComplete(true);
           setIsPlaying(false);
@@ -115,9 +122,9 @@ export default function Question() {
           }, 0);
           break;
         case "3":
-          if (type !== 4) break;
-          if (id < DATA.parts[3].length) setId((e) => e + 1);
-          setIndex(0);
+          if (type !== 6) break;
+          setRightsTurn((e) => !e);
+          setDuration(180);
           setIsComplete(true);
           setIsPlaying(false);
           audio.volume = 0;
@@ -127,8 +134,25 @@ export default function Question() {
             setIsComplete(false);
           }, 0);
           break;
+        case "4":
+          if (type !== 4) break;
+          if (id < DATA.parts[3].length) {
+            setId((e) => e + 1);
+            setRightsTurn((e) => !e);
+          }
+          setIndex(0);
+          setIsComplete(true);
+          setZdone(false);
+          setIsPlaying(false);
+          audio.volume = 0;
+          audio.playbackRate = 0.5;
+          audio.currentTime = 0;
+          setTimeout(() => {
+            setIsComplete(false);
+          }, 0);
+          break;
         case "End":
-          navigate("/rate");
+          if (type === 3 || type === 2 || type === 6) navigate("/rate/" + type);
           break;
 
         default:
@@ -140,16 +164,14 @@ export default function Question() {
       audio,
       id,
       index,
-      setDuration,
-      setIsPlaying,
-      setIsComplete,
       setRightsTurn,
-      setLeftScore,
       setRightScore,
       type,
       marks,
       isPlaying,
+      setLeftScore,
       rightsTurn,
+      zdone,
     ]
   );
   useEffect(() => {
@@ -165,18 +187,25 @@ export default function Question() {
   }, [handleKeyDown, audio, audio2]);
   return (
     <div className="Question">
-      <Score right />
-      <Score />
-      <h1 className="Question-title">{text}</h1>
+      <Score right turn={rightsTurn && type !== 1 && type !== 3} />
+      <Score turn={!rightsTurn} />
+      <h1
+        className={"Question-title" + (type === 6 ? " Question-title-6" : "")}
+      >
+        {text}
+      </h1>
       <div
         className={
           "Question-timer-container" +
-          (isComplete && type !== 3 ? " Question-timer-container-complete" : "")
+          (isComplete && type !== 3 && type !== 6
+            ? " Question-timer-container-complete"
+            : "")
         }
       >
         {isComplete ? (
           type !== 3 &&
-          type !== 4 && <h1 className="Question-answer">{answer}</h1>
+          type !== 4 &&
+          type !== 6 && <h1 className="Question-answer">{answer}</h1>
         ) : (
           <CountdownCircleTimer
             isPlaying={isPlaying}

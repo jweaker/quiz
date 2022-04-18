@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
+import { useGlobalContext } from "./contexts/Global";
 import Home from "./screens/Home";
 import Question from "./screens/Question";
 import QuestionPicker from "./screens/QuestionPicker";
@@ -9,6 +10,7 @@ import Windows from "./screens/Windows";
 
 export default function App() {
   const [hideCursor, setHideCursor] = useState(false);
+  const { setRightsTurn } = useGlobalContext();
   const navigate = useNavigate();
   const handleKeyDown = useCallback(
     (e) => {
@@ -19,11 +21,14 @@ export default function App() {
         case "Pause":
           setHideCursor((e) => !e);
           break;
+        case "F8":
+          setRightsTurn((e) => !e);
+          break;
         default:
           break;
       }
     },
-    [navigate]
+    [navigate, setRightsTurn]
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -38,7 +43,7 @@ export default function App() {
         <Route path="windows" element={<Windows />} />
         <Route path="questionpicker/:id" element={<QuestionPicker />} />
         <Route path="question/:type/:id/:index" element={<Question />} />
-        <Route path="rate" element={<Rate />} />
+        <Route path="rate/:type" element={<Rate />} />
       </Routes>
     </div>
   );

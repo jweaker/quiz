@@ -7,6 +7,10 @@
   flex-direction: column;
   margin: 0;
 }
+.Score-score-turn {
+  box-shadow: 0 10px 15px 10px rgba(0, 0, 0, 0.3);
+  outline: solid 5px dodgerblue;
+}
 .Score-score {
   width: 8rem;
   height: 8rem;

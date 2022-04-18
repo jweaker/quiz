@@ -4,8 +4,10 @@ import IconButton from "../components/IconButton";
 import { MdWindow, MdSports } from "react-icons/md";
 import { IoMdChatbubbles } from "react-icons/io";
 import { RiTimerFill } from "react-icons/ri";
+import { GiJuggler } from "react-icons/gi";
 import "./Home.css";
 import { useGlobalContext } from "../contexts/Global";
+import Score from "../components/Score";
 export default function Home() {
   const {
     quickQuestion,
@@ -31,6 +33,9 @@ export default function Home() {
           } else if (nkey === 4) {
             navigate(`/question/4/1/0`);
             setDiscussionCounter(1);
+          } else if (nkey === 5) {
+          } else if (nkey === 6) {
+            navigate(`/question/6/1/0`);
           }
         } else setActive(nkey);
       } else
@@ -56,53 +61,66 @@ export default function Home() {
   }, [handleKeyDown]);
   return (
     <div className="Home">
+      <Score />
+      <Score right />
       <div className="Home-container">
         <IconButton
           title="سؤال السرعة"
           Icon={MdSports}
-          width="50rem"
+          width="25rem"
+          height="25rem"
           color="tomato"
-          height="20rem"
           fontSize={"4rem"}
           active={active === 1}
         />
         <IconButton
           title="النوافذ"
           Icon={MdWindow}
-          width="50rem"
-          height="20rem"
+          width="25rem"
+          height="25rem"
           fontSize={"4rem"}
           active={active === 2}
         />
         <IconButton
           title="المناظرة"
           Icon={IoMdChatbubbles}
-          width="50rem"
-          height="20rem"
+          width="25rem"
+          height="25rem"
           fontSize={"4rem"}
           active={active === 3}
         />
         <IconButton
           title="الرشق السريع"
           Icon={RiTimerFill}
-          width="50rem"
-          height="20rem"
+          width="25rem"
+          height="25rem"
           fontSize={"4rem"}
           active={active === 4}
         />
         <IconButton
-          title="النوافذ"
-          Icon={MdWindow}
-          width="50rem"
-          height="20rem"
-          fontSize={"4rem"}
+          title="المطاردة الشعرية"
+          Icon={() => (
+            <span
+              style={{
+                color: "dodgerblue",
+                fontSize: "18rem",
+                marginTop: "-11rem",
+                marginBottom: "-7rem",
+              }}
+            >
+              ت
+            </span>
+          )}
+          width="25rem"
+          height="25rem"
+          fontSize={"3rem"}
           active={active === 5}
         />
         <IconButton
-          title="النوافذ"
-          Icon={MdWindow}
-          width="50rem"
-          height="20rem"
+          title="المواهب"
+          Icon={GiJuggler}
+          width="25rem"
+          height="25rem"
           fontSize={"4rem"}
           active={active === 6}
         />

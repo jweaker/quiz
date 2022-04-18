@@ -1,7 +1,7 @@
 import { useGlobalContext } from "../contexts/Global";
 import "./Score.css";
 import DATA from "../config/data.json";
-export default function Score({ right = false }) {
+export default function Score({ right = false, turn }) {
   const { leftScore, rightScore } = useGlobalContext();
   const mscore = right ? rightScore : leftScore;
   const rightTeamName = DATA.rightTeamName;
@@ -13,7 +13,7 @@ export default function Score({ right = false }) {
         {teamName}
         {right}
       </h1>
-      <div className="Score-score">
+      <div className={"Score-score" + (turn ? " Score-score-turn" : "")}>
         <span className="Score-score-score">{mscore}</span>
       </div>
     </div>

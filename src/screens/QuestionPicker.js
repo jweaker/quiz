@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import DATA from "../config/data.json";
 import IconButton from "../components/IconButton";
+import Score from "../components/Score";
 export default function QuestionPicker() {
   const params = useParams();
   const id = parseInt(params.id);
@@ -33,6 +34,8 @@ export default function QuestionPicker() {
   }, [handleKeyDown]);
   return (
     <div className="QuestionPicker">
+      <Score right />
+      <Score />
       <h1 className="QuestionPicker-title">{DATA.parts[1][id - 1].name}</h1>
       <div className="QuestionPicker-container">
         {DATA.parts[1][id - 1].questions.map((text, i) => (

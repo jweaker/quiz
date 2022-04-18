@@ -23,6 +23,11 @@
   border: solid 10px white;
   border-radius: 3rem;
 }
+.Question-title-6 {
+  font-size: 10rem;
+  margin-top: -6rem;
+  border: none;
+}
 .Question-answer {
   margin-top: 0;
   animation: answer 0.4s 0.3s ease-in-out forwards 1;

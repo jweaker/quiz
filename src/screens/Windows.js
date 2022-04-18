@@ -4,6 +4,7 @@ import { MdSportsSoccer, MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Score from "../components/Score";
 
 export default function Windows() {
   const navigate = useNavigate();
@@ -34,6 +35,8 @@ export default function Windows() {
   }, [handleKeyDown]);
   return (
     <div className="Windows">
+      <Score right />
+      <Score />
       <h1 className="Windows-title">النوافذ</h1>
       <div className="Windows-container">
         <IconButton
