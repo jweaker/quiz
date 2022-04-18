@@ -9,7 +9,7 @@
   justify-content: center;
   transform: scale(0) translateY(500px);
   filter: blur(1.5rem);
-  animation: start 0.7s 0.3s ease-in-out forwards 1;
+  animation: starta 0.5s ease-in-out forwards 1;
 }
 .Question-title {
   color: white;
@@ -26,8 +26,11 @@
 .Question-answer {
   margin-top: 0;
   animation: answer 0.4s 0.3s ease-in-out forwards 1;
-  font-size: 4rem;
+  font-size: 3.5rem;
+  text-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
+  color: white;
   opacity: 0;
+  margin-bottom: 0;
   overflow: hidden;
   filter: blur(1.5rem);
   text-align: center;
@@ -56,9 +59,8 @@
 }
 .Question-timer-container-complete {
   border-radius: 3rem;
-  padding: 0.5rem;
   background: green;
-  width: 80%;
+  width: 65%;
   min-height: 10rem;
 }
 @keyframes answer {
@@ -71,9 +73,7 @@
     filter: blur(0);
   }
 }
-@keyframes start {
-  0% {
-  }
+@keyframes starta {
   100% {
     transform: scale(1) translateY(0);
     filter: blur(0);

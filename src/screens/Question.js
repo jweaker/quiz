@@ -1,75 +1,182 @@
 import "./Question.css";
-import WINDOWS from "../config/windows.json";
-import { useParams } from "react-router-dom";
+import DATA from "../config/data.json";
+import { useNavigate, useParams } from "react-router-dom";
 import sourceAudio from "../assets/tick.wav";
 import sourceAudio2 from "../assets/ding.wav";
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useCallback, useEffect, useState, useMemo, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Score from "../components/Score";
+import { useGlobalContext } from "../contexts/Global";
 export default function Question() {
+  const params = useParams();
+  const { rightsTurn, setLeftScore, setRightScore, setRightsTurn } =
+    useGlobalContext();
+  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const params = useParams();
-  const id = parseInt(params.id);
-  const index = parseInt(params.index);
-  const window = WINDOWS[id - 1];
-  const question = window.questions[index];
+  const [id, setId] = useState(parseInt(params.id));
+  const [index, setIndex] = useState(parseInt(params.index));
+  const type = parseInt(params.type);
+  console.log(type, id, index);
+  const window = DATA.parts[type - 1][id - 1];
+  const question =
+    type === 2 ? window.questions[index] : type === 4 ? window[index] : window;
   const text = question.text;
-  const duration = question.duration;
-  const audio = useRef();
-  const audio2 = useRef();
-  const initAudio = useMemo(() => {
-    audio.current = new Audio(sourceAudio);
-    audio.current.loop = true;
-    return () => {};
-  }, [audio]);
-  const initAudio2 = useMemo(() => {
-    audio2.current = new Audio(sourceAudio2);
-    return () => {};
-  }, [audio2]);
+  const hduration = question.duration;
+  const [duration, setDuration] = useState(hduration);
+  const marks = question.marks;
+  const [audio] = useState(new Audio(sourceAudio));
+  const [audio2] = useState(new Audio(sourceAudio2));
   const answer = question.answer;
   const handleKeyDown = useCallback(
     (e) => {
       switch (e.key) {
+        case "Escape":
+          audio?.pause?.();
+          break;
         case "Enter":
           console.log(isPlaying);
-          if (isPlaying) audio.current.pause();
-          else audio.current.play();
+          if (isPlaying) audio.pause();
+          else {
+            console.log("play");
+            audio.play();
+          }
           setIsPlaying((e) => !e);
           break;
-        case "End":
-          setIsComplete((e) => !e);
+        case "z":
+        case "Z":
+          if (type === 4) {
+            console.log(index + 1, DATA.parts[3][id - 1].length);
+            if (index + 1 < DATA.parts[3][id - 1].length) {
+              setIndex((e) => e + 1);
+              setRightScore((e) => e + marks);
+            } else {
+              audio.pause();
+              setIsPlaying(false);
+            }
+          } else {
+            audio.pause();
+            setIsPlaying(false);
+            setIsComplete((e) => !e);
+            if (type === 1) {
+              setRightsTurn(false);
+            } else if (rightsTurn) {
+              setRightScore((e) => e + marks);
+              setRightsTurn((e) => !e);
+            } else {
+              setLeftScore((e) => e + marks);
+              setRightsTurn((e) => !e);
+            }
+          }
           break;
+        case "x":
+        case "X":
+          if (type === 4) {
+            if (index + 1 < DATA.parts[3][id - 1].length)
+              setIndex((e) => e + 1);
+            else {
+              audio.pause();
+              setIsPlaying(false);
+            }
+          } else {
+            if (type === 1) {
+              setRightsTurn(true);
+            }
+            audio.pause();
+            setIsPlaying(false);
+            setIsComplete((e) => !e);
+          }
+          break;
+
+        case "1":
+          if (type !== 3) break;
+          setDuration(60);
+          setIsComplete(true);
+          setIsPlaying(false);
+          audio.volume = 0;
+          audio.playbackRate = 0.5;
+          audio.currentTime = 0;
+          setTimeout(() => {
+            setIsComplete(false);
+          }, 0);
+          break;
+        case "2":
+          if (type !== 3) break;
+
+          setDuration(120);
+          setIsComplete(true);
+          setIsPlaying(false);
+          audio.volume = 0;
+          audio.playbackRate = 0.5;
+          audio.currentTime = 0;
+          setTimeout(() => {
+            setIsComplete(false);
+          }, 0);
+          break;
+        case "3":
+          if (type !== 4) break;
+          if (id < DATA.parts[3].length) setId((e) => e + 1);
+          setIndex(0);
+          setIsComplete(true);
+          setIsPlaying(false);
+          audio.volume = 0;
+          audio.playbackRate = 0.5;
+          audio.currentTime = 0;
+          setTimeout(() => {
+            setIsComplete(false);
+          }, 0);
+          break;
+        case "End":
+          navigate("/rate");
+          break;
+
         default:
           break;
       }
     },
-    [isPlaying, audio]
+    [
+      navigate,
+      audio,
+      id,
+      index,
+      setDuration,
+      setIsPlaying,
+      setIsComplete,
+      setRightsTurn,
+      setLeftScore,
+      setRightScore,
+      type,
+      marks,
+      isPlaying,
+      rightsTurn,
+    ]
   );
   useEffect(() => {
-    initAudio();
-    initAudio2();
+    audio.loop = true;
+    audio.volume = 0;
+    audio.playbackRate = 0.5;
+    audio2.volume = 0.1;
     document.addEventListener("keydown", handleKeyDown);
     return () => {
-      audio.current?.pause();
-      audio2.current?.pause();
-      audio.current = undefined;
-      audio2.current = undefined;
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleKeyDown]);
+    // esslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleKeyDown, audio, audio2]);
   return (
     <div className="Question">
+      <Score right />
+      <Score />
       <h1 className="Question-title">{text}</h1>
       <div
         className={
           "Question-timer-container" +
-          (isComplete ? " Question-timer-container-complete" : "")
+          (isComplete && type !== 3 ? " Question-timer-container-complete" : "")
         }
       >
         {isComplete ? (
-          <h1 className="Question-title Question-answer">{answer}</h1>
+          type !== 3 &&
+          type !== 4 && <h1 className="Question-answer">{answer}</h1>
         ) : (
           <CountdownCircleTimer
             isPlaying={isPlaying}
@@ -81,13 +188,16 @@ export default function Question() {
             trailStrokeWidth={25}
             size={400}
             onUpdate={(e) => {
-              audio.current.playbackRate = 2 - e / duration;
-              audio.current.volume = (duration - e) / duration;
-              console.log(audio.current.playbackRate);
+              if (e === 14) audio.currentTime = 0;
+              console.log(audio.currentTime);
+              audio.playbackRate =
+                e <= 15 ? 2.5 - ((e + duration - 15) / duration) * 2 : 0.5;
+              audio.volume = e <= 15 ? 1 - (e + duration - 15) / duration : 0;
+              console.log(audio.playbackRate, audio.volume);
             }}
             onComplete={() => {
-              audio.current.pause();
-              audio2.current.play();
+              audio.pause();
+              audio2.play();
             }}
           >
             {({ remainingTime }) => (

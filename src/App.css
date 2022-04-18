@@ -10,3 +10,6 @@
     rgba(20, 37, 74, 1) 100%
   );
 }
+.hideCursor {
+  cursor: none;
+}

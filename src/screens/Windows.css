@@ -7,12 +7,9 @@
   flex-direction: column;
   align-items: center;
   justify-self: center;
-  background: rgb(89, 133, 227);
-  background: radial-gradient(
-    circle,
-    rgba(89, 133, 227, 1) 0%,
-    rgba(20, 37, 74, 1) 100%
-  );
+  animation: starta 0.5s ease-in-out forwards 1;
+  transform: scale(0) translateY(500px);
+  filter: blur(1.5rem);
 }
 .Windows-container {
   width: 100%;

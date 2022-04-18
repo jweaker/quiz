@@ -1,7 +1,7 @@
 import "./QuestionPicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import WINDOWS from "../config/windows.json";
+import DATA from "../config/data.json";
 import IconButton from "../components/IconButton";
 export default function QuestionPicker() {
   const params = useParams();
@@ -14,7 +14,7 @@ export default function QuestionPicker() {
       const nkey = parseInt(e.key);
       if (nkey >= 0 && nkey <= 5) {
         if (nkey === active && nkey !== 0) {
-          navigate("/question/" + id + "/" + (nkey - 1));
+          navigate("/question/2/" + id + "/" + (nkey - 1));
         } else setActive(nkey);
       } else
         switch (e.key) {
@@ -33,9 +33,9 @@ export default function QuestionPicker() {
   }, [handleKeyDown]);
   return (
     <div className="QuestionPicker">
-      <h1 className="QuestionPicker-title">{WINDOWS[id - 1].name}</h1>
+      <h1 className="QuestionPicker-title">{DATA.parts[1][id - 1].name}</h1>
       <div className="QuestionPicker-container">
-        {WINDOWS[id - 1].questions.map((text, i) => (
+        {DATA.parts[1][id - 1].questions.map((text, i) => (
           <IconButton
             key={i}
             active={active === i + 1}

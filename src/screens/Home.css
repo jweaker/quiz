@@ -3,10 +3,29 @@
   height: 100vh;
   padding: 0;
   margin: 0;
-  background: rgb(89, 133, 227);
-  background: radial-gradient(
-    circle,
-    rgba(89, 133, 227, 1) 0%,
-    rgba(20, 37, 74, 1) 100%
-  );
+  position: fixed;
+  overflow-y: scroll;
+}
+.Home-container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  align-items: center;
+  flex-direction: column;
+  animation: starta 0.5s ease-in-out forwards 1;
+  transform: scale(0) translateY(500px);
+  filter: blur(1.5rem);
+}
+.Home::-webkit-scrollbar {
+  display: none;
+}
+@keyframes starta {
+  100% {
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
 }
