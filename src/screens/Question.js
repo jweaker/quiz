@@ -152,7 +152,7 @@ export default function Question() {
           }, 0);
           break;
         case "End":
-          if (type === 3 || type === 2 || type === 6) navigate("/rate/" + type);
+          if (type === 3 || type === 2 || type === 6 ) navigate("/rate/" + type);
           break;
 
         default:
@@ -190,14 +190,14 @@ export default function Question() {
       <Score right turn={rightsTurn && type !== 1 && type !== 3} />
       <Score turn={!rightsTurn} />
       <h1
-        className={"Question-title" + (type === 6 ? " Question-title-6" : "")}
+        className={"Question-title" + (type === 6 || type === 5? " Question-title-6" : "")}
       >
         {text}
       </h1>
       <div
-        className={
-          "Question-timer-container" +
-          (isComplete && type !== 3 && type !== 6
+      className={
+        "Question-timer-container" +
+        (isComplete && type !== 3 && type !== 6
             ? " Question-timer-container-complete"
             : "")
         }
@@ -206,7 +206,7 @@ export default function Question() {
           type !== 3 &&
           type !== 4 &&
           type !== 6 && <h1 className="Question-answer">{answer}</h1>
-        ) : (
+          ) : (
           <CountdownCircleTimer
             isPlaying={isPlaying}
             duration={duration}
@@ -215,7 +215,7 @@ export default function Question() {
             trailColor="white"
             strokeWidth={20}
             trailStrokeWidth={25}
-            size={400}
+            size={600}
             onUpdate={(e) => {
               if (e === 14) audio.currentTime = 0;
               console.log(audio.currentTime);
@@ -235,6 +235,7 @@ export default function Question() {
           </CountdownCircleTimer>
         )}
       </div>
+      
     </div>
   );
 }

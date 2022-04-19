@@ -16,8 +16,8 @@ export function useGlobalContext() {
 }
 export function GlobalContextProvider({ children }) {
   useEffect(() => {}, []);
-  const [rightScore, setRightScore] = useState(0);
-  const [leftScore, setLeftScore] = useState(0);
+  const [rightScore, setRightScore] = useState(20);
+  const [leftScore, setLeftScore] = useState(6);
   const [rightsTurn, setRightsTurn] = useState(false);
   const [quickQuestion, setQuickQuestion] = useState(0);
   const [discussionCounter, setDiscussionCounter] = useState(0);

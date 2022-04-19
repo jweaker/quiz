@@ -14,11 +14,12 @@ export default function App() {
   const navigate = useNavigate();
   const handleKeyDown = useCallback(
     (e) => {
+      console.log(e.key)
       switch (e.key) {
         case "Escape":
           navigate(-1);
           break;
-        case "Pause":
+        case "PageUp":
           setHideCursor((e) => !e);
           break;
         case "F8":

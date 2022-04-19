@@ -8,6 +8,8 @@
   justify-content: center;
   align-items: center;
   overflow-y: scroll;
+  flex-direction: column;
+
 }
 .Home-container {
   width: 60%;
@@ -22,10 +24,25 @@
   animation: starta 0.5s ease-in-out forwards 1;
   transform: scale(0) translateY(500px);
   filter: blur(1.5rem);
+
 }
 .Home::-webkit-scrollbar {
   display: none;
 }
+.logob{
+  height: 30rem;
+  position: absolute;
+  right: 1rem;
+  top:1rem;
+}
+.logom{
+  height: 27rem;
+  position: absolute;
+  left: 1rem;
+  top:1rem;
+}
+
+
 @keyframes starta {
   100% {
     transform: scale(1) translateY(0);

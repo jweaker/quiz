@@ -8,11 +8,13 @@ import { GiJuggler } from "react-icons/gi";
 import "./Home.css";
 import { useGlobalContext } from "../contexts/Global";
 import Score from "../components/Score";
+import logob from "../assets/logob.png"
+import logom from "../assets/logom.png"
+
 export default function Home() {
   const {
     quickQuestion,
     setQuickQuestion,
-    discussionCounter,
     setDiscussionCounter,
   } = useGlobalContext();
   const navigate = useNavigate();
@@ -28,12 +30,13 @@ export default function Home() {
             setQuickQuestion(1);
           } else if (nkey === 2) navigate(`/windows`);
           else if (nkey === 3) {
-            navigate(`/question/3/${discussionCounter + 1}/0`);
+            navigate(`/question/3/1/0`);
             setDiscussionCounter(1);
           } else if (nkey === 4) {
             navigate(`/question/4/1/0`);
             setDiscussionCounter(1);
           } else if (nkey === 5) {
+            navigate(`/question/5/1/0`);
           } else if (nkey === 6) {
             navigate(`/question/6/1/0`);
           }
@@ -49,7 +52,6 @@ export default function Home() {
       navigate,
       setQuickQuestion,
       quickQuestion,
-      discussionCounter,
       setDiscussionCounter,
     ]
   );
@@ -63,6 +65,9 @@ export default function Home() {
     <div className="Home">
       <Score />
       <Score right />
+      <img src={logob} alt="" srcset="" className="logob" />
+      <img src={logom} alt="" srcset="" className="logom" />
+
       <div className="Home-container">
         <IconButton
           title="سؤال السرعة"
