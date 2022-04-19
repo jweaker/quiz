@@ -1,5 +1,4 @@
 import "./Question.css";
-import DATA from "../config/data.json";
 import { useNavigate, useParams } from "react-router-dom";
 import sourceAudio from "../assets/tick.wav";
 import sourceAudio2 from "../assets/ding.wav";
@@ -8,10 +7,17 @@ import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useCallback, useEffect, useState } from "react";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
+import { GiInfinity } from "react-icons/gi";
 export default function Question() {
   const params = useParams();
-  const { rightsTurn, setLeftScore, setRightScore, setRightsTurn } =
-    useGlobalContext();
+  const {
+    rightsTurn,
+    setLeftScore,
+    setRightScore,
+    setRightsTurn,
+    DATA,
+    setDATA,
+  } = useGlobalContext();
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
@@ -152,14 +158,25 @@ export default function Question() {
           }, 0);
           break;
         case "End":
-          if (type === 3 || type === 2 || type === 6 ) navigate("/rate/" + type);
+          if (type === 3 || type === 2 || type === 6) navigate("/rate/" + type);
           break;
-
+        case "PageDown":
+          if (type !== 2) break;
+          setDATA((prevState) => {
+            const DATA = { ...prevState };
+            console.log(DATA);
+            DATA.parts[1][id - 1].questions[index].done = !question.done;
+            return DATA;
+          });
+          break;
         default:
           break;
       }
     },
     [
+      setDATA,
+      DATA,
+      question,
       navigate,
       audio,
       id,
@@ -190,14 +207,17 @@ export default function Question() {
       <Score right turn={rightsTurn && type !== 1 && type !== 3} />
       <Score turn={!rightsTurn} />
       <h1
-        className={"Question-title" + (type === 6 || type === 5? " Question-title-6" : "")}
+        className={
+          "Question-title" +
+          (type === 6 || type === 5 ? " Question-title-6" : "")
+        }
       >
         {text}
       </h1>
       <div
-      className={
-        "Question-timer-container" +
-        (isComplete && type !== 3 && type !== 6
+        className={
+          "Question-timer-container" +
+          (isComplete && type !== 3 && type !== 6
             ? " Question-timer-container-complete"
             : "")
         }
@@ -206,7 +226,9 @@ export default function Question() {
           type !== 3 &&
           type !== 4 &&
           type !== 6 && <h1 className="Question-answer">{answer}</h1>
-          ) : (
+        ) : type === 1 ? (
+          <GiInfinity size={500} color="white" className="infinity" />
+        ) : (
           <CountdownCircleTimer
             isPlaying={isPlaying}
             duration={duration}
@@ -235,7 +257,6 @@ export default function Question() {
           </CountdownCircleTimer>
         )}
       </div>
-      
     </div>
   );
 }

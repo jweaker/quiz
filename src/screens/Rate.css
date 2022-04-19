@@ -77,13 +77,13 @@
 .Rate-input:focus {
   border: none;
 }
-.Rate-input::-webkit-outer-spin-button,
-.Rate-input::-webkit-inner-spin-button {
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-.Rate-input[type="number"] {
+input[type="number"] {
   -moz-appearance: textfield;
 }

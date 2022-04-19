@@ -6,16 +6,30 @@ export default function IconButton({
   width,
   height,
   fontSize,
+  done = false,
   active = false, // if true, will be highlighted
 }) {
   return (
     <div
-      className={"IconButton" + (active ? " IconButton-active" : "")}
+      className={
+        "IconButton" +
+        (active ? " IconButton-active" : "") +
+        (done ? " IconButton-done" : "")
+      }
       style={{ width, height }}
     >
-      {Icon && <Icon className="IconButton-icon" color={color} />}
+      {Icon && (
+        <Icon className="IconButton-icon" color={done ? "white" : color} />
+      )}
       <span
-        className={"IconButton-title" + (Icon ? "" : " IconButton-title-big")}
+        className={
+          "IconButton-title" +
+          (Icon
+            ? ""
+            : done
+            ? " IconButton-title-done"
+            : " IconButton-title-big")
+        }
         style={{ fontSize }}
       >
         {title}

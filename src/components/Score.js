@@ -1,9 +1,11 @@
 import { useGlobalContext } from "../contexts/Global";
 import "./Score.css";
-import DATA from "../config/data.json";
+
 export default function Score({ right = false, turn }) {
-  const { leftScore, rightScore } = useGlobalContext();
+  const { leftScore, rightScore, setRightScore, setLeftScore, DATA } =
+    useGlobalContext();
   const mscore = right ? rightScore : leftScore;
+  const mset = right ? setRightScore : setLeftScore;
   const rightTeamName = DATA.rightTeamName;
   const leftTeamName = DATA.leftTeamName;
   const teamName = right ? rightTeamName : leftTeamName;
@@ -14,7 +16,12 @@ export default function Score({ right = false, turn }) {
         {right}
       </h1>
       <div className={"Score-score" + (turn ? " Score-score-turn" : "")}>
-        <span className="Score-score-score">{mscore}</span>
+        <input
+          type="number"
+          className="Score-score-score"
+          value={mscore}
+          onChange={(e) => mset(e.target.value)}
+        />
       </div>
     </div>
   );

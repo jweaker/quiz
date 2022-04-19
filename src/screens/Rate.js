@@ -2,13 +2,12 @@ import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGlobalContext } from "../contexts/Global";
 import "./Rate.css";
-import DATA from "../config/data.json";
 
 export default function Rate() {
   const navigate = useNavigate();
   const { rightsTurn, setRightsTurn } = useGlobalContext();
   const params = useParams();
-  const { setLeftScore, setRightScore } = useGlobalContext();
+  const { setLeftScore, setRightScore, DATA } = useGlobalContext();
   const [rjudje, setRjudje] = useState();
   const [rguest, seRguest] = useState();
   const [raudience, SetRaudience] = useState();

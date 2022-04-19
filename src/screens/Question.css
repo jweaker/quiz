@@ -23,6 +23,16 @@
   border: solid 15px white;
   border-radius: 3rem;
 }
+.infinity {
+  padding: 50px;
+  border-radius: 300px;
+  background: rgb(48, 205, 227, 0);
+  background: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 0.5) 0%,
+    rgba(4, 52, 182, 0) 80%
+  );
+}
 .Question-title-6 {
   font-size: 15rem;
   margin-top: -6rem;

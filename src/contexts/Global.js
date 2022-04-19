@@ -1,4 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from "react";
+import data from "../config/data.json";
 const MyContext = createContext({
   rightScore: 0,
   setRightScore: () => {},
@@ -16,16 +17,20 @@ export function useGlobalContext() {
 }
 export function GlobalContextProvider({ children }) {
   useEffect(() => {}, []);
-  const [rightScore, setRightScore] = useState(20);
-  const [leftScore, setLeftScore] = useState(6);
+  const [rightScore, setRightScore] = useState(0);
+  const [leftScore, setLeftScore] = useState(0);
   const [rightsTurn, setRightsTurn] = useState(false);
   const [quickQuestion, setQuickQuestion] = useState(0);
+  const [DATA, setDATA] = useState(data);
+
   const [discussionCounter, setDiscussionCounter] = useState(0);
   const value = {
     rightScore,
     setRightScore,
     leftScore,
     setLeftScore,
+    DATA,
+    setDATA,
     rightsTurn,
     setRightsTurn,
     quickQuestion,

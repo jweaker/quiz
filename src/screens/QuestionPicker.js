@@ -1,14 +1,15 @@
 import "./QuestionPicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import DATA from "../config/data.json";
 import IconButton from "../components/IconButton";
 import Score from "../components/Score";
+import { useGlobalContext } from "../contexts/Global";
 export default function QuestionPicker() {
   const params = useParams();
   const id = parseInt(params.id);
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+  const { DATA } = useGlobalContext();
   const handleKeyDown = useCallback(
     (e) => {
       console.log(e.key);
@@ -41,6 +42,7 @@ export default function QuestionPicker() {
         {DATA.parts[1][id - 1].questions.map((text, i) => (
           <IconButton
             key={i}
+            done={DATA.parts[1][id - 1].questions[i]?.done}
             active={active === i + 1}
             title={i + 1}
             onPress={() => console.log("1")}

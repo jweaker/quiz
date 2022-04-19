@@ -19,13 +19,23 @@
 .IconButton-icon {
   width: 20rem;
   height: 20rem;
-  color: dodgerblue;
 }
 .IconButton-title {
   font-size: 3em;
   font-weight: bold;
   color: black;
   text-align: center;
+}
+.IconButton-done {
+  background-color: gray;
+}
+.IconButton-done .IconButton-title {
+  color: white;
+}
+.IconButton-title-done {
+  font-size: 15rem;
+  color: white;
+  font-weight: bold;
 }
 .IconButton-title-big {
   font-size: 15rem;
