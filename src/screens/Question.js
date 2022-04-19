@@ -31,6 +31,8 @@ export default function Question() {
     type === 2 ? window.questions[index] : type === 4 ? window[index] : window;
   const text = question.text;
   const hduration = question.duration;
+  const [leftWrong,setLeftWrong] = useState(0);
+  const [rightWrong,setRiteWrong] = useState(0);
   const [duration, setDuration] = useState(hduration);
   const marks = question.marks;
   const [audio] = useState(new Audio(sourceAudio));
@@ -53,7 +55,18 @@ export default function Question() {
           break;
         case "z":
         case "Z":
-          if (type === 4) {
+          if(type === 5){
+          setDuration(30);
+          setRightsTurn(e=>!e);
+          setIsComplete(true);
+          audio.volume = 0;
+          audio.playbackRate = 0.5;
+          audio.currentTime = 0;
+          setTimeout(() => {
+            setIsComplete(false);
+          }, 0);
+          }
+          else if (type === 4) {
             console.log(index + 1, DATA.parts[3][id - 1].length, zdone);
             if (index + 1 < DATA.parts[3][id - 1].length) {
               console.log("id");
@@ -88,6 +101,20 @@ export default function Question() {
           break;
         case "x":
         case "X":
+          if(type === 5){
+            if(rightsTurn)setRiteWrong((e)=>e+1)
+            else  setLeftWrong(e=>e+1)
+            setRightsTurn(e=>!e);
+            setDuration(30);
+            setIsComplete(true);
+            audio.volume = 0;
+            audio.playbackRate = 0.5;
+            audio.currentTime = 0;
+            setTimeout(() => {
+              setIsComplete(false);
+            }, 0);
+            }
+            else
           if (type === 4) {
             if (index + 1 < DATA.parts[3][id - 1].length)
               setIndex((e) => e + 1);
@@ -159,6 +186,12 @@ export default function Question() {
           break;
         case "End":
           if (type === 3 || type === 2 || type === 6) navigate("/rate/" + type);
+          if(type === 5 ) {
+            const rscore = 15 - (Math.min(3,rightWrong) * 5);
+            setRightScore(e=>e+rscore);
+            const lscore = 15 - (Math.min(3,leftWrong) * 5);
+            setLeftScore(e=>e+lscore);
+          }
           break;
         case "PageDown":
           if (type !== 2) break;
@@ -174,7 +207,10 @@ export default function Question() {
       }
     },
     [
+
       setDATA,
+      leftWrong,
+      rightWrong,
       DATA,
       question,
       navigate,
@@ -209,7 +245,7 @@ export default function Question() {
       <h1
         className={
           "Question-title" +
-          (type === 6 || type === 5 ? " Question-title-6" : "")
+          (type === 6 || type === 5 || type ===3  ? " Question-title-6" : "")
         }
       >
         {text}
@@ -226,7 +262,7 @@ export default function Question() {
           type !== 3 &&
           type !== 4 &&
           type !== 6 && <h1 className="Question-answer">{answer}</h1>
-        ) : type === 1 ? (
+        ) : type === 1 || type ===7 ? (
           <GiInfinity size={500} color="white" className="infinity" />
         ) : (
           <CountdownCircleTimer

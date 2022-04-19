@@ -15,6 +15,8 @@ export default function Home() {
   const {
     quickQuestion,
     setQuickQuestion,
+    audienceQuesion,
+    setAudienceQuestion,
     setDiscussionCounter,
   } = useGlobalContext();
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ export default function Home() {
     (e) => {
       console.log(e.key);
       const nkey = parseInt(e.key);
-      if (nkey >= 0 && nkey <= 6) {
+      if (nkey >= 0 && nkey <= 7) {
         if (nkey === active && nkey !== 0) {
           if (nkey === 1) {
             navigate(`/question/1/${quickQuestion + 1}/0`);
@@ -39,6 +41,9 @@ export default function Home() {
             navigate(`/question/5/1/0`);
           } else if (nkey === 6) {
             navigate(`/question/6/1/0`);
+          }else if (nkey === 7) {
+            navigate(`/question/7/${audienceQuesion + 1}/0`);
+            setAudienceQuestion(e=>e+1);
           }
         } else setActive(nkey);
       } else
@@ -48,6 +53,7 @@ export default function Home() {
         }
     },
     [
+      audienceQuesion,setAudienceQuestion,
       active,
       navigate,
       setQuickQuestion,

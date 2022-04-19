@@ -21,11 +21,14 @@ export function GlobalContextProvider({ children }) {
   const [leftScore, setLeftScore] = useState(0);
   const [rightsTurn, setRightsTurn] = useState(false);
   const [quickQuestion, setQuickQuestion] = useState(0);
+  const [audienceQuesion, setAudienceQuestion] = useState(0);
   const [DATA, setDATA] = useState(data);
 
   const [discussionCounter, setDiscussionCounter] = useState(0);
   const value = {
     rightScore,
+    setAudienceQuestion,
+    audienceQuesion,
     setRightScore,
     leftScore,
     setLeftScore,
