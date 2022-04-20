@@ -20,7 +20,7 @@ export default function Score({ right = false, turn }) {
           type="number"
           className="Score-score-score"
           value={mscore}
-          onChange={(e) => mset(e.target.value)}
+          onChange={(e) => mset(parseInt(e.target.value))}
         />
       </div>
     </div>
