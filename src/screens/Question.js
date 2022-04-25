@@ -132,7 +132,7 @@ export default function Question() {
 
         case "1":
           if (type !== 3) break;
-          setDuration(60);
+          setDuration(45);
           setIsComplete(true);
           setIsPlaying(false);
           audio.volume = 0;
@@ -144,7 +144,7 @@ export default function Question() {
           break;
         case "2":
           if (type !== 3) break;
-          setDuration(120);
+          setDuration(90);
           setIsComplete(true);
           setIsPlaying(false);
           audio.volume = 0;
@@ -157,7 +157,7 @@ export default function Question() {
         case "3":
           if (type !== 6) break;
           setRightsTurn((e) => !e);
-          setDuration(180);
+          setDuration(120);
           setIsComplete(true);
           setIsPlaying(false);
           audio.volume = 0;
@@ -207,7 +207,6 @@ export default function Question() {
       }
     },
     [
-
       setDATA,
       leftWrong,
       rightWrong,
@@ -245,10 +244,10 @@ export default function Question() {
       <h1
         className={
           "Question-title" +
-          (type === 6 || type === 5 || type ===3  ? " Question-title-6" : "")
+          (type === 6 || type === 5 || type ===3 || ((type === 4||type===1) && !isPlaying) ? " Question-title-6" : "")
         }
       >
-        {text}
+        {!isPlaying? type ===4 ? "متى؟":type===1?"سؤال السرعة":text :text}
       </h1>
       <div
         className={

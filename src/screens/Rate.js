@@ -99,15 +99,7 @@ export default function Rate() {
           </div>
           {type !== 2 && (
             <>
-              <div className="Rate-vcontainer">
-                <span className="Rate-title">الضيف</span>
-                <input
-                  className="Rate-input"
-                  type="number"
-                  value={rguest}
-                  onChange={(e) => seRguest(e.target.value)}
-                />
-              </div>
+              
               <div className="Rate-vcontainer">
                 <span className="Rate-title">الجمهور</span>
                 <input
@@ -142,14 +134,7 @@ export default function Rate() {
                 onChange={(e) => setLjudje(e.target.value)}
               />
             </div>
-            <div className="Rate-vcontainer">
-              <input
-                className="Rate-input"
-                type="number"
-                value={lguest}
-                onChange={(e) => setLguest(e.target.value)}
-              />
-            </div>
+       
             <div className="Rate-vcontainer">
               <input
                 className="Rate-input"
