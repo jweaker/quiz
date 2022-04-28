@@ -9,7 +9,7 @@ export default function Rate() {
   const params = useParams();
   const { setLeftScore, setRightScore, DATA } = useGlobalContext();
   const [rjudje, setRjudje] = useState();
-  const [rguest, seRguest] = useState();
+  const [rguest, setRguest] = useState();
   const [raudience, SetRaudience] = useState();
   const [ljudje, setLjudje] = useState();
   const [lguest, setLguest] = useState();
@@ -76,12 +76,27 @@ export default function Rate() {
                 {parseInt(rjudje ?? 0) +
                   parseInt(rguest ?? 0) +
                   parseInt(raudience ?? 0) ===
-                0
+                  0
                   ? ""
                   : parseInt(rjudje ?? 0) +
-                    parseInt(rguest ?? 0) +
-                    parseInt(raudience ?? 0)}
+                  parseInt(rguest ?? 0) +
+                  parseInt(raudience ?? 0)}
               </span>
+            </div>
+          )}
+          {type !== 2 && (
+            <div className="Rate-vcontainer">
+              <span
+                className={"Rate-title" + (type === 2 ? " Rate-title-2" : "")}
+              >
+                الضيف
+              </span>
+              <input
+                className={"Rate-input" + (type === 2 ? " Rate-input-2" : "")}
+                type="number"
+                value={rguest}
+                onChange={(e) => setRguest(e.target.value)}
+              />
             </div>
           )}
           <div className="Rate-vcontainer">
@@ -99,7 +114,7 @@ export default function Rate() {
           </div>
           {type !== 2 && (
             <>
-              
+
               <div className="Rate-vcontainer">
                 <span className="Rate-title">الجمهور</span>
                 <input
@@ -119,13 +134,23 @@ export default function Rate() {
                 {parseInt(ljudje ?? 0) +
                   parseInt(lguest ?? 0) +
                   parseInt(laudience ?? 0) ===
-                0
+                  0
                   ? ""
                   : parseInt(ljudje ?? 0) +
-                    parseInt(lguest ?? 0) +
-                    parseInt(laudience ?? 0)}
+                  parseInt(lguest ?? 0) +
+                  parseInt(laudience ?? 0)}
               </span>
             </div>
+            {type !== 2 && (
+              <div className="Rate-vcontainer">
+                <input
+                  className="Rate-input"
+                  type="number"
+                  value={lguest}
+                  onChange={(e) => setLguest(e.target.value)}
+                />
+              </div>
+            )}
             <div className="Rate-vcontainer">
               <input
                 className="Rate-input"
@@ -134,7 +159,7 @@ export default function Rate() {
                 onChange={(e) => setLjudje(e.target.value)}
               />
             </div>
-       
+
             <div className="Rate-vcontainer">
               <input
                 className="Rate-input"
