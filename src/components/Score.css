@@ -9,7 +9,7 @@
 }
 .Score-score-turn {
   box-shadow: 0 10px 15px 10px rgba(0, 0, 0, 0.3);
-  outline: solid 5px dodgerblue;
+  outline: solid 10px dodgerblue;
 }
 .Score-score {
   width: 12rem;

@@ -76,11 +76,11 @@ export default function Rate() {
                 {parseInt(rjudje ?? 0) +
                   parseInt(rguest ?? 0) +
                   parseInt(raudience ?? 0) ===
-                  0
+                0
                   ? ""
                   : parseInt(rjudje ?? 0) +
-                  parseInt(rguest ?? 0) +
-                  parseInt(raudience ?? 0)}
+                    parseInt(rguest ?? 0) +
+                    parseInt(raudience ?? 0)}
               </span>
             </div>
           )}
@@ -114,7 +114,6 @@ export default function Rate() {
           </div>
           {type !== 2 && (
             <>
-
               <div className="Rate-vcontainer">
                 <span className="Rate-title">الجمهور</span>
                 <input
@@ -134,11 +133,11 @@ export default function Rate() {
                 {parseInt(ljudje ?? 0) +
                   parseInt(lguest ?? 0) +
                   parseInt(laudience ?? 0) ===
-                  0
+                0
                   ? ""
                   : parseInt(ljudje ?? 0) +
-                  parseInt(lguest ?? 0) +
-                  parseInt(laudience ?? 0)}
+                    parseInt(lguest ?? 0) +
+                    parseInt(laudience ?? 0)}
               </span>
             </div>
             {type !== 2 && (

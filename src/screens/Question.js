@@ -13,6 +13,8 @@ export default function Question() {
   const {
     rightsTurn,
     setLeftScore,
+    setTurned,
+    turned,
     setRightScore,
     setRightsTurn,
     DATA,
@@ -24,6 +26,7 @@ export default function Question() {
   const [id, setId] = useState(parseInt(params.id));
   const [index, setIndex] = useState(parseInt(params.index));
   const [zdone, setZdone] = useState(false);
+  const [file, setFile] = useState();
   const type = parseInt(params.type);
   console.log(type, id, index);
   const window = DATA.parts[type - 1][id - 1];
@@ -31,12 +34,14 @@ export default function Question() {
     type === 2 ? window.questions[index] : type === 4 ? window[index] : window;
   const text = question.text;
   const hduration = question.duration;
+  const fileLoc = question.file;
+  const isImage = question.isImage;
   const [leftWrong, setLeftWrong] = useState(0);
   const [rightWrong, setRiteWrong] = useState(0);
   const [duration, setDuration] = useState(hduration);
-  const marks = question.marks;
   const [audio] = useState(new Audio(sourceAudio));
   const [audio2] = useState(new Audio(sourceAudio2));
+  const [showOverlay, setShowOverlay] = useState(false);
   const answer = question.answer;
   const handleKeyDown = useCallback(
     (e) => {
@@ -55,9 +60,10 @@ export default function Question() {
           break;
         case "z":
         case "Z":
+          setTurned(true);
           if (type === 5) {
             setDuration(30);
-            setRightsTurn(e => !e);
+            setRightsTurn((e) => !e);
             setIsComplete(true);
             audio.volume = 0;
             audio.playbackRate = 0.5;
@@ -65,8 +71,7 @@ export default function Question() {
             setTimeout(() => {
               setIsComplete(false);
             }, 0);
-          }
-          else if (type === 4) {
+          } else if (type === 4) {
             console.log(index + 1, DATA.parts[3][id - 1].length, zdone);
             if (index + 1 < DATA.parts[3][id - 1].length) {
               console.log("id");
@@ -101,10 +106,11 @@ export default function Question() {
           break;
         case "x":
         case "X":
+          setTurned(true);
           if (type === 5) {
-            if (rightsTurn) setRiteWrong((e) => e + 1)
-            else setLeftWrong(e => e + 1)
-            setRightsTurn(e => !e);
+            if (rightsTurn) setRiteWrong((e) => e + 1);
+            else setLeftWrong((e) => e + 1);
+            setRightsTurn((e) => !e);
             setDuration(30);
             setIsComplete(true);
             audio.volume = 0;
@@ -113,21 +119,19 @@ export default function Question() {
             setTimeout(() => {
               setIsComplete(false);
             }, 0);
-          }
-          else
-            if (type === 4) {
-              if (index + 1 < DATA.parts[3][id - 1].length)
-                setIndex((e) => e + 1);
-              else {
-                audio.pause();
-                setIsPlaying(false);
-              }
-            } else {
+          } else if (type === 4) {
+            if (index + 1 < DATA.parts[3][id - 1].length)
+              setIndex((e) => e + 1);
+            else {
               audio.pause();
               setIsPlaying(false);
-              setIsComplete((e) => !e);
-              if (type === 1) setRightsTurn(true);
             }
+          } else {
+            audio.pause();
+            setIsPlaying(false);
+            setIsComplete((e) => !e);
+            if (type === 1) setRightsTurn(true);
+          }
           break;
 
         case "1":
@@ -157,7 +161,7 @@ export default function Question() {
         case "3":
           if (type !== 6) break;
           setRightsTurn((e) => !e);
-          setDuration(90);
+          setDuration(180);
           setIsComplete(true);
           setIsPlaying(false);
           audio.volume = 0;
@@ -187,10 +191,10 @@ export default function Question() {
         case "End":
           if (type === 3 || type === 2 || type === 6) navigate("/rate/" + type);
           if (type === 5) {
-            const rscore = 15 - (Math.min(3, rightWrong) * 5);
-            setRightScore(e => e + rscore);
-            const lscore = 15 - (Math.min(3, leftWrong) * 5);
-            setLeftScore(e => e + lscore);
+            const rscore = 15 - Math.min(3, rightWrong) * 5;
+            setRightScore((e) => e + rscore);
+            const lscore = 15 - Math.min(3, leftWrong) * 5;
+            setLeftScore((e) => e + lscore);
           }
           break;
         case "PageDown":
@@ -202,11 +206,17 @@ export default function Question() {
             return DATA;
           });
           break;
+        case "|":
+          console.log(fileLoc);
+          setShowOverlay((e) => !e);
+
+          break;
         default:
           break;
       }
     },
     [
+      fileLoc,
       setDATA,
       leftWrong,
       rightWrong,
@@ -215,12 +225,12 @@ export default function Question() {
       navigate,
       audio,
       id,
-
+      setTurned,
+      setShowOverlay,
       index,
       setRightsTurn,
       setRightScore,
       type,
-
       isPlaying,
       setLeftScore,
       rightsTurn,
@@ -232,30 +242,46 @@ export default function Question() {
     audio.volume = 0;
     audio.playbackRate = 0.5;
     audio2.volume = 0.1;
+    (async () => {
+      setFile((await import("../assets/questions/" + fileLoc)).default);
+    })();
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
     // esslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleKeyDown, audio, audio2]);
+  }, [handleKeyDown, audio, audio2, fileLoc]);
   return (
     <div className="Question">
-      <Score right turn={rightsTurn && type !== 1 && type !== 3} />
-      <Score turn={!rightsTurn} />
+      <Score right turn={rightsTurn && turned} />
+      <Score turn={!rightsTurn && turned} />
       <h1
         className={
           "Question-title" +
-          (type === 6 || type === 5 || type === 3 || ((type === 4 || type === 1) && !isPlaying) ? " Question-title-6" : "")
+          (type === 6 ||
+          type === 5 ||
+          type === 3 ||
+          ((type === 4 || type === 1) && !isPlaying)
+            ? " Question-title-6"
+            : "") +
+          (showOverlay && file ? " Question-title-overlay" : "")
         }
       >
-        {!isPlaying ? type === 4 ? "اكمل" : type === 1 ? "سؤال السرعة" : text : text}
+        {!isPlaying
+          ? type === 4
+            ? "اكمل"
+            : type === 1
+            ? "سؤال السرعة"
+            : text
+          : text}
       </h1>
       <div
         className={
           "Question-timer-container" +
           (isComplete && type !== 3 && type !== 6
             ? " Question-timer-container-complete"
-            : "")
+            : "") +
+          (showOverlay && file ? " Question-timer-container-overlay" : "")
         }
       >
         {isComplete ? (
@@ -291,6 +317,26 @@ export default function Question() {
               <span className="Question-timer">{remainingTime}</span>
             )}
           </CountdownCircleTimer>
+        )}
+      </div>
+      <div
+        className={
+          "Question-overlay" +
+          (showOverlay && file ? " Question-overlay-visible" : "")
+        }
+      >
+        {isImage ? (
+          <img className="Question-overlay-image" src={file} alt="idk" />
+        ) : (
+          file &&
+          showOverlay && (
+            <video
+              src={file}
+              className="Question-overlay-image"
+              autoPlay
+              loop
+            />
+          )
         )}
       </div>
     </div>

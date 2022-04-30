@@ -1,19 +1,21 @@
-# notes
-perteam
-- quick question test (2)
-- windows 5 (1) 2mins 8 marks per one : total 40 marks
-    -religion 
-    -natural science
-    -human science
-    -litreture and arts
-    -sports
-    *spare general question
-    *help from private audience
-- discussion title only (two rounds 2 mins and 1 min) 15 marks refree and guest and general audience (with/total * 5)
-- quick questions : ten quesiton 2 marks per question and a total time of 30s and total marks (20)
-- poetry chase, 10 marks , 30s per round if fails loses 5 marks and a time cap of 3m 
-- talent show: 3 mins , same marking system as #discussion
 
-*insert general audience question between each one 4
-
-
+[[{"text":"مطربة الحي","answer":"لا تطرب","duration":30,"marks"2},
+{"text":"اختلط الحابل","answer":"بالنابل","duration":30,"marks"2},
+{"text":"لك الجمل","answer":"بما حمل","duration":30,"marks"2},
+{"text":"في الصيف ضيعتي","answer":"اللبن","duration":30,"marks"2},
+{"text":"ليس كل ما يعلم","answer":"يقال","duration":30,"marks"2},
+{"text":"جوع كلبك","answer":"يتبعك","duration":30,"marks"2},
+{"text":"فرق","answer":"تسد","duration":30,"marks"2},
+{"text":"الطيور على","answer":"أشكالها تقع","duration":30,"marks"2},
+{"text":"على نفسها جنت","answer":"براقش","duration":30,"marks"2},
+{"text":"من شابه اباه","answer":"فما ظلم","duration":30,"marks"2}],
+[{"text":"من شب على شي","answer":"شاب عليه","duration":30,"marks"2},
+{"text":"هذا الشبل","answer":"من ذاك الاسد","duration":30,"marks"2},
+{"text":"اذا حضر الماء","answer":"بطل التيمم","duration":30,"marks"2},
+{"text":"لكل جواد","answer":"كبوة","duration":30,"marks"2},
+{"text":"اعقلها","answer":"وتوكل","duration":30,"marks"2},
+{"text":"ما لا يقتلك","answer":"يقويك","duration":30,"marks"2},
+{"text":"سبق السيف","answer":"العذل","duration":30,"marks"2},
+{"text":"الناس على دين","answer":"ملوكها","duration":30,"marks"2},
+{"text":"اول الغيث","answer":"قطرة","duration":30,"marks"2},
+{"text":"رمتني بدائها","answer":"وانسلت","duration":30,"marks"2}]]

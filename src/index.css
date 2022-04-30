@@ -9,6 +9,7 @@ body {
   height: 100vh;
   position: fixed;
   overflow: hidden;
+  -webkit-user-drag: none;
   font-family: "Cairo", monospace;
   -webkit-user-select: none;
   -moz-user-select: none;

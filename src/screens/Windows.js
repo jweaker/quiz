@@ -11,7 +11,7 @@ import { useGlobalContext } from "../contexts/Global";
 export default function Windows() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const { DATA } = useGlobalContext();
+  const { DATA, rightsTurn, turned } = useGlobalContext();
   const handleKeyDown = useCallback(
     (e) => {
       console.log(e.key);
@@ -38,8 +38,8 @@ export default function Windows() {
   }, [handleKeyDown]);
   return (
     <div className="Windows">
-      <Score right />
-      <Score />
+      <Score right turn={rightsTurn && turned} />
+      <Score turn={!rightsTurn && turned} />
       <h1 className="Windows-title">النوافذ</h1>
       <div className="Windows-container">
         <IconButton

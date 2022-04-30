@@ -11,6 +11,10 @@ const MyContext = createContext({
   setQuickQuestion: () => {},
   discussionCounter: 0,
   setDiscussionCounter: () => {},
+  turned: false,
+  setTurned: () => {},
+  DATA: {},
+  setDATA: () => {},
 });
 export function useGlobalContext() {
   return useContext(MyContext);
@@ -23,6 +27,7 @@ export function GlobalContextProvider({ children }) {
   const [quickQuestion, setQuickQuestion] = useState(0);
   const [audienceQuesion, setAudienceQuestion] = useState(0);
   const [DATA, setDATA] = useState(data);
+  const [turned, setTurned] = useState(false);
 
   const [discussionCounter, setDiscussionCounter] = useState(0);
   const value = {
@@ -32,6 +37,8 @@ export function GlobalContextProvider({ children }) {
     setRightScore,
     leftScore,
     setLeftScore,
+    turned,
+    setTurned,
     DATA,
     setDATA,
     rightsTurn,

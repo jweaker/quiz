@@ -10,7 +10,7 @@ import Windows from "./screens/Windows";
 
 export default function App() {
   const [hideCursor, setHideCursor] = useState(false);
-  const { setRightsTurn } = useGlobalContext();
+  const { setRightsTurn, setTurned } = useGlobalContext();
   const navigate = useNavigate();
   const handleKeyDown = useCallback(
     (e) => {
@@ -24,12 +24,13 @@ export default function App() {
           break;
         case "PageUp":
           setRightsTurn((e) => !e);
+          setTurned(true);
           break;
         default:
           break;
       }
     },
-    [navigate, setRightsTurn]
+    [navigate, setRightsTurn, setTurned]
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);

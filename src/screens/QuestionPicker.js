@@ -9,7 +9,7 @@ export default function QuestionPicker() {
   const id = parseInt(params.id);
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const { DATA } = useGlobalContext();
+  const { DATA, rightsTurn, turned } = useGlobalContext();
   const handleKeyDown = useCallback(
     (e) => {
       console.log(e.key);
@@ -35,8 +35,8 @@ export default function QuestionPicker() {
   }, [handleKeyDown]);
   return (
     <div className="QuestionPicker">
-      <Score right />
-      <Score />
+      <Score right turn={rightsTurn && turned} />
+      <Score turn={!rightsTurn && turned} />
       <h1 className="QuestionPicker-title">{DATA.parts[1][id - 1].name}</h1>
       <div className="QuestionPicker-container">
         {DATA.parts[1][id - 1].questions.map((text, i) => (

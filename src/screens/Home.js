@@ -8,14 +8,16 @@ import { GiJuggler } from "react-icons/gi";
 import "./Home.css";
 import { useGlobalContext } from "../contexts/Global";
 import Score from "../components/Score";
-import logob from "../assets/logob.png"
-import logom from "../assets/logom.png"
+import logob from "../assets/logob.png";
+import logom from "../assets/logom.png";
 
 export default function Home() {
   const {
     quickQuestion,
     setQuickQuestion,
     audienceQuesion,
+    rightsTurn,
+    turned,
     setAudienceQuestion,
     setDiscussionCounter,
   } = useGlobalContext();
@@ -41,9 +43,9 @@ export default function Home() {
             navigate(`/question/5/1/0`);
           } else if (nkey === 6) {
             navigate(`/question/6/1/0`);
-          }else if (nkey === 7) {
+          } else if (nkey === 7) {
             navigate(`/question/7/${audienceQuesion + 1}/0`);
-            setAudienceQuestion(e=>e+1);
+            setAudienceQuestion((e) => e + 1);
           }
         } else setActive(nkey);
       } else
@@ -53,7 +55,8 @@ export default function Home() {
         }
     },
     [
-      audienceQuesion,setAudienceQuestion,
+      audienceQuesion,
+      setAudienceQuestion,
       active,
       navigate,
       setQuickQuestion,
@@ -69,8 +72,8 @@ export default function Home() {
   }, [handleKeyDown]);
   return (
     <div className="Home">
-      <Score />
-      <Score right />
+      <Score right turn={rightsTurn && turned} />
+      <Score turn={!rightsTurn && turned} />
       <img src={logob} alt="" srcset="" className="logob" />
       <img src={logom} alt="" srcset="" className="logom" />
 
