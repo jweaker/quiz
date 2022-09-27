@@ -1,15 +1,14 @@
 import { useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import IconButton from "../components/IconButton";
-import { MdWindow, MdSports } from "react-icons/md";
+import { MdWindow, MdSports, MdQuestionAnswer } from "react-icons/md";
 import { IoMdChatbubbles } from "react-icons/io";
-import { RiTimerFill } from "react-icons/ri";
-import { GiJuggler } from "react-icons/gi";
+import { RiQuestionMark, RiTimerFill } from "react-icons/ri";
+import { GiJuggler, GiPuzzle } from "react-icons/gi";
 import "./Home.css";
 import { useGlobalContext } from "../contexts/Global";
 import Score from "../components/Score";
-import logob from "../assets/logob.png";
-import logom from "../assets/logom.png";
+
 
 export default function Home() {
   const {
@@ -18,6 +17,7 @@ export default function Home() {
     audienceQuesion,
     rightsTurn,
     turned,
+    DATA,
     setAudienceQuestion,
     setDiscussionCounter,
   } = useGlobalContext();
@@ -40,10 +40,10 @@ export default function Home() {
             navigate(`/question/4/1/0`);
             setDiscussionCounter(1);
           } else if (nkey === 5) {
-            navigate(`/question/5/1/0`);
+            navigate(`/questionpicker/7`);
           } else if (nkey === 6) {
             navigate(`/question/6/1/0`);
-          } else if (nkey === 7) {
+          } else if (nkey === 7 && audienceQuesion < DATA.parts[6].length) {
             navigate(`/question/7/${audienceQuesion + 1}/0`);
             setAudienceQuestion((e) => e + 1);
           }
@@ -54,15 +54,7 @@ export default function Home() {
             break;
         }
     },
-    [
-      audienceQuesion,
-      setAudienceQuestion,
-      active,
-      navigate,
-      setQuickQuestion,
-      quickQuestion,
-      setDiscussionCounter,
-    ]
+    [active, navigate, audienceQuesion, DATA.parts, quickQuestion, setQuickQuestion, setDiscussionCounter, setAudienceQuestion]
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -74,9 +66,7 @@ export default function Home() {
     <div className="Home">
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
-      <img src={logob} alt="" srcset="" className="logob" />
-      <img src={logom} alt="" srcset="" className="logom" />
-
+      <span className="Question-title Question-title-6 Home-title">مسابقة سامراء الأولى</span>
       <div className="Home-container">
         <IconButton
           title="سؤال السرعة"
@@ -112,22 +102,11 @@ export default function Home() {
           active={active === 4}
         />
         <IconButton
-          title="المطاردة الشعرية"
-          Icon={() => (
-            <span
-              style={{
-                color: "dodgerblue",
-                fontSize: "18rem",
-                marginTop: "-11rem",
-                marginBottom: "-7rem",
-              }}
-            >
-              ت
-            </span>
-          )}
+          title="الحزورات"
+          Icon={RiQuestionMark}
           width="25rem"
           height="25rem"
-          fontSize={"3rem"}
+          fontSize={"4rem"}
           active={active === 5}
         />
         <IconButton

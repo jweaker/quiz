@@ -11,10 +11,7 @@ export default function Score({ right = false, turn }) {
   const teamName = right ? rightTeamName : leftTeamName;
   return (
     <div className={"Score" + (right ? " Score-right" : " Score-left")}>
-      <h1 className="Score-name">
-        {teamName}
-        {right}
-      </h1>
+      <input type="text" className="Score-name" defaultValue={teamName} />
       <div className={"Score-score" + (turn ? " Score-score-turn" : "")}>
         <input
           type="number"

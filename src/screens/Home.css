@@ -44,6 +44,9 @@
 
   top: 1rem;
 }
+.Home-title {
+  font-size: 9rem !important;
+}
 
 @keyframes starta {
   100% {

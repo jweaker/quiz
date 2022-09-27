@@ -14,7 +14,9 @@ export default function QuestionPicker() {
     (e) => {
       console.log(e.key);
       const nkey = parseInt(e.key);
-      if (nkey >= 0 && nkey <= 5) {
+
+      const length = DATA.parts[1][id - 1].questions.length
+      if (nkey >= 0 && nkey <= length) {
         if (nkey === active && nkey !== 0) {
           navigate("/question/2/" + id + "/" + (nkey - 1));
         } else setActive(nkey);
@@ -24,7 +26,7 @@ export default function QuestionPicker() {
             break;
         }
     },
-    [active, navigate, id]
+    [DATA.parts, id, active, navigate]
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
