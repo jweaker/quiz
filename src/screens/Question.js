@@ -1,6 +1,6 @@
 import "./Question.css";
 import { useNavigate, useParams } from "react-router-dom";
-import sourceAudio from "../assets/tick.wav";
+import sourceAudio from "../assets/ding.wav";
 import sourceAudio2 from "../assets/ding.wav";
 
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
@@ -235,7 +235,7 @@ export default function Question() {
       setLeftScore,
       rightsTurn,
       zdone,
-    ]
+    ],
   );
   useEffect(() => {
     audio.loop = true;
@@ -243,7 +243,7 @@ export default function Question() {
     audio.playbackRate = 0.5;
     audio2.volume = 0.1;
     (async () => {
-      setFile((await import("../assets/questions/" + fileLoc)).default);
+      // setFile((await import("../assets/questions/" + fileLoc)).default);
     })();
     document.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -271,8 +271,8 @@ export default function Question() {
           ? type === 4
             ? "اكمل"
             : type === 1
-            ? "سؤال السرعة"
-            : text
+              ? "سؤال السرعة"
+              : text
           : text}
       </h1>
       <div
