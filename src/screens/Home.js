@@ -1,122 +1,136 @@
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import IconButton from "../components/IconButton";
-import { MdWindow, MdSports, MdQuestionAnswer } from "react-icons/md";
-import { IoMdChatbubbles } from "react-icons/io";
-import { RiQuestionMark, RiTimerFill } from "react-icons/ri";
-import { GiJuggler, GiPuzzle } from "react-icons/gi";
+import {
+  MdWindow,
+  MdSports,
+  MdQuestionAnswer,
+  MdOutlineDirectionsRun,
+} from "react-icons/md";
+import { TbUserQuestion } from "react-icons/tb";
+import { RiTimerFill } from "react-icons/ri";
+import { IoExtensionPuzzle } from "react-icons/io5";
 import "./Home.css";
 import { useGlobalContext } from "../contexts/Global";
 import Score from "../components/Score";
 
+const ICON_SIZE = "35rem";
+const FONT_SIZE = "5rem";
 
 export default function Home() {
   const {
     quickQuestion,
     setQuickQuestion,
-    audienceQuesion,
+    audienceQuestion, // corrected variable name
     rightsTurn,
     turned,
     DATA,
     setAudienceQuestion,
-    setDiscussionCounter,
   } = useGlobalContext();
+
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+
+  // Define actions for each key using useMemo for performance.
+  const actions = useMemo(
+    () => ({
+      1: () => {
+        navigate(`/question/speedQuestions/${quickQuestion}`);
+        if (DATA.parts.speedQuestions.length <= quickQuestion + 1)
+          setQuickQuestion(0);
+        else setQuickQuestion((p) => p + 1);
+      },
+      2: () => navigate(`/windows`),
+      3: () => {
+        if (DATA.parts.puzzles.length > 1) navigate(`/questionpicker/puzzles`);
+        else navigate(`/question/puzzles/0`);
+      },
+      4: () => navigate(`/question/debate`),
+      5: () => navigate(`/question/poeticChase`),
+      6: () => navigate(`/question/askSmartly`),
+      7: () => navigate(`/questionpicker/quickQuestions`),
+      8: () => {
+        if (audienceQuestion < DATA.parts.audienceQuestions?.length) {
+          navigate(`/question/audienceQuestions/${audienceQuestion}`);
+          setAudienceQuestion((prev) => prev + 1);
+          console.log(DATA.parts.audienceQuestions.length);
+        } else {
+          navigate(`/question/audienceQuestions/0`);
+          setAudienceQuestion(0);
+        }
+      },
+    }),
+    [
+      navigate,
+      quickQuestion,
+      setQuickQuestion,
+      audienceQuestion,
+      DATA.parts,
+      setAudienceQuestion,
+    ],
+  );
+
+  // Keydown handler: If the pressed key is the same as the active one (and not 0),
+  // execute its associated action; otherwise, update the active state.
   const handleKeyDown = useCallback(
     (e) => {
-      console.log(e.key);
-      const nkey = parseInt(e.key);
-      if (nkey >= 0 && nkey <= 7) {
-        if (nkey === active && nkey !== 0) {
-          if (nkey === 1) {
-            navigate(`/question/1/${quickQuestion + 1}/0`);
-            setQuickQuestion(1);
-          } else if (nkey === 2) navigate(`/windows`);
-          else if (nkey === 3) {
-            navigate(`/question/3/1/0`);
-            setDiscussionCounter(1);
-          } else if (nkey === 4) {
-            navigate(`/question/4/1/0`);
-            setDiscussionCounter(1);
-          } else if (nkey === 5) {
-            navigate(`/questionpicker/7`);
-          } else if (nkey === 6) {
-            navigate(`/question/6/1/0`);
-          } else if (nkey === 7 && audienceQuesion < DATA.parts[6].length) {
-            navigate(`/question/7/${audienceQuesion + 1}/0`);
-            setAudienceQuestion((e) => e + 1);
-          }
-        } else setActive(nkey);
-      } else
-        switch (e.key) {
-          default:
-            break;
+      const keyNum = Number(e.key);
+      if (Number.isInteger(keyNum) && keyNum >= 0 && keyNum <= 8) {
+        if (keyNum === active && keyNum !== 0) {
+          const action = actions[keyNum];
+          if (action) action();
+        } else {
+          setActive(keyNum);
         }
+      }
     },
-    [active, navigate, audienceQuesion, DATA.parts, quickQuestion, setQuickQuestion, setDiscussionCounter, setAudienceQuestion]
+    [active, actions],
   );
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
+
+  // Configuration for icon buttons to avoid repetitive code.
+  const iconButtons = [
+    { key: 1, title: "سؤال السرعة", Icon: MdSports, color: "tomato" },
+    { key: 2, title: "النوافذ", Icon: MdWindow },
+    { key: 3, title: "اللغز", Icon: IoExtensionPuzzle },
+    { key: 4, title: "المناظرة", Icon: MdQuestionAnswer },
+    {
+      key: 5,
+      title: "المطاردة الشعرية",
+      Icon: MdOutlineDirectionsRun,
+    },
+    { key: 6, title: "اسأل بذكاء", Icon: TbUserQuestion },
+    { key: 7, title: "الرشق السريع", Icon: RiTimerFill },
+  ];
+
   return (
     <div className="Home">
-      <Score right turn={rightsTurn && turned} />
-      <Score turn={!rightsTurn && turned} />
-      <span className="Question-title Question-title-6 Home-title">مسابقة سامراء الأولى</span>
+      <Score top right turn={rightsTurn && turned} />
+      <Score top turn={!rightsTurn && turned} />
+      <span className="Question-title Question-title-6 Home-title">
+        بشائر المعرفة
+      </span>
       <div className="Home-container">
-        <IconButton
-          title="سؤال السرعة"
-          Icon={MdSports}
-          width="25rem"
-          height="25rem"
-          color="tomato"
-          fontSize={"4rem"}
-          active={active === 1}
-        />
-        <IconButton
-          title="النوافذ"
-          Icon={MdWindow}
-          width="25rem"
-          height="25rem"
-          fontSize={"4rem"}
-          active={active === 2}
-        />
-        <IconButton
-          title="المناظرة"
-          Icon={IoMdChatbubbles}
-          width="25rem"
-          height="25rem"
-          fontSize={"4rem"}
-          active={active === 3}
-        />
-        <IconButton
-          title="الرشق السريع"
-          Icon={RiTimerFill}
-          width="25rem"
-          height="25rem"
-          fontSize={"4rem"}
-          active={active === 4}
-        />
-        <IconButton
-          title="الحزورات"
-          Icon={RiQuestionMark}
-          width="25rem"
-          height="25rem"
-          fontSize={"4rem"}
-          active={active === 5}
-        />
-        <IconButton
-          title="المواهب"
-          Icon={GiJuggler}
-          width="25rem"
-          height="25rem"
-          fontSize={"4rem"}
-          active={active === 6}
-        />
+        {iconButtons.map(
+          ({ key, title, Icon, color, fontSize: btnFontSize }) => (
+            <IconButton
+              key={key}
+              title={title}
+              Icon={Icon}
+              width={ICON_SIZE}
+              height={ICON_SIZE}
+              color={color}
+              fontSize={btnFontSize || FONT_SIZE}
+              active={active === key}
+            />
+          ),
+        )}
       </div>
     </div>
   );

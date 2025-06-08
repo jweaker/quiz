@@ -1,8 +1,8 @@
 import IconButton from "../components/IconButton";
 import "./Windows.css";
-import { MdSportsSoccer, MdBrush, MdPerson } from "react-icons/md";
+import { MdMiscSoccer, MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
-import { RiQuestionMark } from "react-icons/ri";
+import { FaShapes } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Score from "../components/Score";
@@ -12,14 +12,20 @@ export default function Windows() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const { DATA, rightsTurn, turned } = useGlobalContext();
+  const windows = [
+    "religion",
+    "humanSciences",
+    "naturalSciences",
+    "arts",
+    "misc",
+  ];
   const handleKeyDown = useCallback(
     (e) => {
       console.log(e.key);
       const nkey = parseInt(e.key);
-      if (nkey >= 0 && nkey <= 6) {
+      if (nkey >= 0 && nkey <= 5) {
         if (nkey === active && nkey !== 0) {
-          console.log("asdf");
-          navigate("/questionpicker/" + nkey);
+          navigate("/questionpicker/" + windows[nkey - 1]);
         } else setActive(nkey);
       } else
         switch (e.key) {
@@ -27,7 +33,7 @@ export default function Windows() {
             break;
         }
     },
-    [active, navigate]
+    [active, navigate],
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -43,11 +49,11 @@ export default function Windows() {
       <h1 className="Windows-title">النوافذ</h1>
       <div className="Windows-container">
         <IconButton
-          title="العلوم الطبيعية"
-          Icon={GiAtom}
+          title="الدين و السيرة"
+          Icon={GiArabicDoor}
           done={
-            DATA.parts[1][0].questions[0]?.done &&
-            DATA.parts[1][0].questions[1]?.done
+            DATA.parts.windows.religion[0]?.done &&
+            DATA.parts.windows.religion[1]?.done
           }
           active={active === 1}
         />
@@ -55,17 +61,17 @@ export default function Windows() {
           title="العلوم الانسانية"
           Icon={MdPerson}
           done={
-            DATA.parts[1][1].questions[0]?.done &&
-            DATA.parts[1][1].questions[1]?.done
+            DATA.parts.windows.humanSciences[0]?.done &&
+            DATA.parts.windows.humanSciences[1]?.done
           }
           active={active === 2}
         />
         <IconButton
-          title="الرياضة"
-          Icon={MdSportsSoccer}
+          title="العلوم الطبيعية"
+          Icon={GiAtom}
           done={
-            DATA.parts[1][2].questions[0]?.done &&
-            DATA.parts[1][2].questions[1]?.done
+            DATA.parts.windows.naturalSciences[0]?.done &&
+            DATA.parts.windows.naturalSciences[1]?.done
           }
           active={active === 3}
         />
@@ -75,28 +81,17 @@ export default function Windows() {
           title="الأدب و الفنون"
           Icon={MdBrush}
           done={
-            DATA.parts[1][3].questions[0]?.done &&
-            DATA.parts[1][3].questions[1]?.done
+            DATA.parts.windows.arts[0]?.done && DATA.parts.windows.arts[1]?.done
           }
           active={active === 4}
         />
         <IconButton
-          title="الدين و السيرة"
-          Icon={GiArabicDoor}
+          title="اسئلة عامة"
+          Icon={FaShapes}
           done={
-            DATA.parts[1][4].questions[0]?.done &&
-            DATA.parts[1][4].questions[1]?.done
+            DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done
           }
           active={active === 5}
-        />
-        <IconButton
-          title="اسئلة بديلة"
-          Icon={RiQuestionMark}
-          done={
-            DATA.parts[1][5].questions[0]?.done &&
-            DATA.parts[1][5].questions[1]?.done
-          }
-          active={active === 6}
         />
       </div>
     </div>

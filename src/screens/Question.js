@@ -1,15 +1,17 @@
 import "./Question.css";
 import { useNavigate, useParams } from "react-router-dom";
-import sourceAudio from "../assets/ding.wav";
-import sourceAudio2 from "../assets/ding.wav";
-
+import sourceAudio from "../assets/tick.wav";
+import sourceAudio2 from "../assets/boom.mp3";
+import sourceAudioCorrect from "../assets/correct.mp3";
+import sourceAudioWrong from "../assets/wrong.mp3";
+import sourceAudioWhoosh from "../assets/whoosh.mp3";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useCallback, useEffect, useState } from "react";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
 import { GiInfinity } from "react-icons/gi";
+
 export default function Question() {
-  const params = useParams();
   const {
     rightsTurn,
     setLeftScore,
@@ -20,257 +22,323 @@ export default function Question() {
     DATA,
     setDATA,
   } = useGlobalContext();
+  const params = useParams();
+  const type = params.type;
   const navigate = useNavigate();
+
+  // Local states
   const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [id, setId] = useState(parseInt(params.id));
-  const [index, setIndex] = useState(parseInt(params.index));
+  const [id, setId] = useState(params.id);
+  const [index, setIndex] = useState(parseInt(params.index ?? 0));
   const [zdone, setZdone] = useState(false);
-  const [file, setFile] = useState();
-  const type = parseInt(params.type);
-  console.log(type, id, index);
-  const window = DATA.parts[type - 1][id - 1];
-  const question =
-    type === 2 ? window.questions[index] : type === 4 ? window[index] : window;
-  const text = question.text;
-  const hduration = question.duration;
-  const fileLoc = question.file;
-  const isImage = question.isImage;
+  const [file, setFile] = useState(null);
   const [leftWrong, setLeftWrong] = useState(0);
-  const [rightWrong, setRiteWrong] = useState(0);
-  const [duration, setDuration] = useState(hduration);
+  const [rightWrong, setRightWrong] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [showOverlay, setShowOverlay] = useState(false);
+
+  // Get current question data from DATA
+  const currentWindow = DATA.parts[type]?.[id];
+  const question = currentWindow
+    ? Array.isArray(currentWindow)
+      ? currentWindow[index]
+      : type === "quickQuestions"
+        ? currentWindow.questions[index]
+        : currentWindow
+    : (DATA.parts[type] ??
+      (type === "poeticChase"
+        ? { text: "المطاردة الشعرية", duration: 15 }
+        : type === "askSmartly"
+          ? {
+            text: "اسأل بذكاء",
+            duration: 120,
+            file: "animals.png",
+            isImage: true,
+          }
+          : {}));
+  const {
+    text,
+    duration: hduration,
+    file: fileLoc,
+    isImage,
+    answer,
+  } = question;
+
+  // Set initial duration from the question data
+  useEffect(() => {
+    setDuration(hduration);
+  }, [hduration]);
+
+  useEffect(() => {
+    try {
+      if (type === "puzzles") {
+        setDATA((prevState) => {
+          const newData = { ...prevState };
+          newData.parts[type][id].done = !question.done;
+          return newData;
+        });
+      } else if (type === "windows") {
+        setDATA((prevState) => {
+          const newData = { ...prevState };
+          newData.parts[type][id][index].done = !question.done;
+          return newData;
+        });
+      }
+      audioWhoosh.play();
+    } catch { }
+  }, []);
+
+  // Initialize audio elements
   const [audio] = useState(new Audio(sourceAudio));
   const [audio2] = useState(new Audio(sourceAudio2));
-  const [showOverlay, setShowOverlay] = useState(false);
-  const answer = question.answer;
+  const [audioCorrect] = useState(new Audio(sourceAudioCorrect));
+  const [audioWrong] = useState(new Audio(sourceAudioWrong));
+  const [audioWhoosh] = useState(new Audio(sourceAudioWhoosh));
+
+  // Helper to pause audio and update playing state
+  const pauseAudio = useCallback(() => {
+    audio.pause();
+    setIsPlaying(false);
+  }, [audio]);
+
+  // Helper to trigger "complete" state and reset audio properties
+  const triggerComplete = useCallback(() => {
+    setIsComplete(true);
+    audio.volume = 1;
+    audio.playbackRate = 1;
+    audio.currentTime = 0;
+    setTimeout(() => setIsComplete(false), 0);
+  }, [audio]);
+
   const handleKeyDown = useCallback(
     (e) => {
-      switch (e.key) {
+      const key = e.key;
+      switch (key) {
         case "Escape":
-          audio?.pause?.();
+          pauseAudio();
           break;
         case "Enter":
-          console.log(isPlaying);
-          if (isPlaying) audio.pause();
-          else {
-            console.log("play");
-            audio.play();
+          if (isPlaying) {
+            pauseAudio();
+          } else {
+            if (type !== "speedQuestions" && type !== "audienceQuestions")
+              audio.play();
+            setIsPlaying(true);
           }
-          setIsPlaying((e) => !e);
           break;
         case "z":
         case "Z":
+          if (type === "windows") {
+            audioCorrect.play();
+          }
           setTurned(true);
-          if (type === 5) {
-            setDuration(30);
-            setRightsTurn((e) => !e);
+          if (type === "askSmartly") {
+            setRightsTurn((prev) => !prev);
+            triggerComplete();
+            setDuration(120);
             setIsComplete(true);
-            audio.volume = 0;
-            audio.playbackRate = 0.5;
-            audio.currentTime = 0;
-            setTimeout(() => {
-              setIsComplete(false);
-            }, 0);
-          } else if (type === 4) {
-            console.log(index + 1, DATA.parts[3][id - 1].length, zdone);
-            if (index + 1 < DATA.parts[3][id - 1].length) {
-              console.log("id");
-
-              setIndex((e) => e + 1);
-              if (rightsTurn) setRightScore((e) => e + 2);
-              else setLeftScore((e) => e + 2);
+            setIsPlaying(false);
+          } else if (type === "poeticChase") {
+            setDuration(15);
+            setRightsTurn((prev) => !prev);
+            audioCorrect.play();
+            triggerComplete();
+          } else if (type === "quickQuestions") {
+            const totalSubQuestions =
+              DATA.parts.quickQuestions[id].questions.length;
+            if (index + 1 < totalSubQuestions) {
+              setIndex((prev) => prev + 1);
+              if (rightsTurn) setRightScore((prev) => prev + 1);
+              else setLeftScore((prev) => prev + 1);
             } else {
-              audio.pause();
-              setIsPlaying(false);
+              pauseAudio();
             }
-            if (!zdone && index + 1 === DATA.parts[3][id - 1].length) {
-              console.log("zdone");
-              if (rightsTurn) setRightScore((e) => e + 2);
-              else setLeftScore((e) => e + 2);
+            audioCorrect.play();
+            if (!zdone && index + 1 === totalSubQuestions) {
+              if (rightsTurn) setRightScore((prev) => prev + 1);
+              else setLeftScore((prev) => prev + 1);
               setZdone(true);
             }
           } else {
-            audio.pause();
-            setIsPlaying(false);
-            setIsComplete((e) => !e);
-            if (type === 1) setRightsTurn(false);
-
-            // else if (rightsTurn) {
-            //   setRightScore((e) => e + marks);
-            //   setRightsTurn((e) => !e);
-            // } else {
-            //   setLeftScore((e) => e + marks);
-            //   setRightsTurn((e) => !e);
-            // }
+            pauseAudio();
+            setIsComplete((prev) => !prev);
+            if (type === "speedQuestions") setRightsTurn(false);
           }
           break;
         case "x":
         case "X":
           setTurned(true);
-          if (type === 5) {
-            if (rightsTurn) setRiteWrong((e) => e + 1);
-            else setLeftWrong((e) => e + 1);
-            setRightsTurn((e) => !e);
-            setDuration(30);
-            setIsComplete(true);
-            audio.volume = 0;
-            audio.playbackRate = 0.5;
-            audio.currentTime = 0;
-            setTimeout(() => {
-              setIsComplete(false);
-            }, 0);
-          } else if (type === 4) {
-            if (index + 1 < DATA.parts[3][id - 1].length)
-              setIndex((e) => e + 1);
-            else {
-              audio.pause();
-              setIsPlaying(false);
+          if (type === "windows") {
+            audioWrong.play();
+          }
+          if (type === "askSmartly") {
+            if (rightsTurn) setRightScore((prev) => prev - 1);
+            else setLeftScore((prev) => prev - 1);
+          } else if (type === "poeticChase") {
+            if (rightsTurn) {
+              setRightWrong((prev) => prev + 1);
+              setRightScore((prev) => prev - 5);
+            } else {
+              setLeftWrong((prev) => prev + 1);
+              setLeftScore((prev) => prev - 5);
             }
+            setRightsTurn((prev) => !prev);
+            setDuration(15);
+            triggerComplete();
+            audioWrong.play();
+          } else if (type === "quickQuestions") {
+            const totalSubQuestions =
+              DATA.parts.quickQuestions[id].questions.length;
+            if (index + 1 < totalSubQuestions) {
+              setIndex((prev) => prev + 1);
+            } else {
+              pauseAudio();
+            }
+            audioWrong.play();
           } else {
-            audio.pause();
-            setIsPlaying(false);
-            setIsComplete((e) => !e);
-            if (type === 1) setRightsTurn(true);
+            pauseAudio();
+            setIsComplete((prev) => !prev);
+            if (type === "speedQuestions") setRightsTurn(true);
           }
           break;
-
         case "1":
-          if (type !== 3) break;
-          setDuration(45);
-          setIsComplete(true);
-          setIsPlaying(false);
-          audio.volume = 0;
-          audio.playbackRate = 0.5;
-          audio.currentTime = 0;
-          setTimeout(() => {
-            setIsComplete(false);
-          }, 0);
-          break;
-        case "2":
-          if (type !== 3) break;
-          setDuration(90);
-          setIsComplete(true);
-          setIsPlaying(false);
-          audio.volume = 0;
-          audio.playbackRate = 0.5;
-          audio.currentTime = 0;
-          setTimeout(() => {
-            setIsComplete(false);
-          }, 0);
-          break;
-        case "3":
-          if (type !== 6) break;
-          setRightsTurn((e) => !e);
-          setDuration(180);
-          setIsComplete(true);
-          setIsPlaying(false);
-          audio.volume = 0;
-          audio.playbackRate = 0.5;
-          audio.currentTime = 0;
-          setTimeout(() => {
-            setIsComplete(false);
-          }, 0);
-          break;
-        case "4":
-          if (type !== 4) break;
-          if (id < DATA.parts[3].length) {
-            setId((e) => e + 1);
-            setRightsTurn((e) => !e);
-          }
-          setIndex(0);
-          setIsComplete(true);
-          setZdone(false);
-          setIsPlaying(false);
-          audio.volume = 0;
-          audio.playbackRate = 0.5;
-          audio.currentTime = 0;
-          setTimeout(() => {
-            setIsComplete(false);
-          }, 0);
-          break;
-        case "End":
-          if (type === 3 || type === 2 || type === 6) navigate("/rate/" + type);
-          if (type === 5) {
-            const rscore = 15 - Math.min(3, rightWrong) * 5;
-            setRightScore((e) => e + rscore);
-            const lscore = 15 - Math.min(3, leftWrong) * 5;
-            setLeftScore((e) => e + lscore);
+          if (type === "quickQuestions") {
+            const totalSets = DATA.parts.quickQuestions.questions.length;
+            if (id < totalSets) {
+              setId((prev) => prev + 1);
+              setRightsTurn((prev) => !prev);
+            }
+            setIndex(0);
+            setZdone(false);
+            triggerComplete();
+            setIsPlaying(false);
+          } else {
+            setDuration(type === "debate" ? 60 : hduration);
+            triggerComplete();
+            setIsPlaying(false);
           }
           break;
-        case "PageDown":
-          if (type !== 2) break;
-          setDATA((prevState) => {
-            const DATA = { ...prevState };
-            console.log(DATA);
-            DATA.parts[1][id - 1].questions[index].done = !question.done;
-            return DATA;
-          });
+        case "e":
+          if (["debate", "puzzles", "windows"].includes(type)) {
+            navigate(`/rate/${type}`);
+          }
+          if (type === "poeticChase") {
+            setRightScore((prev) => prev + 15);
+            setLeftScore((prev) => prev + 15);
+          }
+          if (type === "askSmartly") {
+            if (rightsTurn) setRightScore((prev) => prev + 20);
+            else setLeftScore((prev) => prev + 20);
+          }
           break;
-        case "|":
-          console.log(fileLoc);
-          setShowOverlay((e) => !e);
-
+        case "m":
+          if (type === "puzzles") {
+            setDATA((prevState) => {
+              const newData = { ...prevState };
+              newData.parts[type][id].done = !question.done;
+              return newData;
+            });
+          } else if (type === "windows") {
+            setDATA((prevState) => {
+              const newData = { ...prevState };
+              newData.parts[type][id][index].done = !question.done;
+              return newData;
+            });
+          }
+          break;
+        case "f":
+          setShowOverlay((prev) => !prev);
           break;
         default:
           break;
       }
     },
     [
-      fileLoc,
-      setDATA,
+      type,
+      isPlaying,
+      rightsTurn,
+      index,
+      id,
+      zdone,
       leftWrong,
       rightWrong,
       DATA,
       question,
       navigate,
-      audio,
-      id,
+      pauseAudio,
+      triggerComplete,
       setTurned,
-      setShowOverlay,
-      index,
       setRightsTurn,
       setRightScore,
-      type,
-      isPlaying,
       setLeftScore,
-      rightsTurn,
-      zdone,
+      setDATA,
     ],
   );
+
   useEffect(() => {
+    // Configure audio defaults
     audio.loop = true;
-    audio.volume = 0;
-    audio.playbackRate = 0.5;
-    audio2.volume = 0.1;
-    (async () => {
-      // setFile((await import("../assets/questions/" + fileLoc)).default);
-    })();
+    audio.volume = 0.7;
+    audio2.volume = 1;
+    audioCorrect.volume = 1;
+    audioWrong.volume = 1;
+
+    if (fileLoc)
+      (async () => {
+        try {
+          const importedFile = await import(`../assets/${fileLoc}`);
+          setFile(importedFile.default);
+        } catch (err) {
+          console.log(err);
+        }
+      })();
+
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // esslint-disable-next-line react-hooks/exhaustive-deps
-  }, [handleKeyDown, audio, audio2, fileLoc]);
+  }, [audio, audio2, audioCorrect, audioWrong, fileLoc, handleKeyDown]);
+
   return (
     <div className="Question">
-      <Score right turn={rightsTurn && turned} />
-      <Score turn={!rightsTurn && turned} />
+      {type !== "audienceQuestions" && (
+        <>
+          <Score
+            zero={
+              type === "poeticChase" ||
+              type === "askSmartly" ||
+              type === "quickQuestions"
+            }
+            overlay={showOverlay && file}
+            right
+            turn={rightsTurn && turned}
+          />
+          <Score
+            zero={
+              type === "poeticChase" ||
+              type === "askSmartly" ||
+              type === "quickQuestions"
+            }
+            overlay={showOverlay && file}
+            turn={!rightsTurn && turned}
+          />
+        </>
+      )}
       <h1
         className={
           "Question-title" +
-          (type === 6 ||
-          type === 5 ||
-          type === 3 ||
-          ((type === 4 || type === 1) && !isPlaying)
+          (["poeticChase", "debate", "askSmartly"].includes(type) ||
+            (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
             ? " Question-title-6"
             : "") +
           (showOverlay && file ? " Question-title-overlay" : "")
         }
       >
         {!isPlaying
-          ? type === 4
-            ? "اكمل"
-            : type === 1
+          ? type === "quickQuestions"
+            ? DATA.parts.quickQuestions[id].title
+            : type === "speedQuestions"
               ? "سؤال السرعة"
               : text
           : text}
@@ -278,17 +346,17 @@ export default function Question() {
       <div
         className={
           "Question-timer-container" +
-          (isComplete && type !== 3 && type !== 6
+          (isComplete && type !== "debate"
             ? " Question-timer-container-complete"
             : "") +
           (showOverlay && file ? " Question-timer-container-overlay" : "")
         }
       >
         {isComplete ? (
-          type !== 3 &&
-          type !== 4 &&
-          type !== 6 && <h1 className="Question-answer">{answer}</h1>
-        ) : type === 1 || type === 7 ? (
+          type !== "debate" &&
+          type !== "poeticChase" &&
+          type !== "askSmartly" && <h1 className="Question-answer">{answer}</h1>
+        ) : type === "speedQuestions" || type === "audienceQuestions" ? (
           <GiInfinity size={500} color="white" className="infinity" />
         ) : (
           <CountdownCircleTimer
@@ -300,16 +368,18 @@ export default function Question() {
             strokeWidth={20}
             trailStrokeWidth={25}
             size={600}
-            onUpdate={(e) => {
-              if (e === 14) audio.currentTime = 0;
-              console.log(audio.currentTime);
+            onUpdate={(remaining) => {
+              if (remaining === 14) audio.currentTime = 0;
               audio.playbackRate =
-                e <= 15 ? 2.5 - ((e + duration - 15) / duration) * 2 : 0.5;
-              audio.volume = e <= 15 ? 1 - (e + duration - 15) / duration : 0;
-              console.log(audio.playbackRate, audio.volume);
+                duration === 0
+                  ? 0
+                  : remaining <= 15
+                    ? 2 - (remaining + duration - 15) / duration
+                    : 0.75;
+              audio.volume = 1;
             }}
             onComplete={() => {
-              audio.pause();
+              pauseAudio();
               audio2.play();
             }}
           >
@@ -326,7 +396,7 @@ export default function Question() {
         }
       >
         {isImage ? (
-          <img className="Question-overlay-image" src={file} alt="idk" />
+          <img className="Question-overlay-image" src={file} alt="question" />
         ) : (
           file &&
           showOverlay && (

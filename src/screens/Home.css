@@ -10,23 +10,30 @@
   overflow-y: scroll;
   flex-direction: column;
 }
+
 .Home-container {
-  width: 60%;
-  height: 60%;
-  margin: 0;
+  margin-top: 5rem;
+  direction: rtl;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* centers each row’s items */
+  gap: 1rem;
+  /* optional: adjust spacing between items */
+  /* Remove any width:100% if you want the container to shrink-wrap */
   padding: 0;
-  grid-template-columns: 4;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
-  place-items: center;
-  animation: starta 0.5s ease-in-out forwards 1;
-  transform: scale(0) translateY(500px);
-  filter: blur(1.5rem);
 }
+
+.Home-container>* {
+  flex: 0 0 calc(20% - 1rem);
+  /* Four items per row, adjust gap accordingly */
+  max-width: calc(20% - 1rem);
+}
+
 .Home::-webkit-scrollbar {
   display: none;
 }
+
 .logob {
   height: 30rem;
   position: absolute;
@@ -35,6 +42,7 @@
   opacity: 0;
   animation: startb 0.5s ease-in-out forwards 1;
 }
+
 .logom {
   height: 27rem;
   position: absolute;
@@ -44,8 +52,14 @@
 
   top: 1rem;
 }
+
 .Home-title {
-  font-size: 9rem !important;
+  font-size: 12rem !important;
+  margin-top: 2rem !important;
+  margin-bottom: 0 !important;
+  opacity: 0;
+  animation: startb 0.5s ease-in-out forwards 1;
+  text-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
 }
 
 @keyframes starta {
@@ -54,6 +68,7 @@
     filter: blur(0);
   }
 }
+
 @keyframes startb {
   100% {
     opacity: 1;

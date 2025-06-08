@@ -4,48 +4,53 @@
   box-shadow: 0 8px 15px 3px rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease-in-out;
   flex-direction: column;
-  width: 25rem;
-  height: 25rem;
+  width: 35rem;
+  height: 35rem;
   margin: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   outline: solid 0px transparent;
 }
+
 .IconButton-active {
   transform: scale(1.1) translateY(-1.5rem);
   box-shadow: 0 10px 15px 10px rgba(0, 0, 0, 0.3);
 }
+
 .IconButton-icon {
   width: 20rem;
   height: 20rem;
 }
+
 .IconButton-title {
-  font-size: 3em;
+  font-size: 4.2rem;
   font-weight: bold;
   color: black;
   text-align: center;
 }
+
 .IconButton-done {
   background-color: gray;
 }
+
 .IconButton-done .IconButton-title {
   color: white;
 }
+
 .IconButton-title-done {
   font-size: 15rem;
   color: white;
   font-weight: bold;
 }
+
 .IconButton-title-big {
   font-size: 15rem;
   font-weight: bold;
   background: rgb(48, 205, 227);
-  background: linear-gradient(
-    180deg,
-    rgba(48, 205, 227, 1) 0%,
-    rgba(4, 52, 182, 1) 80%
-  );
+  background: linear-gradient(180deg,
+      rgba(48, 205, 227, 1) 0%,
+      rgba(4, 52, 182, 1) 80%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

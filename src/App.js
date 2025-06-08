@@ -17,12 +17,12 @@ export default function App() {
       console.log(e.key);
       switch (e.key) {
         case "Escape":
-          navigate(-1);
+          if (window.location.pathname !== "/") navigate(-1);
           break;
-        case "F8":
+        case "c":
           setHideCursor((e) => !e);
           break;
-        case "PageUp":
+        case "s":
           setRightsTurn((e) => !e);
           setTurned(true);
           break;
@@ -30,7 +30,7 @@ export default function App() {
           break;
       }
     },
-    [navigate, setRightsTurn, setTurned]
+    [navigate, setRightsTurn, setTurned],
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -45,6 +45,8 @@ export default function App() {
         <Route path="windows" element={<Windows />} />
         <Route path="questionpicker/:id" element={<QuestionPicker />} />
         <Route path="question/:type/:id/:index" element={<Question />} />
+        <Route path="question/:type/:id" element={<Question />} />
+        <Route path="question/:type" element={<Question />} />
         <Route path="rate/:type" element={<Rate />} />
       </Routes>
     </div>

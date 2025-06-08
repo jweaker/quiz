@@ -5,39 +5,43 @@ import "./Rate.css";
 
 export default function Rate() {
   const navigate = useNavigate();
-  const { rightsTurn, setRightsTurn } = useGlobalContext();
   const params = useParams();
-  const { setLeftScore, setRightScore, DATA } = useGlobalContext();
-  const [rjudje, setRjudje] = useState();
+  const { setLeftScore, setRightScore, setRightsTurn, rightsTurn, DATA } =
+    useGlobalContext();
+  const [rjudge, setRjudge] = useState();
   const [rguest, setRguest] = useState();
-  const [raudience, SetRaudience] = useState();
-  const [ljudje, setLjudje] = useState();
+  const [raudience, setRaudience] = useState();
+  const [ljudge, setLjudge] = useState();
   const [lguest, setLguest] = useState();
   const [laudience, setLaudience] = useState();
-  const type = parseInt(params.type);
+  const type = params.type;
+  const singlePuzzle = DATA.parts.puzzles.length <= 1;
+  const singleRate = type === "puzzles" || type === "windows";
+  const doubleTeam = type === "puzzles" ? singlePuzzle : type !== "windows";
   const handleKeyDown = useCallback(
     (e) => {
       switch (e.key) {
         case "Enter":
           const rsum =
-            parseInt(rjudje ?? 0) +
+            parseInt(rjudge ?? 0) +
             parseInt(rguest ?? 0) +
             parseInt(raudience ?? 0);
-          if (type === 2) {
+          const lsum =
+            parseInt(ljudge ?? 0) +
+            parseInt(lguest ?? 0) +
+            parseInt(laudience ?? 0);
+
+          if (doubleTeam) {
+            setRightScore((e) => e + rsum);
+            setLeftScore((e) => e + lsum);
+          } else {
             if (rightsTurn) setRightScore((e) => e + rsum);
             else setLeftScore((e) => e + rsum);
             setRightsTurn((e) => !e);
-            navigate(-3);
-          } else {
-            setRightScore((e) => e + rsum);
-
-            const lsum =
-              parseInt(ljudje ?? 0) +
-              parseInt(lguest ?? 0) +
-              parseInt(laudience ?? 0);
-            setLeftScore((e) => e + lsum);
-            navigate(-2);
           }
+          if (type === "windows") navigate(-3);
+          else navigate(-2);
+
           break;
         default:
           break;
@@ -49,14 +53,14 @@ export default function Rate() {
       rightsTurn,
       navigate,
       raudience,
-      rjudje,
+      rjudge,
       rguest,
       setLeftScore,
       setRightScore,
       laudience,
-      ljudje,
+      ljudge,
       lguest,
-    ]
+    ],
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -69,50 +73,51 @@ export default function Rate() {
     <div className="Rate">
       <div className="Rate-ultra-container">
         <div className="Rate-container">
-          {type !== 2 && (
+          {!singleRate && (
             <div className="Rate-vcontainer">
               <span className="Rate-title">المجموع</span>
               <span className="Rate-input">
-                {parseInt(rjudje ?? 0) +
+                {parseInt(rjudge ?? 0) +
                   parseInt(rguest ?? 0) +
                   parseInt(raudience ?? 0) ===
-                0
+                  0
                   ? ""
-                  : parseInt(rjudje ?? 0) +
-                    parseInt(rguest ?? 0) +
-                    parseInt(raudience ?? 0)}
+                  : parseInt(rjudge ?? 0) +
+                  parseInt(rguest ?? 0) +
+                  parseInt(raudience ?? 0)}
               </span>
             </div>
           )}
-          {type !== 2 && (
+
+          <div className="Rate-vcontainer">
+            <span
+              className={"Rate-title" + (singleRate ? " Rate-title-2" : "")}
+            >
+              {singleRate ? "التقييم" : "الحكم"}
+            </span>
+            <input
+              className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
+              type="number"
+              value={rjudge}
+              onChange={(e) => setRjudge(e.target.value)}
+            />
+          </div>
+          {!singleRate && (
             <div className="Rate-vcontainer">
               <span
-                className={"Rate-title" + (type === 2 ? " Rate-title-2" : "")}
+                className={"Rate-title" + (singleRate ? " Rate-title-2" : "")}
               >
                 الضيف
               </span>
               <input
-                className={"Rate-input" + (type === 2 ? " Rate-input-2" : "")}
+                className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                 type="number"
                 value={rguest}
                 onChange={(e) => setRguest(e.target.value)}
               />
             </div>
           )}
-          <div className="Rate-vcontainer">
-            <span
-              className={"Rate-title" + (type === 2 ? " Rate-title-2" : "")}
-            >
-              {type === 2 ? "التقييم" : "الحكم"}
-            </span>
-            <input
-              className={"Rate-input" + (type === 2 ? " Rate-input-2" : "")}
-              type="number"
-              value={rjudje}
-              onChange={(e) => setRjudje(e.target.value)}
-            />
-          </div>
-          {type !== 2 && (
+          {!singleRate && (
             <>
               <div className="Rate-vcontainer">
                 <span className="Rate-title">الجمهور</span>
@@ -120,60 +125,70 @@ export default function Rate() {
                   className="Rate-input"
                   type="number"
                   value={raudience}
-                  onChange={(e) => SetRaudience(e.target.value)}
+                  onChange={(e) => setRaudience(e.target.value)}
                 />
               </div>
             </>
           )}
         </div>
-        {type !== 2 && (
+        {doubleTeam && (
           <div className="Rate-container">
-            <div className="Rate-vcontainer">
-              <span className="Rate-input">
-                {parseInt(ljudje ?? 0) +
-                  parseInt(lguest ?? 0) +
-                  parseInt(laudience ?? 0) ===
-                0
-                  ? ""
-                  : parseInt(ljudje ?? 0) +
+            {!singleRate && (
+              <div className="Rate-vcontainer">
+                <span className="Rate-input">
+                  {parseInt(ljudge ?? 0) +
+                    parseInt(lguest ?? 0) +
+                    parseInt(laudience ?? 0) ===
+                    0
+                    ? ""
+                    : parseInt(ljudge ?? 0) +
                     parseInt(lguest ?? 0) +
                     parseInt(laudience ?? 0)}
-              </span>
+                </span>
+              </div>
+            )}
+
+            <div className="Rate-vcontainer">
+              <input
+                className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
+                type="number"
+                value={ljudge}
+                onChange={(e) => setLjudge(e.target.value)}
+              />
             </div>
-            {type !== 2 && (
+            {!singleRate && (
               <div className="Rate-vcontainer">
                 <input
-                  className="Rate-input"
+                  className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                   type="number"
                   value={lguest}
                   onChange={(e) => setLguest(e.target.value)}
                 />
               </div>
             )}
-            <div className="Rate-vcontainer">
-              <input
-                className="Rate-input"
-                type="number"
-                value={ljudje}
-                onChange={(e) => setLjudje(e.target.value)}
-              />
-            </div>
-
-            <div className="Rate-vcontainer">
-              <input
-                className="Rate-input"
-                type="number"
-                value={laudience}
-                onChange={(e) => setLaudience(e.target.value)}
-              />
-            </div>
+            {!singleRate && (
+              <>
+                <div className="Rate-vcontainer">
+                  <input
+                    className="Rate-input"
+                    type="number"
+                    value={laudience}
+                    onChange={(e) => setLaudience(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
-      {type !== 2 && (
-        <div className="Rate-team-container">
-          <span className="Rate-team">{DATA.rightTeamName}</span>
-          <span className="Rate-team">{DATA.leftTeamName}</span>
+      {(!singleRate || doubleTeam) && (
+        <div className={"Rate-team-container"}>
+          <span className={"Rate-team" + (singleRate ? " Rate-team-2" : "")}>
+            {DATA.rightTeamName}
+          </span>
+          <span className={"Rate-team" + (singleRate ? " Rate-team-2" : "")}>
+            {DATA.leftTeamName}
+          </span>
         </div>
       )}
     </div>
