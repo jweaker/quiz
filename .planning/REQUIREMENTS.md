@@ -113,13 +113,72 @@ Populated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| — | — | — |
+| ARCH-01 | Phase 1 | Pending |
+| ARCH-02 | Phase 2 | Pending |
+| ARCH-03 | Phase 2 | Pending |
+| ARCH-04 | Phase 2 | Pending |
+| ARCH-05 | Phase 1 | Pending |
+| ARCH-06 | Phase 4 | Pending |
+| ARCH-07 | Phase 2 | Pending |
+| ARCH-08 | Phase 1 | Pending |
+| SECT-01 | Phase 6 | Pending |
+| SECT-02 | Phase 6 | Pending |
+| SECT-03 | Phase 6 | Pending |
+| SECT-04 | Phase 6 | Pending |
+| SECT-05 | Phase 6 | Pending |
+| SECT-06 | Phase 4 | Pending |
+| SECT-07 | Phase 4 | Pending |
+| SECT-08 | Phase 4 | Pending |
+| SECT-09 | Phase 6 | Pending |
+| SECT-10 | Phase 6 | Pending |
+| SECT-11 | Phase 6 | Pending |
+| SCOR-01 | Phase 3 | Pending |
+| SCOR-02 | Phase 3 | Pending |
+| SCOR-03 | Phase 3 | Pending |
+| SCOR-04 | Phase 3 | Pending |
+| SCOR-05 | Phase 3 | Pending |
+| SCOR-06 | Phase 3 | Pending |
+| ANIM-01 | Phase 5 | Pending |
+| ANIM-02 | Phase 5 | Pending |
+| ANIM-03 | Phase 5 | Pending |
+| ANIM-04 | Phase 5 | Pending |
+| ANIM-05 | Phase 5 | Pending |
+| ANIM-06 | Phase 5 | Pending |
+| ANIM-07 | Phase 5 | Pending |
+| ANIM-08 | Phase 5 | Pending |
+| ANIM-09 | Phase 5 | Pending |
+| ANIM-10 | Phase 5 | Pending |
+| ANIM-11 | Phase 5 | Pending |
+| CTRL-01 | Phase 7 | Pending |
+| CTRL-02 | Phase 5 | Pending |
+| CTRL-03 | Phase 5 | Pending |
+| CTRL-04 | Phase 7 | Pending |
+| DATA-01 | Phase 7 | Pending |
+| DATA-02 | Phase 7 | Pending |
+| DATA-03 | Phase 7 | Pending |
+| DATA-04 | Phase 7 | Pending |
+| DATA-05 | Phase 7 | Pending |
+| DATA-06 | Phase 7 | Pending |
+| DATA-07 | Phase 7 | Pending |
+| AUDIO-01 | Phase 7 | Pending |
+| AUDIO-02 | Phase 7 | Pending |
+| AUDIO-03 | Phase 7 | Pending |
+| AUDIO-04 | Phase 7 | Pending |
 
 **Coverage:**
 - v1 requirements: 42 total
-- Mapped to phases: 0
-- Unmapped: 42
+- Mapped to phases: 42
+- Unmapped: 0
+
+**Phase Distribution:**
+- Phase 1 (Foundation & Migration): 3 requirements
+- Phase 2 (Dual-Screen Architecture): 4 requirements
+- Phase 3 (Game State & Scoring): 6 requirements
+- Phase 4 (Timer System): 4 requirements
+- Phase 5 (Visual System): 13 requirements
+- Phase 6 (Quiz Sections): 8 requirements
+- Phase 7 (Audio & Episode Management): 12 requirements
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after initial definition*
+*Last updated: 2026-02-08 after roadmap creation*
