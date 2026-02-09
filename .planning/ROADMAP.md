@@ -35,10 +35,10 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: Vite migration and build system setup
-- [ ] 01-02: TypeScript migration with noImplicitAny
-- [ ] 01-03: Error boundaries and Zustand state architecture
-- [ ] 01-04: RTL CSS foundation with logical properties
+- [ ] 01-01-PLAN.md — Migrate from CRA to Vite 7 with React plugin and TypeScript foundation
+- [ ] 01-02-PLAN.md — Convert all JavaScript files to TypeScript with strict mode
+- [ ] 01-03-PLAN.md — Replace React Context with Zustand stores and add error boundaries
+- [ ] 01-04-PLAN.md — Set up Tailwind CSS v4 with RTL logical properties and self-hosted Cairo font
 
 ### Phase 2: Dual-Screen Architecture
 **Goal**: Operator controls on laptop screen, audience display on external screen with synchronized state
