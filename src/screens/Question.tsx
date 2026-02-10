@@ -373,7 +373,7 @@ export default function Question() {
   }, [audio, audio2, audioCorrect, audioWrong, fileLoc, handleKeyDown]);
 
   return (
-    <div className="Question">
+    <div className="w-screen h-screen m-0 p-0 flex flex-col items-center justify-center scale-0 translate-y-[500px] blur-[1.5rem] [animation:starta_1s_ease-in-out_forwards_1]">
       {type !== "audienceQuestions" && (
         <>
           <Score
@@ -399,12 +399,12 @@ export default function Question() {
       )}
       <h1
         className={
-          "Question-title" +
+          "text-white max-w-[95%] font-bold text-center p-[1rem] transition-transform duration-200 ease-in-out mb-[4rem] [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)] rounded-[3rem] whitespace-pre-line align-bottom" +
           (["poeticChase", "debate", "askSmartly"].includes(type) ||
           (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
-            ? " Question-title-6"
-            : "") +
-          (showOverlay && file ? " Question-title-overlay" : "")
+            ? " text-[14rem] -mt-[6rem] border-none"
+            : " text-[6rem] border-[15px] border-solid border-white") +
+          (showOverlay && file ? " absolute z-[99] scale-50 -translate-y-[82vh] opacity-65" : "")
         }
       >
         {!isPlaying
@@ -417,19 +417,19 @@ export default function Question() {
       </h1>
       <div
         className={
-          "Question-timer-container" +
+          "bg-[radial-gradient(circle,rgba(48,205,227,1)_0%,rgba(4,52,182,1)_80%)] rounded-[300px] transition-all duration-[0.4s] ease-in-out justify-center items-center flex w-[600px] min-h-[600px] shadow-[0_10px_15px_10px_rgba(0,0,0,0.3)]" +
           (isComplete && type !== "debate"
-            ? " Question-timer-container-complete"
+            ? " !rounded-[3rem] !bg-green-600 !w-[60%] !min-h-[10rem]"
             : "") +
-          (showOverlay && file ? " Question-timer-container-overlay" : "")
+          (showOverlay && file ? " absolute scale-50 translate-x-[85vw] -translate-y-[75vh] z-[99] opacity-65" : "")
         }
       >
         {isComplete ? (
           type !== "debate" &&
           type !== "poeticChase" &&
-          type !== "askSmartly" && <h1 className="Question-answer">{answer}</h1>
+          type !== "askSmartly" && <h1 className="mt-0 [animation:answer_0.4s_0.3s_ease-in-out_forwards_1] text-[5rem] [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)] text-white opacity-0 mb-0 overflow-hidden blur-[1.5rem] text-center whitespace-pre-line align-bottom">{answer}</h1>
         ) : type === "speedQuestions" || type === "audienceQuestions" ? (
-          <GiInfinity size={500} color="white" className="infinity" />
+          <GiInfinity size={500} color="white" className="p-[50px] rounded-[300px] bg-[radial-gradient(circle,rgba(0,0,0,0.5)_0%,rgba(4,52,182,0)_80%)]" />
         ) : (
           <CountdownCircleTimer
             isPlaying={isPlaying}
@@ -456,25 +456,25 @@ export default function Question() {
             }}
           >
             {({ remainingTime }: { remainingTime: number }) => (
-              <span className="Question-timer">{remainingTime}</span>
+              <span className="western-numerals text-white text-[16rem] font-bold [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)]">{remainingTime}</span>
             )}
           </CountdownCircleTimer>
         )}
       </div>
       <div
         className={
-          "Question-overlay" +
-          (showOverlay && file ? " Question-overlay-visible" : "")
+          "fixed left-0 top-0 w-full opacity-0 transition-all duration-200 ease-in-out h-full bg-black" +
+          (showOverlay && file ? " !opacity-100" : "")
         }
       >
         {isImage ? (
-          <img className="Question-overlay-image" src={file ?? ""} alt="question" />
+          <img className="w-full select-none [-webkit-user-drag:none] h-full object-contain" src={file ?? ""} alt="question" />
         ) : (
           file &&
           showOverlay && (
             <video
               src={file}
-              className="Question-overlay-image"
+              className="w-full select-none [-webkit-user-drag:none] h-full object-contain"
               autoPlay
               loop
             />
