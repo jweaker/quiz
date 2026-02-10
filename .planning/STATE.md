@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 1 - Foundation & Migration
+**Current focus:** Phase 1 complete — ready for Phase 2 (Dual-Screen Architecture)
 
 ## Current Position
 
-Phase: 1 of 7 (Foundation & Migration)
-Plan: 3 of 4 complete
-Status: In progress
-Last activity: 2026-02-10 — Completed 01-03-PLAN.md (Zustand store + error boundaries)
+Phase: 1 of 7 (Foundation & Migration) — COMPLETE
+Plan: 4 of 4 complete
+Status: Phase complete
+Last activity: 2026-02-10 — Completed 01-04-PLAN.md (Tailwind CSS & RTL)
 
-Progress: [███░░░░░░░░░░░░░░░░░░░░░░] 3/25 (12%)
+Progress: [████░░░░░░░░░░░░░░░░░░░░░] 4/25 (16%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
-- Average duration: 8.3 min
-- Total execution time: 0.42 hours
+- Total plans completed: 4
+- Average duration: 9 min
+- Total execution time: 0.6 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Foundation & Migration | 3/4 | 25 min | 8.3 min |
+| 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (10 min)
-- Trend: Consistent ~7-10 min per plan
+- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (10 min), 01-04 (11 min)
+- Trend: Consistent ~7-11 min per plan
 
 *Updated after each plan completion*
 
@@ -53,6 +53,9 @@ Recent decisions affecting current work:
 - Individual Zustand selectors: useShowStore((s) => s.field) per field for optimal re-render performance (01-03)
 - Error boundary wraps BrowserRouter: Catches routing errors in addition to component errors (01-03)
 - Null guard pattern: if (!data) return null after hooks but before data access (01-03)
+- Physical positioning for Score panels: right/left not start/end for spatial consistency regardless of RTL (01-04)
+- Arbitrary value syntax for complex CSS: gradients, shadows, animations inline rather than @apply or custom classes (01-04)
+- western-numerals utility class: for score/timer Western numeral display (01-04)
 
 ### Pending Todos
 
@@ -60,10 +63,10 @@ None.
 
 ### Blockers/Concerns
 
-**Phase 1 (Foundation & Migration):**
-- ~~Pre-existing build warnings: dynamic import in Question.jsx needs file extension, MdMiscSoccer not exported from react-icons~~ — RESOLVED in Plan 02 (MdMiscSoccer removed, dynamic import annotated with @vite-ignore)
-- LSP phantom errors: "Cannot find module 'react-router-dom'" and JSX.IntrinsicElements errors in IDE but tsc --noEmit passes clean. LSP moduleResolution mismatch with "bundler" setting — cosmetic only, not blocking.
-- Plan 01-04 (Tailwind CSS) running in parallel — both plans touch overlapping files. Parallel changes carefully managed via selective staging.
+**Phase 1 (Foundation & Migration):** ✅ COMPLETE
+- ~~Pre-existing build warnings~~ — RESOLVED in Plan 02
+- ~~LSP phantom errors~~ — Cosmetic only, not blocking. Documented.
+- ~~Parallel plan overlap (01-03 & 01-04)~~ — RESOLVED, both committed successfully
 
 **Phase 2 (Dual-Screen):**
 - Multi-window state synchronization patterns need validation during planning (MEDIUM confidence from research)
@@ -76,6 +79,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10T12:34:11Z
-Stopped at: Completed 01-03-PLAN.md (Zustand store + error boundaries)
+Last session: 2026-02-10
+Stopped at: Completed Phase 1 — all 4 plans done (01-01 Vite, 01-02 TypeScript, 01-03 Zustand, 01-04 Tailwind)
 Resume file: None
+Next step: Begin Phase 2 planning (Dual-Screen Architecture)
