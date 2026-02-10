@@ -41,7 +41,7 @@ export default function Score({
     <div
       className={
         "fixed flex items-center justify-center flex-col m-[0.2rem] mx-[1rem]" +
-        (right && !overlay ? " right-[-12rem]" : !overlay ? " left-[-12rem]" : "") +
+        (right && !overlay ? " end-[-12rem]" : !overlay ? " start-[-12rem]" : "") +
         (top || overlay ? " top-0" : " bottom-[10rem]") +
         (overlay ? " z-[99] opacity-75 scale-[0.65] translate-x-[-6vh] translate-y-[-6vh]" : "")
       }
