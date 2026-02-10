@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+/*
+ * Global base styles
+ * Using Tailwind's @layer to integrate with the cascade
+ */
+@layer base {
+  body {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    overflow: hidden;
+    font-family: "Cairo", monospace;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+/*
+ * Keyframe animations used across screens
+ */
+@keyframes starta {
+  100% {
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes startb {
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes answer {
+  0% {
+    opacity: 0;
+    filter: blur(1.5rem);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/*
+ * Utility: hide number input spinners
+ */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
