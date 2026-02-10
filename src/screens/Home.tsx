@@ -21,7 +21,7 @@ export default function Home() {
   const {
     quickQuestion,
     setQuickQuestion,
-    audienceQuestion, // corrected variable name
+    audienceQuestion,
     rightsTurn,
     turned,
     DATA,
@@ -29,37 +29,39 @@ export default function Home() {
   } = useGlobalContext();
 
   const navigate = useNavigate();
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState<number>(0);
 
   // Define actions for each key using useMemo for performance.
   const actions = useMemo(
-    () => ({
-      1: () => {
-        navigate(`/question/speedQuestions/${quickQuestion}`);
-        if (DATA.parts.speedQuestions.length <= quickQuestion + 1)
-          setQuickQuestion(0);
-        else setQuickQuestion((p) => p + 1);
-      },
-      2: () => navigate(`/windows`),
-      3: () => {
-        if (DATA.parts.puzzles.length > 1) navigate(`/questionpicker/puzzles`);
-        else navigate(`/question/puzzles/0`);
-      },
-      4: () => navigate(`/question/debate`),
-      5: () => navigate(`/question/poeticChase`),
-      6: () => navigate(`/question/askSmartly`),
-      7: () => navigate(`/questionpicker/quickQuestions`),
-      8: () => {
-        if (audienceQuestion < DATA.parts.audienceQuestions?.length) {
-          navigate(`/question/audienceQuestions/${audienceQuestion}`);
-          setAudienceQuestion((prev) => prev + 1);
-          console.log(DATA.parts.audienceQuestions.length);
-        } else {
-          navigate(`/question/audienceQuestions/0`);
-          setAudienceQuestion(0);
-        }
-      },
-    }),
+    () =>
+      ({
+        1: () => {
+          navigate(`/question/speedQuestions/${quickQuestion}`);
+          if (DATA.parts.speedQuestions.length <= quickQuestion + 1)
+            setQuickQuestion(0);
+          else setQuickQuestion((p) => p + 1);
+        },
+        2: () => navigate(`/windows`),
+        3: () => {
+          if (DATA.parts.puzzles.length > 1)
+            navigate(`/questionpicker/puzzles`);
+          else navigate(`/question/puzzles/0`);
+        },
+        4: () => navigate(`/question/debate`),
+        5: () => navigate(`/question/poeticChase`),
+        6: () => navigate(`/question/askSmartly`),
+        7: () => navigate(`/questionpicker/quickQuestions`),
+        8: () => {
+          if (audienceQuestion < DATA.parts.audienceQuestions?.length) {
+            navigate(`/question/audienceQuestions/${audienceQuestion}`);
+            setAudienceQuestion((prev) => prev + 1);
+            console.log(DATA.parts.audienceQuestions.length);
+          } else {
+            navigate(`/question/audienceQuestions/0`);
+            setAudienceQuestion(0);
+          }
+        },
+      }) as Record<number, () => void>,
     [
       navigate,
       quickQuestion,
@@ -73,7 +75,7 @@ export default function Home() {
   // Keydown handler: If the pressed key is the same as the active one (and not 0),
   // execute its associated action; otherwise, update the active state.
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       const keyNum = Number(e.key);
       if (Number.isInteger(keyNum) && keyNum >= 0 && keyNum <= 8) {
         if (keyNum === active && keyNum !== 0) {
@@ -117,20 +119,18 @@ export default function Home() {
         بشائر المعرفة
       </span>
       <div className="Home-container">
-        {iconButtons.map(
-          ({ key, title, Icon, color, fontSize: btnFontSize }) => (
-            <IconButton
-              key={key}
-              title={title}
-              Icon={Icon}
-              width={ICON_SIZE}
-              height={ICON_SIZE}
-              color={color}
-              fontSize={btnFontSize || FONT_SIZE}
-              active={active === key}
-            />
-          ),
-        )}
+        {iconButtons.map(({ key, title, Icon, color }) => (
+          <IconButton
+            key={key}
+            title={title}
+            Icon={Icon}
+            width={ICON_SIZE}
+            height={ICON_SIZE}
+            color={color}
+            fontSize={FONT_SIZE}
+            active={active === key}
+          />
+        ))}
       </div>
     </div>
   );

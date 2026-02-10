@@ -1,6 +1,6 @@
 import IconButton from "../components/IconButton";
 import "./Windows.css";
-import { MdMiscSoccer, MdBrush, MdPerson } from "react-icons/md";
+import { MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
 import { FaShapes } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from "react";
@@ -8,40 +8,39 @@ import { useNavigate } from "react-router-dom";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
 
+const WINDOWS = [
+  "religion",
+  "humanSciences",
+  "naturalSciences",
+  "arts",
+  "misc",
+] as const;
+
 export default function Windows() {
   const navigate = useNavigate();
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState<number>(0);
   const { DATA, rightsTurn, turned } = useGlobalContext();
-  const windows = [
-    "religion",
-    "humanSciences",
-    "naturalSciences",
-    "arts",
-    "misc",
-  ];
+
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       console.log(e.key);
       const nkey = parseInt(e.key);
       if (nkey >= 0 && nkey <= 5) {
         if (nkey === active && nkey !== 0) {
-          navigate("/questionpicker/" + windows[nkey - 1]);
+          navigate("/questionpicker/" + WINDOWS[nkey - 1]);
         } else setActive(nkey);
-      } else
-        switch (e.key) {
-          default:
-            break;
-        }
+      }
     },
     [active, navigate],
   );
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
+
   return (
     <div className="Windows">
       <Score right turn={rightsTurn && turned} />

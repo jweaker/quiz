@@ -5,44 +5,45 @@ import "./Rate.css";
 
 export default function Rate() {
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams<{ type: string }>();
   const { setLeftScore, setRightScore, setRightsTurn, rightsTurn, DATA } =
     useGlobalContext();
-  const [rjudge, setRjudge] = useState();
-  const [rguest, setRguest] = useState();
-  const [raudience, setRaudience] = useState();
-  const [ljudge, setLjudge] = useState();
-  const [lguest, setLguest] = useState();
-  const [laudience, setLaudience] = useState();
-  const type = params.type;
+  const [rjudge, setRjudge] = useState<string | undefined>();
+  const [rguest, setRguest] = useState<string | undefined>();
+  const [raudience, setRaudience] = useState<string | undefined>();
+  const [ljudge, setLjudge] = useState<string | undefined>();
+  const [lguest, setLguest] = useState<string | undefined>();
+  const [laudience, setLaudience] = useState<string | undefined>();
+  const type = params.type!;
   const singlePuzzle = DATA.parts.puzzles.length <= 1;
   const singleRate = type === "puzzles" || type === "windows";
   const doubleTeam = type === "puzzles" ? singlePuzzle : type !== "windows";
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       switch (e.key) {
-        case "Enter":
+        case "Enter": {
           const rsum =
-            parseInt(rjudge ?? 0) +
-            parseInt(rguest ?? 0) +
-            parseInt(raudience ?? 0);
+            parseInt(rjudge ?? "0") +
+            parseInt(rguest ?? "0") +
+            parseInt(raudience ?? "0");
           const lsum =
-            parseInt(ljudge ?? 0) +
-            parseInt(lguest ?? 0) +
-            parseInt(laudience ?? 0);
+            parseInt(ljudge ?? "0") +
+            parseInt(lguest ?? "0") +
+            parseInt(laudience ?? "0");
 
           if (doubleTeam) {
-            setRightScore((e) => e + rsum);
-            setLeftScore((e) => e + lsum);
+            setRightScore((prev) => prev + rsum);
+            setLeftScore((prev) => prev + lsum);
           } else {
-            if (rightsTurn) setRightScore((e) => e + rsum);
-            else setLeftScore((e) => e + rsum);
-            setRightsTurn((e) => !e);
+            if (rightsTurn) setRightScore((prev) => prev + rsum);
+            else setLeftScore((prev) => prev + rsum);
+            setRightsTurn((prev) => !prev);
           }
           if (type === "windows") navigate(-3);
           else navigate(-2);
 
           break;
+        }
         default:
           break;
       }
@@ -60,6 +61,7 @@ export default function Rate() {
       laudience,
       ljudge,
       lguest,
+      doubleTeam,
     ],
   );
   useEffect(() => {
@@ -67,7 +69,6 @@ export default function Rate() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
   return (
     <div className="Rate">
@@ -77,14 +78,14 @@ export default function Rate() {
             <div className="Rate-vcontainer">
               <span className="Rate-title">المجموع</span>
               <span className="Rate-input">
-                {parseInt(rjudge ?? 0) +
-                  parseInt(rguest ?? 0) +
-                  parseInt(raudience ?? 0) ===
-                  0
+                {parseInt(rjudge ?? "0") +
+                  parseInt(rguest ?? "0") +
+                  parseInt(raudience ?? "0") ===
+                0
                   ? ""
-                  : parseInt(rjudge ?? 0) +
-                  parseInt(rguest ?? 0) +
-                  parseInt(raudience ?? 0)}
+                  : parseInt(rjudge ?? "0") +
+                    parseInt(rguest ?? "0") +
+                    parseInt(raudience ?? "0")}
               </span>
             </div>
           )}
@@ -98,7 +99,7 @@ export default function Rate() {
             <input
               className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
               type="number"
-              value={rjudge}
+              value={rjudge ?? ""}
               onChange={(e) => setRjudge(e.target.value)}
             />
           </div>
@@ -112,7 +113,7 @@ export default function Rate() {
               <input
                 className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                 type="number"
-                value={rguest}
+                value={rguest ?? ""}
                 onChange={(e) => setRguest(e.target.value)}
               />
             </div>
@@ -124,7 +125,7 @@ export default function Rate() {
                 <input
                   className="Rate-input"
                   type="number"
-                  value={raudience}
+                  value={raudience ?? ""}
                   onChange={(e) => setRaudience(e.target.value)}
                 />
               </div>
@@ -136,14 +137,14 @@ export default function Rate() {
             {!singleRate && (
               <div className="Rate-vcontainer">
                 <span className="Rate-input">
-                  {parseInt(ljudge ?? 0) +
-                    parseInt(lguest ?? 0) +
-                    parseInt(laudience ?? 0) ===
-                    0
+                  {parseInt(ljudge ?? "0") +
+                    parseInt(lguest ?? "0") +
+                    parseInt(laudience ?? "0") ===
+                  0
                     ? ""
-                    : parseInt(ljudge ?? 0) +
-                    parseInt(lguest ?? 0) +
-                    parseInt(laudience ?? 0)}
+                    : parseInt(ljudge ?? "0") +
+                      parseInt(lguest ?? "0") +
+                      parseInt(laudience ?? "0")}
                 </span>
               </div>
             )}
@@ -152,7 +153,7 @@ export default function Rate() {
               <input
                 className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                 type="number"
-                value={ljudge}
+                value={ljudge ?? ""}
                 onChange={(e) => setLjudge(e.target.value)}
               />
             </div>
@@ -161,7 +162,7 @@ export default function Rate() {
                 <input
                   className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                   type="number"
-                  value={lguest}
+                  value={lguest ?? ""}
                   onChange={(e) => setLguest(e.target.value)}
                 />
               </div>
@@ -172,7 +173,7 @@ export default function Rate() {
                   <input
                     className="Rate-input"
                     type="number"
-                    value={laudience}
+                    value={laudience ?? ""}
                     onChange={(e) => setLaudience(e.target.value)}
                   />
                 </div>

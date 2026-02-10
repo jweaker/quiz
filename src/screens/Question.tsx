@@ -22,40 +22,79 @@ export default function Question() {
     DATA,
     setDATA,
   } = useGlobalContext();
-  const params = useParams();
-  const type = params.type;
+  const params = useParams<{ type: string; id: string; index: string }>();
+  const type = params.type!;
   const navigate = useNavigate();
 
   // Local states
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isComplete, setIsComplete] = useState(false);
-  const [id, setId] = useState(params.id);
-  const [index, setIndex] = useState(parseInt(params.index ?? 0));
-  const [zdone, setZdone] = useState(false);
-  const [file, setFile] = useState(null);
-  const [leftWrong, setLeftWrong] = useState(0);
-  const [rightWrong, setRightWrong] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [id, setId] = useState<string | number>(params.id ?? "");
+  const [index, setIndex] = useState<number>(parseInt(params.index ?? "0"));
+  const [zdone, setZdone] = useState<boolean>(false);
+  const [file, setFile] = useState<string | null>(null);
+  const [leftWrong, setLeftWrong] = useState<number>(0);
+  const [rightWrong, setRightWrong] = useState<number>(0);
+  const [duration, setDuration] = useState<number>(0);
+  const [showOverlay, setShowOverlay] = useState<boolean>(false);
 
   // Get current question data from DATA
-  const currentWindow = DATA.parts[type]?.[id];
-  const question = currentWindow
+  const currentWindow = (DATA.parts[type] as Record<string, unknown>)?.[
+    id as string
+  ];
+  const question: {
+    text?: string;
+    duration?: number;
+    file?: string;
+    isImage?: boolean;
+    answer?: string;
+    done?: boolean;
+  } = currentWindow
     ? Array.isArray(currentWindow)
-      ? currentWindow[index]
+      ? (currentWindow[index] as {
+          text?: string;
+          duration?: number;
+          file?: string;
+          isImage?: boolean;
+          answer?: string;
+          done?: boolean;
+        })
       : type === "quickQuestions"
-        ? currentWindow.questions[index]
-        : currentWindow
-    : (DATA.parts[type] ??
+        ? ((
+            currentWindow as { questions: Array<{ text?: string; duration?: number; file?: string; isImage?: boolean; answer?: string; done?: boolean }> }
+          ).questions[index] as {
+            text?: string;
+            duration?: number;
+            file?: string;
+            isImage?: boolean;
+            answer?: string;
+            done?: boolean;
+          })
+        : (currentWindow as {
+            text?: string;
+            duration?: number;
+            file?: string;
+            isImage?: boolean;
+            answer?: string;
+            done?: boolean;
+          })
+    : ((DATA.parts[type] as {
+        text?: string;
+        duration?: number;
+        file?: string;
+        isImage?: boolean;
+        answer?: string;
+        done?: boolean;
+      }) ??
       (type === "poeticChase"
         ? { text: "المطاردة الشعرية", duration: 15 }
         : type === "askSmartly"
           ? {
-            text: "اسأل بذكاء",
-            duration: 120,
-            file: "animals.png",
-            isImage: true,
-          }
+              text: "اسأل بذكاء",
+              duration: 120,
+              file: "animals.png",
+              isImage: true,
+            }
           : {}));
   const {
     text,
@@ -67,7 +106,7 @@ export default function Question() {
 
   // Set initial duration from the question data
   useEffect(() => {
-    setDuration(hduration);
+    setDuration(hduration ?? 0);
   }, [hduration]);
 
   useEffect(() => {
@@ -75,26 +114,42 @@ export default function Question() {
       if (type === "puzzles") {
         setDATA((prevState) => {
           const newData = { ...prevState };
-          newData.parts[type][id].done = !question.done;
+          const puzzles = newData.parts[type] as Array<{ done?: boolean }>;
+          const puzzle = puzzles[id as unknown as number];
+          if (puzzle) puzzle.done = !question.done;
           return newData;
         });
       } else if (type === "windows") {
         setDATA((prevState) => {
           const newData = { ...prevState };
-          newData.parts[type][id][index].done = !question.done;
+          const windows = newData.parts[type] as Record<
+            string,
+            Array<{ done?: boolean }>
+          >;
+          const windowCategory = windows[id as string];
+          if (windowCategory?.[index]) {
+            windowCategory[index].done = !question.done;
+          }
           return newData;
         });
       }
       audioWhoosh.play();
-    } catch { }
+    } catch {
+      /* ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Initialize audio elements
-  const [audio] = useState(new Audio(sourceAudio));
-  const [audio2] = useState(new Audio(sourceAudio2));
-  const [audioCorrect] = useState(new Audio(sourceAudioCorrect));
-  const [audioWrong] = useState(new Audio(sourceAudioWrong));
-  const [audioWhoosh] = useState(new Audio(sourceAudioWhoosh));
+  const [audio] = useState<HTMLAudioElement>(new Audio(sourceAudio));
+  const [audio2] = useState<HTMLAudioElement>(new Audio(sourceAudio2));
+  const [audioCorrect] = useState<HTMLAudioElement>(
+    new Audio(sourceAudioCorrect),
+  );
+  const [audioWrong] = useState<HTMLAudioElement>(new Audio(sourceAudioWrong));
+  const [audioWhoosh] = useState<HTMLAudioElement>(
+    new Audio(sourceAudioWhoosh),
+  );
 
   // Helper to pause audio and update playing state
   const pauseAudio = useCallback(() => {
@@ -112,7 +167,7 @@ export default function Question() {
   }, [audio]);
 
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       const key = e.key;
       switch (key) {
         case "Escape":
@@ -145,8 +200,9 @@ export default function Question() {
             audioCorrect.play();
             triggerComplete();
           } else if (type === "quickQuestions") {
+            const quickQuestionsData = DATA.parts.quickQuestions;
             const totalSubQuestions =
-              DATA.parts.quickQuestions[id].questions.length;
+              quickQuestionsData[id as unknown as number]?.questions.length ?? 0;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
               if (rightsTurn) setRightScore((prev) => prev + 1);
@@ -188,8 +244,9 @@ export default function Question() {
             triggerComplete();
             audioWrong.play();
           } else if (type === "quickQuestions") {
+            const quickQuestionsData = DATA.parts.quickQuestions;
             const totalSubQuestions =
-              DATA.parts.quickQuestions[id].questions.length;
+              quickQuestionsData[id as unknown as number]?.questions.length ?? 0;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
             } else {
@@ -204,9 +261,9 @@ export default function Question() {
           break;
         case "1":
           if (type === "quickQuestions") {
-            const totalSets = DATA.parts.quickQuestions.questions.length;
-            if (id < totalSets) {
-              setId((prev) => prev + 1);
+            const totalSets = DATA.parts.quickQuestions.length;
+            if ((id as number) < totalSets) {
+              setId((prev) => (prev as number) + 1);
               setRightsTurn((prev) => !prev);
             }
             setIndex(0);
@@ -214,7 +271,7 @@ export default function Question() {
             triggerComplete();
             setIsPlaying(false);
           } else {
-            setDuration(type === "debate" ? 60 : hduration);
+            setDuration(type === "debate" ? 60 : (hduration ?? 0));
             triggerComplete();
             setIsPlaying(false);
           }
@@ -236,13 +293,22 @@ export default function Question() {
           if (type === "puzzles") {
             setDATA((prevState) => {
               const newData = { ...prevState };
-              newData.parts[type][id].done = !question.done;
+              const puzzles = newData.parts[type] as Array<{ done?: boolean }>;
+              const puzzle = puzzles[id as unknown as number];
+              if (puzzle) puzzle.done = !question.done;
               return newData;
             });
           } else if (type === "windows") {
             setDATA((prevState) => {
               const newData = { ...prevState };
-              newData.parts[type][id][index].done = !question.done;
+              const windows = newData.parts[type] as Record<
+                string,
+                Array<{ done?: boolean }>
+              >;
+              const windowCategory = windows[id as string];
+              if (windowCategory?.[index]) {
+                windowCategory[index].done = !question.done;
+              }
               return newData;
             });
           }
@@ -265,9 +331,13 @@ export default function Question() {
       rightWrong,
       DATA,
       question,
+      hduration,
       navigate,
       pauseAudio,
       triggerComplete,
+      audio,
+      audioCorrect,
+      audioWrong,
       setTurned,
       setRightsTurn,
       setRightScore,
@@ -287,8 +357,10 @@ export default function Question() {
     if (fileLoc)
       (async () => {
         try {
-          const importedFile = await import(`../assets/${fileLoc}`);
-          setFile(importedFile.default);
+          const importedFile = await import(
+            /* @vite-ignore */ `../assets/${fileLoc}`
+          );
+          setFile(importedFile.default as string);
         } catch (err) {
           console.log(err);
         }
@@ -310,7 +382,7 @@ export default function Question() {
               type === "askSmartly" ||
               type === "quickQuestions"
             }
-            overlay={showOverlay && file}
+            overlay={showOverlay && !!file}
             right
             turn={rightsTurn && turned}
           />
@@ -320,7 +392,7 @@ export default function Question() {
               type === "askSmartly" ||
               type === "quickQuestions"
             }
-            overlay={showOverlay && file}
+            overlay={showOverlay && !!file}
             turn={!rightsTurn && turned}
           />
         </>
@@ -329,7 +401,7 @@ export default function Question() {
         className={
           "Question-title" +
           (["poeticChase", "debate", "askSmartly"].includes(type) ||
-            (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
+          (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
             ? " Question-title-6"
             : "") +
           (showOverlay && file ? " Question-title-overlay" : "")
@@ -337,7 +409,7 @@ export default function Question() {
       >
         {!isPlaying
           ? type === "quickQuestions"
-            ? DATA.parts.quickQuestions[id].title
+            ? DATA.parts.quickQuestions[id as unknown as number]?.title
             : type === "speedQuestions"
               ? "سؤال السرعة"
               : text
@@ -364,11 +436,11 @@ export default function Question() {
             duration={duration}
             colors={["#00ff00", "#ffff01", "#A30000", "#A30000"]}
             colorsTime={[duration, duration / 2, 5, 0]}
-            trailColor="white"
+            trailColor="#ffffff"
             strokeWidth={20}
             trailStrokeWidth={25}
             size={600}
-            onUpdate={(remaining) => {
+            onUpdate={(remaining: number) => {
               if (remaining === 14) audio.currentTime = 0;
               audio.playbackRate =
                 duration === 0
@@ -383,7 +455,7 @@ export default function Question() {
               audio2.play();
             }}
           >
-            {({ remainingTime }) => (
+            {({ remainingTime }: { remainingTime: number }) => (
               <span className="Question-timer">{remainingTime}</span>
             )}
           </CountdownCircleTimer>
@@ -396,7 +468,7 @@ export default function Question() {
         }
       >
         {isImage ? (
-          <img className="Question-overlay-image" src={file} alt="question" />
+          <img className="Question-overlay-image" src={file ?? ""} alt="question" />
         ) : (
           file &&
           showOverlay && (

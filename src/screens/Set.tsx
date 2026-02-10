@@ -1,6 +1,7 @@
 import "./Set.css";
 import DATA from "../config/data.json";
 import { useGlobalContext } from "../contexts/Global";
+
 export default function Set() {
   const { rightScore, setRightScore, leftScore, setLeftScore } =
     useGlobalContext();
@@ -12,7 +13,7 @@ export default function Set() {
           className="Rate-input Rate-input-2"
           type="number"
           value={leftScore}
-          onChange={(e) => setLeftScore(e.target.value)}
+          onChange={(e) => setLeftScore(parseInt(e.target.value) || 0)}
         />
       </div>
       <div className="Rate-vcontainer">
@@ -21,7 +22,7 @@ export default function Set() {
           className="Rate-input Rate-input-2"
           type="number"
           value={rightScore}
-          onChange={(e) => setRightScore(e.target.value)}
+          onChange={(e) => setRightScore(parseInt(e.target.value) || 0)}
         />
       </div>
     </div>
