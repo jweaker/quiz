@@ -7,14 +7,14 @@
 
 ### Architecture (ARCH)
 
-- [ ] **ARCH-01**: App built with Vite + React 18 + TypeScript (no JavaScript, no CRA)
+- [x] **ARCH-01**: App built with Vite + React 18 + TypeScript (no JavaScript, no CRA)
 - [ ] **ARCH-02**: Dual-screen architecture — operator panel on MacBook, audience view on external display via window.open()
 - [ ] **ARCH-03**: Cross-window state sync via Broadcast Channel API with automatic reconnection
 - [ ] **ARCH-04**: Configurable safe area / content boundaries (margins adjustable per edge, persisted)
-- [ ] **ARCH-05**: Error boundaries around every major section (crash in one section doesn't kill the app)
+- [x] **ARCH-05**: Error boundaries around every major section (crash in one section doesn't kill the app)
 - [ ] **ARCH-06**: Web Worker timers for accurate countdowns even when browser tab is backgrounded
 - [ ] **ARCH-07**: Confidence monitor — operator sees preview of what audience will see next before triggering
-- [ ] **ARCH-08**: All state managed via Zustand stores (not React Context)
+- [x] **ARCH-08**: All state managed via Zustand stores (not React Context)
 
 ### Quiz Sections (SECT)
 
@@ -113,11 +113,11 @@ Populated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ARCH-01 | Phase 1 | Pending |
+| ARCH-01 | Phase 1 | Complete |
 | ARCH-02 | Phase 2 | Pending |
 | ARCH-03 | Phase 2 | Pending |
 | ARCH-04 | Phase 2 | Pending |
-| ARCH-05 | Phase 1 | Pending |
+| ARCH-05 | Phase 1 | Complete |
 | ARCH-06 | Phase 4 | Pending |
 | ARCH-07 | Phase 2 | Pending |
 | ARCH-08 | Phase 1 | Pending |
