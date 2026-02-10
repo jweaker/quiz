@@ -1,4 +1,17 @@
+import type { IconType } from "react-icons";
 import "./IconButton.css";
+
+interface IconButtonProps {
+  title?: string;
+  Icon?: IconType;
+  color?: string;
+  width?: string;
+  height?: string;
+  fontSize?: string;
+  done?: boolean;
+  active?: boolean;
+}
+
 export default function IconButton({
   title = "",
   Icon,
@@ -7,8 +20,8 @@ export default function IconButton({
   height,
   fontSize,
   done = false,
-  active = false, // if true, will be highlighted
-}) {
+  active = false,
+}: IconButtonProps) {
   return (
     <div
       className={
@@ -27,8 +40,8 @@ export default function IconButton({
           (Icon
             ? ""
             : done
-            ? " IconButton-title-done"
-            : " IconButton-title-big")
+              ? " IconButton-title-done"
+              : " IconButton-title-big")
         }
         style={{ fontSize }}
       >

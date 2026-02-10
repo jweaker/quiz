@@ -2,18 +2,26 @@ import { useEffect, useState } from "react";
 import { useGlobalContext } from "../contexts/Global";
 import "./Score.css";
 
+interface ScoreProps {
+  right?: boolean;
+  turn?: boolean;
+  top?: boolean;
+  overlay?: boolean;
+  zero?: boolean;
+}
+
 export default function Score({
   right = false,
   turn,
   top = false,
   overlay = false,
   zero = false,
-}) {
+}: ScoreProps) {
   const { leftScore, rightScore, setRightScore, setLeftScore, DATA } =
     useGlobalContext();
   const mscore = right ? rightScore : leftScore;
   const mset = right ? setRightScore : setLeftScore;
-  const [init, setInit] = useState(0);
+  const [init, setInit] = useState<number>(0);
   useEffect(() => {
     if (zero && !init) setInit(mscore);
   });
@@ -38,7 +46,7 @@ export default function Score({
           type="number"
           className="Score-score-score"
           value={mscore - init}
-          onChange={(e) => mset(parseInt(e.target.value))}
+          onChange={(e) => mset(parseInt(e.target.value) || 0)}
         />
       </div>
     </div>
