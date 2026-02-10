@@ -47,40 +47,41 @@ export default function OperatorPanel() {
         <WindowLauncher />
       </div>
       <div className="flex-1 min-h-0">
-      <ResizablePanelGroup
-        orientation="horizontal"
-        onLayoutChanged={(layout) => {
-          const monitorSize = layout[MONITOR_PANEL_ID]
-          if (monitorSize !== undefined) {
-            setConfidenceMonitorSize(monitorSize)
-          }
-        }}
-      >
-        <ResizablePanel
-          defaultSize={100 - confidenceMonitorSize}
-          minSize={40}
-          id="controls"
+        <ResizablePanelGroup
+          orientation="horizontal"
+          onLayoutChanged={(layout) => {
+            const monitorSize = layout[MONITOR_PANEL_ID]
+            if (monitorSize !== undefined) {
+              setConfidenceMonitorSize(monitorSize)
+            }
+          }}
         >
-          <OperatorControls />
-        </ResizablePanel>
+          <ResizablePanel
+            defaultSize={100 - confidenceMonitorSize}
+            minSize={40}
+            id="controls"
+          >
+            <OperatorControls />
+          </ResizablePanel>
 
-        <ResizableHandle withHandle />
+          <ResizableHandle withHandle />
 
-        <ResizablePanel
-          defaultSize={confidenceMonitorSize}
-          minSize={15}
-          id={MONITOR_PANEL_ID}
-        >
-          <ConfidenceMonitorPlaceholder />
-        </ResizablePanel>
-      </ResizablePanelGroup>
+          <ResizablePanel
+            defaultSize={confidenceMonitorSize}
+            minSize={15}
+            id={MONITOR_PANEL_ID}
+          >
+            <ConfidenceMonitorPlaceholder />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
     </div>
   )
 }
 
 /**
  * Placeholder for the confidence monitor (live audience mirror).
- * Will be implemented in Plan 03 (window management).
+ * Will be replaced with actual ConfidenceMonitor in Task 3.
  */
 function ConfidenceMonitorPlaceholder() {
   const audienceWindowConnected = useOperatorStore((s) => s.audienceWindowConnected)
