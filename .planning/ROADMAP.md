@@ -53,9 +53,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Window manager and Broadcast Channel sync
-- [ ] 02-02: Operator panel scaffold and audience display with safe area
-- [ ] 02-03: Confidence monitor and window lifecycle management
+- [ ] 02-01-PLAN.md — BroadcastChannel middleware, shadcn/ui setup, operatorStore
+- [ ] 02-02-PLAN.md — Operator panel layout, audience display with safe area, settings
+- [ ] 02-03-PLAN.md — Window lifecycle, confidence monitor, disconnect banner
 
 ### Phase 3: Game State & Scoring
 **Goal**: Real-time score tracking with animations visible on both screens
