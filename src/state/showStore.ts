@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { broadcast } from './sync/broadcastMiddleware'
 
 // Question data types (re-exported from contexts for backward compatibility)
 interface QuestionItem {
@@ -85,30 +86,33 @@ const initialState = {
 }
 
 export const useShowStore = create<ShowState>()(
-  persist(
-    (set) => ({
-      ...initialState,
+  broadcast(
+    persist(
+      (set) => ({
+        ...initialState,
 
-      setRightScore: (score) => set({ rightScore: score }),
-      setLeftScore: (score) => set({ leftScore: score }),
-      addRightScore: (delta) => set((state) => ({ rightScore: state.rightScore + delta })),
-      addLeftScore: (delta) => set((state) => ({ leftScore: state.leftScore + delta })),
-      setRightsTurn: (isRight) => set({ rightsTurn: isRight }),
-      toggleTurn: () => set((state) => ({ rightsTurn: !state.rightsTurn, turned: true })),
-      setTurned: (turned) => set({ turned }),
-      setQuickQuestion: (index) => set({ quickQuestion: index }),
-      setAudienceQuestion: (index) => set({ audienceQuestion: index }),
-      setData: (data) => set({ data }),
-      updateData: (updater) =>
-        set((state) => {
-          if (!state.data) return state
-          return { data: updater(state.data) }
-        }),
-      reset: () => set(initialState),
-    }),
-    {
-      name: 'show-storage', // localStorage key
-      storage: createJSONStorage(() => localStorage),
-    }
+        setRightScore: (score) => set({ rightScore: score }),
+        setLeftScore: (score) => set({ leftScore: score }),
+        addRightScore: (delta) => set((state) => ({ rightScore: state.rightScore + delta })),
+        addLeftScore: (delta) => set((state) => ({ leftScore: state.leftScore + delta })),
+        setRightsTurn: (isRight) => set({ rightsTurn: isRight }),
+        toggleTurn: () => set((state) => ({ rightsTurn: !state.rightsTurn, turned: true })),
+        setTurned: (turned) => set({ turned }),
+        setQuickQuestion: (index) => set({ quickQuestion: index }),
+        setAudienceQuestion: (index) => set({ audienceQuestion: index }),
+        setData: (data) => set({ data }),
+        updateData: (updater) =>
+          set((state) => {
+            if (!state.data) return state
+            return { data: updater(state.data) }
+          }),
+        reset: () => set(initialState),
+      }),
+      {
+        name: 'show-storage', // localStorage key
+        storage: createJSONStorage(() => localStorage),
+      }
+    ),
+    'quiz-show-state' // BroadcastChannel name
   )
 )
