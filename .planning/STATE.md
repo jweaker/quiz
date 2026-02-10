@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 1 of 7 (Foundation & Migration)
-Plan: 2 of 4 complete
+Plan: 3 of 4 complete
 Status: In progress
-Last activity: 2026-02-10 — Completed 01-02-PLAN.md (TypeScript migration)
+Last activity: 2026-02-10 — Completed 01-03-PLAN.md (Zustand store + error boundaries)
 
-Progress: [██░░░░░░░░░░░░░░░░░░░░░░░] 2/25 (8%)
+Progress: [███░░░░░░░░░░░░░░░░░░░░░░] 3/25 (12%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 7.5 min
-- Total execution time: 0.25 hours
+- Total plans completed: 3
+- Average duration: 8.3 min
+- Total execution time: 0.42 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 - Foundation & Migration | 2/4 | 15 min | 7.5 min |
+| 1 - Foundation & Migration | 3/4 | 25 min | 8.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (7 min), 01-02 (8 min)
-- Trend: Consistent ~7-8 min per plan
+- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (10 min)
+- Trend: Consistent ~7-10 min per plan
 
 *Updated after each plan completion*
 
@@ -50,6 +50,9 @@ Recent decisions affecting current work:
 - allowJs removed: Full TypeScript migration complete, no JS files remain in src/ (01-02)
 - IconButton optional props: width, height, fontSize, Icon made optional in TypeScript interface to match actual usage (01-02)
 - @types/react v18: Downgraded from v19 to match actual React 18 runtime (01-02)
+- Individual Zustand selectors: useShowStore((s) => s.field) per field for optimal re-render performance (01-03)
+- Error boundary wraps BrowserRouter: Catches routing errors in addition to component errors (01-03)
+- Null guard pattern: if (!data) return null after hooks but before data access (01-03)
 
 ### Pending Todos
 
@@ -60,6 +63,7 @@ None.
 **Phase 1 (Foundation & Migration):**
 - ~~Pre-existing build warnings: dynamic import in Question.jsx needs file extension, MdMiscSoccer not exported from react-icons~~ — RESOLVED in Plan 02 (MdMiscSoccer removed, dynamic import annotated with @vite-ignore)
 - LSP phantom errors: "Cannot find module 'react-router-dom'" and JSX.IntrinsicElements errors in IDE but tsc --noEmit passes clean. LSP moduleResolution mismatch with "bundler" setting — cosmetic only, not blocking.
+- Plan 01-04 (Tailwind CSS) running in parallel — both plans touch overlapping files. Parallel changes carefully managed via selective staging.
 
 **Phase 2 (Dual-Screen):**
 - Multi-window state synchronization patterns need validation during planning (MEDIUM confidence from research)
@@ -72,6 +76,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-10
-Stopped at: Completed 01-02-PLAN.md (TypeScript migration)
+Last session: 2026-02-10T12:34:11Z
+Stopped at: Completed 01-03-PLAN.md (Zustand store + error boundaries)
 Resume file: None
