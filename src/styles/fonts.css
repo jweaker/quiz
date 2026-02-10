@@ -1,0 +1,31 @@
+/*
+ * Self-hosted Cairo font — Arabic broadcast quiz font
+ * Downloaded from Google Fonts, served locally (no CDN dependency)
+ * Variable font covers weight range 200-1000
+ */
+
+/* Cairo Regular (400) — Arabic + Latin subset */
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/Cairo-Regular.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+0600-06FF, U+0750-077F,
+    U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2000-206F, U+20AC, U+2122, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
+
+/* Cairo Bold (700) — Arabic + Latin subset */
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/Cairo-Bold.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+    U+02DA, U+02DC, U+0304, U+0308, U+0329, U+0600-06FF, U+0750-077F,
+    U+0870-088E, U+0890-0891, U+0897-08E1, U+08E3-08FF, U+200C-200E,
+    U+2000-206F, U+20AC, U+2122, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC;
+}
