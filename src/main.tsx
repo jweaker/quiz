@@ -1,17 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
+import "./styles/main.css";
 import App from "./App";
-import { GlobalContextProvider } from "./contexts/Global";
 import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <GlobalContextProvider>
-        <App />
-      </GlobalContextProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );

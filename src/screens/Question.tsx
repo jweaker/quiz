@@ -1,4 +1,3 @@
-import "./Question.css";
 import { useNavigate, useParams } from "react-router-dom";
 import sourceAudio from "../assets/tick.wav";
 import sourceAudio2 from "../assets/boom.mp3";
@@ -8,20 +7,18 @@ import sourceAudioWhoosh from "../assets/whoosh.mp3";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import { useCallback, useEffect, useState } from "react";
 import Score from "../components/Score";
-import { useGlobalContext } from "../contexts/Global";
+import { useShowStore } from "../state";
 import { GiInfinity } from "react-icons/gi";
 
 export default function Question() {
-  const {
-    rightsTurn,
-    setLeftScore,
-    setTurned,
-    turned,
-    setRightScore,
-    setRightsTurn,
-    DATA,
-    setDATA,
-  } = useGlobalContext();
+  const rightsTurn = useShowStore((state) => state.rightsTurn);
+  const turned = useShowStore((state) => state.turned);
+  const data = useShowStore((state) => state.data);
+  const setRightsTurn = useShowStore((state) => state.setRightsTurn);
+  const setTurned = useShowStore((state) => state.setTurned);
+  const addRightScore = useShowStore((state) => state.addRightScore);
+  const addLeftScore = useShowStore((state) => state.addLeftScore);
+  const updateData = useShowStore((state) => state.updateData);
   const params = useParams<{ type: string; id: string; index: string }>();
   const type = params.type!;
   const navigate = useNavigate();
@@ -37,6 +34,9 @@ export default function Question() {
   const [rightWrong, setRightWrong] = useState<number>(0);
   const [duration, setDuration] = useState<number>(0);
   const [showOverlay, setShowOverlay] = useState<boolean>(false);
+
+  if (!data) return null;
+  const DATA = data;
 
   // Get current question data from DATA
   const currentWindow = (DATA.parts[type] as Record<string, unknown>)?.[
@@ -112,7 +112,7 @@ export default function Question() {
   useEffect(() => {
     try {
       if (type === "puzzles") {
-        setDATA((prevState) => {
+        updateData((prevState) => {
           const newData = { ...prevState };
           const puzzles = newData.parts[type] as Array<{ done?: boolean }>;
           const puzzle = puzzles[id as unknown as number];
@@ -120,7 +120,7 @@ export default function Question() {
           return newData;
         });
       } else if (type === "windows") {
-        setDATA((prevState) => {
+        updateData((prevState) => {
           const newData = { ...prevState };
           const windows = newData.parts[type] as Record<
             string,
@@ -189,14 +189,14 @@ export default function Question() {
           }
           setTurned(true);
           if (type === "askSmartly") {
-            setRightsTurn((prev) => !prev);
+            setRightsTurn(!rightsTurn);
             triggerComplete();
             setDuration(120);
             setIsComplete(true);
             setIsPlaying(false);
           } else if (type === "poeticChase") {
             setDuration(15);
-            setRightsTurn((prev) => !prev);
+            setRightsTurn(!rightsTurn);
             audioCorrect.play();
             triggerComplete();
           } else if (type === "quickQuestions") {
@@ -205,15 +205,15 @@ export default function Question() {
               quickQuestionsData[id as unknown as number]?.questions.length ?? 0;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
-              if (rightsTurn) setRightScore((prev) => prev + 1);
-              else setLeftScore((prev) => prev + 1);
+              if (rightsTurn) addRightScore(1);
+              else addLeftScore(1);
             } else {
               pauseAudio();
             }
             audioCorrect.play();
             if (!zdone && index + 1 === totalSubQuestions) {
-              if (rightsTurn) setRightScore((prev) => prev + 1);
-              else setLeftScore((prev) => prev + 1);
+              if (rightsTurn) addRightScore(1);
+              else addLeftScore(1);
               setZdone(true);
             }
           } else {
@@ -229,17 +229,17 @@ export default function Question() {
             audioWrong.play();
           }
           if (type === "askSmartly") {
-            if (rightsTurn) setRightScore((prev) => prev - 1);
-            else setLeftScore((prev) => prev - 1);
+            if (rightsTurn) addRightScore(-1);
+            else addLeftScore(-1);
           } else if (type === "poeticChase") {
             if (rightsTurn) {
               setRightWrong((prev) => prev + 1);
-              setRightScore((prev) => prev - 5);
+              addRightScore(-5);
             } else {
               setLeftWrong((prev) => prev + 1);
-              setLeftScore((prev) => prev - 5);
+              addLeftScore(-5);
             }
-            setRightsTurn((prev) => !prev);
+            setRightsTurn(!rightsTurn);
             setDuration(15);
             triggerComplete();
             audioWrong.play();
@@ -264,7 +264,7 @@ export default function Question() {
             const totalSets = DATA.parts.quickQuestions.length;
             if ((id as number) < totalSets) {
               setId((prev) => (prev as number) + 1);
-              setRightsTurn((prev) => !prev);
+              setRightsTurn(!rightsTurn);
             }
             setIndex(0);
             setZdone(false);
@@ -281,17 +281,17 @@ export default function Question() {
             navigate(`/rate/${type}`);
           }
           if (type === "poeticChase") {
-            setRightScore((prev) => prev + 15);
-            setLeftScore((prev) => prev + 15);
+            addRightScore(15);
+            addLeftScore(15);
           }
           if (type === "askSmartly") {
-            if (rightsTurn) setRightScore((prev) => prev + 20);
-            else setLeftScore((prev) => prev + 20);
+            if (rightsTurn) addRightScore(20);
+            else addLeftScore(20);
           }
           break;
         case "m":
           if (type === "puzzles") {
-            setDATA((prevState) => {
+            updateData((prevState) => {
               const newData = { ...prevState };
               const puzzles = newData.parts[type] as Array<{ done?: boolean }>;
               const puzzle = puzzles[id as unknown as number];
@@ -299,7 +299,7 @@ export default function Question() {
               return newData;
             });
           } else if (type === "windows") {
-            setDATA((prevState) => {
+            updateData((prevState) => {
               const newData = { ...prevState };
               const windows = newData.parts[type] as Record<
                 string,
@@ -340,9 +340,9 @@ export default function Question() {
       audioWrong,
       setTurned,
       setRightsTurn,
-      setRightScore,
-      setLeftScore,
-      setDATA,
+      addRightScore,
+      addLeftScore,
+      updateData,
     ],
   );
 

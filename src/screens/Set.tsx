@@ -1,10 +1,12 @@
 import "./Set.css";
 import DATA from "../config/data.json";
-import { useGlobalContext } from "../contexts/Global";
+import { useShowStore } from "../state";
 
 export default function Set() {
-  const { rightScore, setRightScore, leftScore, setLeftScore } =
-    useGlobalContext();
+  const rightScore = useShowStore((state) => state.rightScore);
+  const setRightScore = useShowStore((state) => state.setRightScore);
+  const leftScore = useShowStore((state) => state.leftScore);
+  const setLeftScore = useShowStore((state) => state.setLeftScore);
   return (
     <div className="Set">
       <div className="Rate-vcontainer">

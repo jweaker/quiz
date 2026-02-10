@@ -10,26 +10,25 @@ import {
 import { TbUserQuestion } from "react-icons/tb";
 import { RiTimerFill } from "react-icons/ri";
 import { IoExtensionPuzzle } from "react-icons/io5";
-import "./Home.css";
-import { useGlobalContext } from "../contexts/Global";
+import { useShowStore } from "../state";
 import Score from "../components/Score";
 
 const ICON_SIZE = "35rem";
 const FONT_SIZE = "5rem";
 
 export default function Home() {
-  const {
-    quickQuestion,
-    setQuickQuestion,
-    audienceQuestion,
-    rightsTurn,
-    turned,
-    DATA,
-    setAudienceQuestion,
-  } = useGlobalContext();
+  const quickQuestion = useShowStore((s) => s.quickQuestion);
+  const setQuickQuestion = useShowStore((s) => s.setQuickQuestion);
+  const audienceQuestion = useShowStore((s) => s.audienceQuestion);
+  const setAudienceQuestion = useShowStore((s) => s.setAudienceQuestion);
+  const rightsTurn = useShowStore((s) => s.rightsTurn);
+  const turned = useShowStore((s) => s.turned);
+  const DATA = useShowStore((s) => s.data);
 
   const navigate = useNavigate();
   const [active, setActive] = useState<number>(0);
+
+  if (!DATA) return null;
 
   // Define actions for each key using useMemo for performance.
   const actions = useMemo(
@@ -39,7 +38,7 @@ export default function Home() {
           navigate(`/question/speedQuestions/${quickQuestion}`);
           if (DATA.parts.speedQuestions.length <= quickQuestion + 1)
             setQuickQuestion(0);
-          else setQuickQuestion((p) => p + 1);
+          else setQuickQuestion(quickQuestion + 1);
         },
         2: () => navigate(`/windows`),
         3: () => {
@@ -54,7 +53,7 @@ export default function Home() {
         8: () => {
           if (audienceQuestion < DATA.parts.audienceQuestions?.length) {
             navigate(`/question/audienceQuestions/${audienceQuestion}`);
-            setAudienceQuestion((prev) => prev + 1);
+            setAudienceQuestion(audienceQuestion + 1);
             console.log(DATA.parts.audienceQuestions.length);
           } else {
             navigate(`/question/audienceQuestions/0`);
@@ -112,13 +111,13 @@ export default function Home() {
   ];
 
   return (
-    <div className="Home">
+    <div className="w-screen h-screen p-0 m-0 fixed flex justify-center items-center overflow-y-scroll flex-col [scrollbar-width:none] [-webkit-scrollbar:none]">
       <Score top right turn={rightsTurn && turned} />
       <Score top turn={!rightsTurn && turned} />
-      <span className="Question-title Question-title-6 Home-title">
+      <span className="text-[12rem] mt-[2rem] mb-0 opacity-0 [animation:startb_0.5s_ease-in-out_forwards_1] [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)] text-white font-bold text-center p-[1rem] border-none">
         بشائر المعرفة
       </span>
-      <div className="Home-container">
+      <div className="mt-[5rem] flex flex-wrap justify-center gap-[1rem] p-0 [&>*]:flex-[0_0_calc(20%-1rem)] [&>*]:max-w-[calc(20%-1rem)]">
         {iconButtons.map(({ key, title, Icon, color }) => (
           <IconButton
             key={key}

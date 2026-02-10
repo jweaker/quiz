@@ -1,13 +1,19 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGlobalContext } from "../contexts/Global";
+import { useShowStore } from "../state";
 import "./Rate.css";
 
 export default function Rate() {
   const navigate = useNavigate();
   const params = useParams<{ type: string }>();
-  const { setLeftScore, setRightScore, setRightsTurn, rightsTurn, DATA } =
-    useGlobalContext();
+  const addLeftScore = useShowStore((state) => state.addLeftScore);
+  const addRightScore = useShowStore((state) => state.addRightScore);
+  const setRightsTurn = useShowStore((state) => state.setRightsTurn);
+  const rightsTurn = useShowStore((state) => state.rightsTurn);
+  const data = useShowStore((state) => state.data);
+
+  if (!data) return null;
+  const DATA = data;
   const [rjudge, setRjudge] = useState<string | undefined>();
   const [rguest, setRguest] = useState<string | undefined>();
   const [raudience, setRaudience] = useState<string | undefined>();
@@ -32,12 +38,12 @@ export default function Rate() {
             parseInt(laudience ?? "0");
 
           if (doubleTeam) {
-            setRightScore((prev) => prev + rsum);
-            setLeftScore((prev) => prev + lsum);
+            addRightScore(rsum);
+            addLeftScore(lsum);
           } else {
-            if (rightsTurn) setRightScore((prev) => prev + rsum);
-            else setLeftScore((prev) => prev + rsum);
-            setRightsTurn((prev) => !prev);
+            if (rightsTurn) addRightScore(rsum);
+            else addLeftScore(rsum);
+            setRightsTurn(!rightsTurn);
           }
           if (type === "windows") navigate(-3);
           else navigate(-2);
@@ -56,8 +62,8 @@ export default function Rate() {
       raudience,
       rjudge,
       rguest,
-      setLeftScore,
-      setRightScore,
+      addLeftScore,
+      addRightScore,
       laudience,
       ljudge,
       lguest,

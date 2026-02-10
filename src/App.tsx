@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import "./App.css";
-import { useGlobalContext } from "./contexts/Global";
+import { useShowStore } from "./state";
+import type { EpisodeData } from "./state";
+import defaultData from "./config/data.json";
 import Home from "./screens/Home";
 import Question from "./screens/Question";
 import QuestionPicker from "./screens/QuestionPicker";
@@ -10,8 +11,16 @@ import Windows from "./screens/Windows";
 
 export default function App() {
   const [hideCursor, setHideCursor] = useState<boolean>(false);
-  const { setRightsTurn, setTurned } = useGlobalContext();
+  const toggleTurn = useShowStore((state) => state.toggleTurn);
   const navigate = useNavigate();
+
+  // Load default episode data if store has none (first load or after reset)
+  useEffect(() => {
+    if (useShowStore.getState().data === null) {
+      useShowStore.getState().setData(defaultData as EpisodeData);
+    }
+  }, []);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       console.log(e.key);
@@ -23,14 +32,13 @@ export default function App() {
           setHideCursor((prev) => !prev);
           break;
         case "s":
-          setRightsTurn((prev) => !prev);
-          setTurned(true);
+          toggleTurn();
           break;
         default:
           break;
       }
     },
-    [navigate, setRightsTurn, setTurned],
+    [navigate, toggleTurn],
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
@@ -39,7 +47,7 @@ export default function App() {
     };
   }, [handleKeyDown]);
   return (
-    <div className={"App" + (hideCursor ? " hideCursor" : "")}>
+    <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="windows" element={<Windows />} />

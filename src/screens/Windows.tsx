@@ -1,12 +1,11 @@
 import IconButton from "../components/IconButton";
-import "./Windows.css";
 import { MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
 import { FaShapes } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Score from "../components/Score";
-import { useGlobalContext } from "../contexts/Global";
+import { useShowStore } from "../state";
 
 const WINDOWS = [
   "religion",
@@ -19,7 +18,11 @@ const WINDOWS = [
 export default function Windows() {
   const navigate = useNavigate();
   const [active, setActive] = useState<number>(0);
-  const { DATA, rightsTurn, turned } = useGlobalContext();
+  const DATA = useShowStore((s) => s.data);
+  const rightsTurn = useShowStore((s) => s.rightsTurn);
+  const turned = useShowStore((s) => s.turned);
+
+  if (!DATA) return null;
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -42,11 +45,11 @@ export default function Windows() {
   }, [handleKeyDown]);
 
   return (
-    <div className="Windows">
+    <div className="w-screen h-screen m-0 p-0 flex flex-col items-center justify-center [animation:starta_0.5s_ease-in-out_forwards_1] scale-0 translate-y-[500px] blur-[1.5rem]">
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
-      <h1 className="Windows-title">النوافذ</h1>
-      <div className="Windows-container">
+      <h1 className="text-white text-[15rem] m-0 mt-[4rem] [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)]">النوافذ</h1>
+      <div className="w-full m-0 p-0 flex justify-center items-center flex-row-reverse">
         <IconButton
           title="الدين و السيرة"
           Icon={GiArabicDoor}
@@ -75,7 +78,7 @@ export default function Windows() {
           active={active === 3}
         />
       </div>
-      <div className="Windows-container">
+      <div className="w-full m-0 p-0 flex justify-center items-center flex-row-reverse">
         <IconButton
           title="الأدب و الفنون"
           Icon={MdBrush}
