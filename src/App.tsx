@@ -9,21 +9,21 @@ import Rate from "./screens/Rate";
 import Windows from "./screens/Windows";
 
 export default function App() {
-  const [hideCursor, setHideCursor] = useState(false);
+  const [hideCursor, setHideCursor] = useState<boolean>(false);
   const { setRightsTurn, setTurned } = useGlobalContext();
   const navigate = useNavigate();
   const handleKeyDown = useCallback(
-    (e) => {
+    (e: KeyboardEvent) => {
       console.log(e.key);
       switch (e.key) {
         case "Escape":
           if (window.location.pathname !== "/") navigate(-1);
           break;
         case "c":
-          setHideCursor((e) => !e);
+          setHideCursor((prev) => !prev);
           break;
         case "s":
-          setRightsTurn((e) => !e);
+          setRightsTurn((prev) => !prev);
           setTurned(true);
           break;
         default:
