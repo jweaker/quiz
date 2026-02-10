@@ -5,33 +5,34 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 1 complete — ready for Phase 2 (Dual-Screen Architecture)
+**Current focus:** Phase 2 in progress — Dual-Screen Architecture (plan 1 of 3 complete)
 
 ## Current Position
 
-Phase: 1 of 7 (Foundation & Migration) — COMPLETE
-Plan: 4 of 4 complete
-Status: Phase complete
-Last activity: 2026-02-10 — Completed 01-04-PLAN.md (Tailwind CSS & RTL)
+Phase: 2 of 7 (Dual-Screen Architecture)
+Plan: 1 of 3 in current phase
+Status: In progress
+Last activity: 2026-02-10 — Completed 02-01-PLAN.md (BroadcastChannel middleware, shadcn/ui, operatorStore)
 
-Progress: [████░░░░░░░░░░░░░░░░░░░░░] 4/25 (16%)
+Progress: [█████░░░░░░░░░░░░░░░░░░░░] 5/25 (20%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 9 min
-- Total execution time: 0.6 hours
+- Total plans completed: 5
+- Average duration: 8 min
+- Total execution time: 0.7 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
+| 2 - Dual-Screen Architecture | 1/3 | 6 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (7 min), 01-02 (8 min), 01-03 (10 min), 01-04 (11 min)
-- Trend: Consistent ~7-11 min per plan
+- Last 5 plans: 01-02 (8 min), 01-03 (10 min), 01-04 (11 min), 02-01 (6 min)
+- Trend: Consistent ~6-11 min per plan
 
 *Updated after each plan completion*
 
@@ -43,19 +44,13 @@ Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
 - Dual-screen architecture: Operator controls on laptop, audience view on external display (Pending)
-- TypeScript migration: Complete migration from JavaScript for type safety (Pending)
-- Chess clock for poetic chase: More dynamic than deduction-based scoring (Pending)
-- JSX file extensions required: Vite 7 Rollup parser rejects JSX in .js files; renamed all to .jsx (01-01)
-- RTL from the start: Set lang=ar dir=rtl on root html element now rather than deferring (01-01)
-- allowJs removed: Full TypeScript migration complete, no JS files remain in src/ (01-02)
-- IconButton optional props: width, height, fontSize, Icon made optional in TypeScript interface to match actual usage (01-02)
-- @types/react v18: Downgraded from v19 to match actual React 18 runtime (01-02)
 - Individual Zustand selectors: useShowStore((s) => s.field) per field for optimal re-render performance (01-03)
-- Error boundary wraps BrowserRouter: Catches routing errors in addition to component errors (01-03)
-- Null guard pattern: if (!data) return null after hooks but before data access (01-03)
 - Physical positioning for Score panels: right/left not start/end for spatial consistency regardless of RTL (01-04)
-- Arbitrary value syntax for complex CSS: gradients, shadows, animations inline rather than @apply or custom classes (01-04)
-- western-numerals utility class: for score/timer Western numeral display (01-04)
+- @ path alias: baseUrl/paths in tsconfig + resolve.alias in vite.config for shadcn/ui imports (02-01)
+- broadcast(persist(creator)) ordering: broadcast wraps persist so BroadcastChannel gets post-hydration state (02-01)
+- partialize operatorStore: audienceWindowConnected excluded from persistence — runtime-only state (02-01)
+- ESM vite config: fileURLToPath/import.meta.url instead of __dirname for ESM compatibility (02-01)
+- esbuild build scripts: pnpm.onlyBuiltDependencies for esbuild to fix EPIPE errors (02-01)
 
 ### Pending Todos
 
@@ -64,12 +59,9 @@ None.
 ### Blockers/Concerns
 
 **Phase 1 (Foundation & Migration):** ✅ COMPLETE
-- ~~Pre-existing build warnings~~ — RESOLVED in Plan 02
-- ~~LSP phantom errors~~ — Cosmetic only, not blocking. Documented.
-- ~~Parallel plan overlap (01-03 & 01-04)~~ — RESOLVED, both committed successfully
 
 **Phase 2 (Dual-Screen):**
-- Multi-window state synchronization patterns need validation during planning (MEDIUM confidence from research)
+- ~~Multi-window state synchronization patterns~~ — VALIDATED in 02-01 (BroadcastChannel middleware working)
 
 **Phase 4 (Timer System):**
 - Web Worker timer implementation patterns need research before detailed planning (MEDIUM confidence)
@@ -80,6 +72,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-10
-Stopped at: Completed Phase 1 — all 4 plans done (01-01 Vite, 01-02 TypeScript, 01-03 Zustand, 01-04 Tailwind)
+Stopped at: Completed 02-01-PLAN.md (BroadcastChannel middleware, shadcn/ui, operatorStore)
 Resume file: None
-Next step: Begin Phase 2 planning (Dual-Screen Architecture)
+Next step: Execute 02-02-PLAN.md (Operator panel layout, audience display with safe area, settings)

@@ -53,7 +53,7 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — BroadcastChannel middleware, shadcn/ui setup, operatorStore
+- [ ] 02-01-PLAN.md — BroadcastChannel middleware, shadcn/ui setup, operatorStore ✅
 - [ ] 02-02-PLAN.md — Operator panel layout, audience display with safe area, settings
 - [ ] 02-03-PLAN.md — Window lifecycle, confidence monitor, disconnect banner
 
@@ -162,11 +162,11 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Migration | 4/4 | ✓ Complete | 2026-02-10 |
-| 2. Dual-Screen Architecture | 0/3 | Not started | - |
+| 2. Dual-Screen Architecture | 1/3 | In progress | - |
 | 3. Game State & Scoring | 0/2 | Not started | - |
 | 4. Timer System | 0/3 | Not started | - |
 | 5. Visual System | 0/4 | Not started | - |
 | 6. Quiz Sections | 0/5 | Not started | - |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 4/25 plans complete (16%)
+**Total:** 5/25 plans complete (20%)
