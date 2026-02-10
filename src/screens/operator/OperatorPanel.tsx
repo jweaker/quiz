@@ -8,13 +8,14 @@ import {
 import OperatorControls from './OperatorControls'
 import { DisconnectBanner } from '@/components/operator/DisconnectBanner'
 import { WindowLauncher } from '@/components/operator/WindowLauncher'
+import { ConfidenceMonitor } from '@/components/operator/ConfidenceMonitor'
 import { useAudienceWindow } from '@/hooks/useAudienceWindow'
 
 const MONITOR_PANEL_ID = 'confidence-monitor'
 
 /**
  * Main operator panel layout with resizable two-column design.
- * Left panel: controls area. Right panel: confidence monitor placeholder.
+ * Left panel: controls area. Right panel: confidence monitor (live preview).
  * Panel sizes persist in operatorStore across refresh.
  * Includes DisconnectBanner, WindowLauncher, and Cmd+Shift+A shortcut.
  */
@@ -71,33 +72,9 @@ export default function OperatorPanel() {
             minSize={15}
             id={MONITOR_PANEL_ID}
           >
-            <ConfidenceMonitorPlaceholder />
+            <ConfidenceMonitor />
           </ResizablePanel>
         </ResizablePanelGroup>
-      </div>
-    </div>
-  )
-}
-
-/**
- * Placeholder for the confidence monitor (live audience mirror).
- * Will be replaced with actual ConfidenceMonitor in Task 3.
- */
-function ConfidenceMonitorPlaceholder() {
-  const audienceWindowConnected = useOperatorStore((s) => s.audienceWindowConnected)
-
-  return (
-    <div className="h-full flex flex-col items-center justify-center bg-muted/30 p-4">
-      <div className="text-muted-foreground text-sm text-center space-y-2">
-        <div className="w-16 h-12 mx-auto border-2 border-dashed border-muted-foreground/30 rounded-md flex items-center justify-center">
-          <span className="text-xs text-muted-foreground/50">📺</span>
-        </div>
-        <p className="font-medium">شاشة المراقبة</p>
-        <p className="text-xs">
-          {audienceWindowConnected
-            ? 'متصلة'
-            : 'سيتم عرض ما يراه الجمهور هنا'}
-        </p>
       </div>
     </div>
   )
