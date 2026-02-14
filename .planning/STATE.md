@@ -10,16 +10,16 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 4 of 7 (Timer System) — IN PROGRESS
-Plan: 1 of 3 complete
-Status: Timer infrastructure ready — Background-accurate countdown with audio cues
-Last activity: 2026-02-14 — Completed 04-01 (Timer Infrastructure)
+Plan: 2 of 3 complete
+Status: Chess clock with dual timers and operator/audience UI ready
+Last activity: 2026-02-14 — Completed 04-02 (Chess Clock UI)
 
-Progress: [█████████░░░░░░░░░░░░░░░] 10/25 (40%)
+Progress: [██████████░░░░░░░░░░░░░░] 11/25 (44%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
+- Total plans completed: 11
 - Average duration: 5 min
 - Total execution time: 1.0 hours
 
@@ -30,14 +30,14 @@ Progress: [█████████░░░░░░░░░░░░░░
 | 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
-| 4 - Timer System | 1/3 🔄 | 2 min | 2 min |
+| 4 - Timer System | 2/3 🔄 | 5 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (7 min), 02-03 (~5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (2 min)
-- Trend: Accelerating (2-7 min range, recent plans averaging ~3 min)
+- Last 5 plans: 02-03 (~5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (2 min), 04-02 (3 min)
+- Trend: Accelerating (2-5 min range, recent plans averaging ~3 min)
 
 *Updated after each plan completion*
-| Phase 04 P01 | 2 | 2 tasks | 6 files |
+| Phase 04 P02 | 3 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -71,6 +71,10 @@ Recent decisions affecting current work:
 - Timer state temporal exclusion: Timer state excluded from temporal middleware to prevent undo rewinding clocks (04-01)
 - worker-timers for countdown: Background-tab resilience with performance.now() drift correction for broadcast accuracy (04-01)
 - Audio placeholder strategy: Copied existing assets to public/sounds/ for unblocked development with swap capability (04-01)
+- Chess clock mutual exclusion: Single activeTimer field ensures only one team's clock ticks at a time, atomic switching (04-02)
+- Points conversion formula: Math.floor(timeMs / 5000) for conservative rounding in Poetic Chase (5s = 1pt) (04-02)
+- Dual-mode timer UI: TimerPanel toggles between countdown and chess clock modes with dedicated keyboard shortcuts (04-02)
+- Western numerals for timers: All timer digits use western-numerals class for broadcast clarity (04-02)
 
 ### Pending Todos
 
@@ -89,7 +93,8 @@ None.
 
 **Phase 4 (Timer System):** 🔄 IN PROGRESS
 - Plan 04-01 complete — Timer infrastructure with drift-corrected countdown and audio cues
-- Next: Plan 04-02 (Chess Clock UI) or 04-03 (Poetic Chase integration)
+- Plan 04-02 complete — Chess clock UI with operator controls and audience display
+- Next: Plan 04-03 (Poetic Chase integration)
 
 **Phase 6 (Quiz Sections):**
 - 72 animal photos need collection/licensing before Ask Intelligently section implementation
@@ -97,6 +102,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 04-01-PLAN.md (Timer Infrastructure)
+Stopped at: Completed 04-02-PLAN.md (Chess Clock UI)
 Resume file: None
-Next step: Continue Phase 4 with 04-02 (Chess Clock UI) or 04-03 (Poetic Chase integration)
+Next step: Continue Phase 4 with 04-03 (Poetic Chase integration)
