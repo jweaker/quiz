@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 
 ## Current Position
 
-Phase: 3 of 7 (Game State & Scoring) — COMPLETE
-Plan: 2 of 2 complete
-Status: Phase 3 complete — Full keyboard-driven scoring workflow ready
-Last activity: 2026-02-14 — Completed 03-02 (Keyboard Controls)
+Phase: 4 of 7 (Timer System) — IN PROGRESS
+Plan: 1 of 3 complete
+Status: Timer infrastructure ready — Background-accurate countdown with audio cues
+Last activity: 2026-02-14 — Completed 04-01 (Timer Infrastructure)
 
-Progress: [█████████░░░░░░░░░░░░░░░] 9/25 (36%)
+Progress: [█████████░░░░░░░░░░░░░░░] 10/25 (40%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 6 min
-- Total execution time: 0.9 hours
+- Total plans completed: 10
+- Average duration: 5 min
+- Total execution time: 1.0 hours
 
 **By Phase:**
 
@@ -30,12 +30,14 @@ Progress: [█████████░░░░░░░░░░░░░░
 | 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
+| 4 - Timer System | 1/3 🔄 | 2 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (6 min), 02-02 (7 min), 02-03 (~5 min), 03-01 (3 min), 03-02 (3 min)
-- Trend: Accelerating (3-7 min range, recent plans averaging ~4 min)
+- Last 5 plans: 02-02 (7 min), 02-03 (~5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (2 min)
+- Trend: Accelerating (2-7 min range, recent plans averaging ~3 min)
 
 *Updated after each plan completion*
+| Phase 04 P01 | 2 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -65,6 +67,10 @@ Recent decisions affecting current work:
 - Active team pattern: All scoring presets apply to whichever team has rightsTurn flag (03-02)
 - Reverse-chronological history: Most recent actions at top for natural "what just happened?" workflow (03-02)
 - Per-entry revert: Each history entry has revert button for direct state restoration (03-02)
+- Separate timer BroadcastChannel: quiz-timer-state channel and timer-storage localStorage key for independent sync (04-01)
+- Timer state temporal exclusion: Timer state excluded from temporal middleware to prevent undo rewinding clocks (04-01)
+- worker-timers for countdown: Background-tab resilience with performance.now() drift correction for broadcast accuracy (04-01)
+- Audio placeholder strategy: Copied existing assets to public/sounds/ for unblocked development with swap capability (04-01)
 
 ### Pending Todos
 
@@ -81,8 +87,9 @@ None.
 - Plan 03-02 complete — keyboard controls for scoring and undo/redo
 - All scoring workflow operable via keyboard only (zero mouse dependency)
 
-**Phase 4 (Timer System):**
-- Web Worker timer implementation patterns need research before detailed planning (MEDIUM confidence)
+**Phase 4 (Timer System):** 🔄 IN PROGRESS
+- Plan 04-01 complete — Timer infrastructure with drift-corrected countdown and audio cues
+- Next: Plan 04-02 (Chess Clock UI) or 04-03 (Poetic Chase integration)
 
 **Phase 6 (Quiz Sections):**
 - 72 animal photos need collection/licensing before Ask Intelligently section implementation
@@ -90,6 +97,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 03-02-PLAN.md (Keyboard Controls)
+Stopped at: Completed 04-01-PLAN.md (Timer Infrastructure)
 Resume file: None
-Next step: Phase 3 complete — ready for Phase 4 (Timer System) planning/research or Phase 5 (Episode Data Management)
+Next step: Continue Phase 4 with 04-02 (Chess Clock UI) or 04-03 (Poetic Chase integration)
