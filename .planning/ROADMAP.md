@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation & Migration** - Modernize build system, establish type safety, prevent critical pitfalls
 - [x] **Phase 2: Dual-Screen Architecture** - Operator panel + audience display with state synchronization
 - [x] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
-- [ ] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
+- [x] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
 - [ ] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view
 - [ ] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
 - [ ] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
@@ -90,7 +90,7 @@ Plans:
 - [x] 04-01-PLAN.md — Install worker-timers, create timerStore with BroadcastChannel sync, drift-corrected useCountdown hook, and audio cue manager
 - [x] 04-02-PLAN.md — Chess clock hook with mutual-exclusion dual timers, points conversion, operator TimerPanel and audience TimerDisplay
 - [x] 04-03-PLAN.md — Letter key display on audience screen and pass mechanic with verse scoring for Poetic Chase
-- [ ] 04-04-PLAN.md — UAT gap closure: fix pause/resume, wire audio, fix hotkeys, add custom duration input, add audience verse counter
+- [x] 04-04-PLAN.md — UAT gap closure: fix pause/resume, wire audio, fix hotkeys, add custom duration input, add audience verse counter
 
 ### Phase 5: Visual System
 **Goal**: Broadcast-quality animations and operator interface with full episode visualization
@@ -165,9 +165,9 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 1. Foundation & Migration | 4/4 | ✓ Complete | 2026-02-10 |
 | 2. Dual-Screen Architecture | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
-| 4. Timer System | 3/4 | UAT gap closure | - |
+| 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
 | 5. Visual System | 0/4 | Not started | - |
 | 6. Quiz Sections | 0/5 | Not started | - |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 12/26 plans complete (46%)
+**Total:** 13/26 plans complete (50%)
