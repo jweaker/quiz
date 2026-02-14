@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { temporal } from 'zundo'
 import { broadcast } from './sync/broadcastMiddleware'
 
 // Question data types (re-exported from contexts for backward compatibility)
@@ -53,6 +54,9 @@ export interface ShowState {
   rightsTurn: boolean
   turned: boolean
 
+  // Side swap tracking
+  sidesSwapped: boolean
+
   // Question tracking
   quickQuestion: number
   audienceQuestion: number
@@ -68,6 +72,7 @@ export interface ShowState {
   setRightsTurn: (isRight: boolean) => void
   toggleTurn: () => void
   setTurned: (turned: boolean) => void
+  swapSides: () => void
   setQuickQuestion: (index: number) => void
   setAudienceQuestion: (index: number) => void
   setData: (data: EpisodeData) => void
@@ -80,6 +85,7 @@ const initialState = {
   leftScore: 0,
   rightsTurn: false,
   turned: false,
+  sidesSwapped: false,
   quickQuestion: 0,
   audienceQuestion: 0,
   data: null as EpisodeData | null,
@@ -88,26 +94,50 @@ const initialState = {
 export const useShowStore = create<ShowState>()(
   broadcast(
     persist(
-      (set) => ({
-        ...initialState,
+      temporal(
+        (set) => ({
+          ...initialState,
 
-        setRightScore: (score) => set({ rightScore: score }),
-        setLeftScore: (score) => set({ leftScore: score }),
-        addRightScore: (delta) => set((state) => ({ rightScore: state.rightScore + delta })),
-        addLeftScore: (delta) => set((state) => ({ leftScore: state.leftScore + delta })),
-        setRightsTurn: (isRight) => set({ rightsTurn: isRight }),
-        toggleTurn: () => set((state) => ({ rightsTurn: !state.rightsTurn, turned: true })),
-        setTurned: (turned) => set({ turned }),
-        setQuickQuestion: (index) => set({ quickQuestion: index }),
-        setAudienceQuestion: (index) => set({ audienceQuestion: index }),
-        setData: (data) => set({ data }),
-        updateData: (updater) =>
-          set((state) => {
-            if (!state.data) return state
-            return { data: updater(state.data) }
-          }),
-        reset: () => set(initialState),
-      }),
+          setRightScore: (score) => set({ rightScore: score }),
+          setLeftScore: (score) => set({ leftScore: score }),
+          addRightScore: (delta) => set((state) => ({ rightScore: state.rightScore + delta })),
+          addLeftScore: (delta) => set((state) => ({ leftScore: state.leftScore + delta })),
+          setRightsTurn: (isRight) => set({ rightsTurn: isRight }),
+          toggleTurn: () => set((state) => ({ rightsTurn: !state.rightsTurn, turned: true })),
+          setTurned: (turned) => set({ turned }),
+          swapSides: () =>
+            set((state) => {
+              if (!state.data) return state
+              return {
+                rightScore: state.leftScore,
+                leftScore: state.rightScore,
+                rightsTurn: !state.rightsTurn,
+                sidesSwapped: !state.sidesSwapped,
+                data: {
+                  ...state.data,
+                  leftTeamName: state.data.rightTeamName,
+                  rightTeamName: state.data.leftTeamName,
+                },
+              }
+            }),
+          setQuickQuestion: (index) => set({ quickQuestion: index }),
+          setAudienceQuestion: (index) => set({ audienceQuestion: index }),
+          setData: (data) => set({ data }),
+          updateData: (updater) =>
+            set((state) => {
+              if (!state.data) return state
+              return { data: updater(state.data) }
+            }),
+          reset: () => set(initialState),
+        }),
+        {
+          limit: 50,
+          partialize: (state) => {
+            const { rightScore, leftScore, rightsTurn, turned, sidesSwapped } = state
+            return { rightScore, leftScore, rightsTurn, turned, sidesSwapped }
+          },
+        }
+      ),
       {
         name: 'show-storage', // localStorage key
         storage: createJSONStorage(() => localStorage),
