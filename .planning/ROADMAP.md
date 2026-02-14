@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Migration** - Modernize build system, establish type safety, prevent critical pitfalls
 - [x] **Phase 2: Dual-Screen Architecture** - Operator panel + audience display with state synchronization
-- [ ] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
+- [x] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
 - [ ] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
 - [ ] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view
 - [ ] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
@@ -70,8 +70,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Install deps (zundo, react-hotkeys-hook), extend showStore with temporal middleware and swapSides, create score display components with pop & scale animations, delta indicators, and active team glow
-- [ ] 03-02-PLAN.md — Keyboard-only scoring controls with section presets, custom number entry, scoring history with revert, turn toggle, side swap, undo/redo
+- [x] 03-01-PLAN.md — Install deps (zundo, react-hotkeys-hook), extend showStore with temporal middleware and swapSides, create score display components with pop & scale animations, delta indicators, and active team glow
+- [x] 03-02-PLAN.md — Keyboard-only scoring controls with section presets, custom number entry, scoring history with revert, turn toggle, side swap, undo/redo
 
 ### Phase 4: Timer System
 **Goal**: Accurate countdown and chess clock timers that work even when browser tab backgrounded
@@ -163,10 +163,10 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 |-------|----------------|--------|-----------|
 | 1. Foundation & Migration | 4/4 | ✓ Complete | 2026-02-10 |
 | 2. Dual-Screen Architecture | 3/3 | ✓ Complete | 2026-02-12 |
-| 3. Game State & Scoring | 0/2 | Not started | - |
+| 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Timer System | 0/3 | Not started | - |
 | 5. Visual System | 0/4 | Not started | - |
 | 6. Quiz Sections | 0/5 | Not started | - |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 7/25 plans complete (28%)
+**Total:** 9/25 plans complete (36%)
