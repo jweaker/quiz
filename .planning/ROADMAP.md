@@ -70,8 +70,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: Score state management and display with animations
-- [ ] 03-02: Turn management, team swap, undo, and manual controls
+- [ ] 03-01-PLAN.md — Install deps (zundo, react-hotkeys-hook), extend showStore with temporal middleware and swapSides, create score display components with pop & scale animations, delta indicators, and active team glow
+- [ ] 03-02-PLAN.md — Keyboard-only scoring controls with section presets, custom number entry, scoring history with revert, turn toggle, side swap, undo/redo
 
 ### Phase 4: Timer System
 **Goal**: Accurate countdown and chess clock timers that work even when browser tab backgrounded
