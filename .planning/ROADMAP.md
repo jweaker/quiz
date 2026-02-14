@@ -87,9 +87,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Web Worker timer infrastructure with performance.now
-- [ ] 04-02: Chess clock implementation with time-to-points conversion
-- [ ] 04-03: Pass mechanic and letter display system
+- [ ] 04-01-PLAN.md — Install worker-timers, create timerStore with BroadcastChannel sync, drift-corrected useCountdown hook, and audio cue manager
+- [ ] 04-02-PLAN.md — Chess clock hook with mutual-exclusion dual timers, points conversion, operator TimerPanel and audience TimerDisplay
+- [ ] 04-03-PLAN.md — Letter key display on audience screen and pass mechanic with verse scoring for Poetic Chase
 
 ### Phase 5: Visual System
 **Goal**: Broadcast-quality animations and operator interface with full episode visualization
