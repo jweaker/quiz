@@ -1,5 +1,6 @@
 import { useShowStore } from '@/state'
 import { ThemeToggle } from '@/components/operator/ThemeToggle'
+import { TeamScore } from '@/components/score/TeamScore'
 import { Monitor, Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -57,13 +58,15 @@ export default function OperatorControls() {
       <div className="flex-1 p-6 overflow-auto">
         <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
           {/* Right team (displayed on left in RTL) */}
-          <ScoreCard
+          <TeamScore
+            variant="operator"
             teamName={rightTeamName}
             score={rightScore}
             isActive={rightsTurn && turned}
           />
           {/* Left team (displayed on right in RTL) */}
-          <ScoreCard
+          <TeamScore
+            variant="operator"
             teamName={leftTeamName}
             score={leftScore}
             isActive={!rightsTurn && turned}
@@ -79,38 +82,6 @@ export default function OperatorControls() {
           </p>
         </div>
       </div>
-    </div>
-  )
-}
-
-/**
- * Score card for a single team in the operator panel.
- */
-function ScoreCard({
-  teamName,
-  score,
-  isActive,
-}: {
-  teamName: string
-  score: number
-  isActive: boolean
-}) {
-  return (
-    <div
-      className={
-        'rounded-lg border p-6 text-center transition-all ' +
-        (isActive
-          ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary/20'
-          : 'border-border bg-card')
-      }
-    >
-      <p className="text-sm font-medium text-muted-foreground mb-2">{teamName}</p>
-      <p className="text-5xl font-bold tabular-nums">{score}</p>
-      {isActive && (
-        <span className="inline-block mt-2 text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded">
-          الدور الحالي
-        </span>
-      )}
     </div>
   )
 }
