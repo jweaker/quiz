@@ -17,6 +17,7 @@ type TimerMode = 'countdown' | 'chess-clock'
  */
 export function TimerPanel() {
   const [mode, setMode] = useState<TimerMode>('countdown')
+  const [customDuration, setCustomDuration] = useState('')
 
   const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
   const countdownRunning = useTimerStore((s) => s.countdownRunning)
@@ -183,6 +184,46 @@ export function TimerPanel() {
                   <span className="western-numerals">{duration}</span> ثانية
                 </Button>
               ))}
+            </div>
+          </div>
+
+          {/* Custom duration input */}
+          <div>
+            <p className="text-sm font-medium mb-2">مدة مخصصة (ثانية)</p>
+            <div className="flex gap-2">
+              <input
+                type="number"
+                min={1}
+                max={999}
+                placeholder="مدة مخصصة"
+                value={customDuration}
+                onChange={(e) => setCustomDuration(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    const dur = parseInt(customDuration, 10)
+                    if (dur > 0 && dur <= 999) {
+                      setCountdown(dur)
+                      setCountdownRunning(false)
+                      setCustomDuration('')
+                    }
+                  }
+                }}
+                className="w-24 px-2 py-1 text-sm border rounded bg-background western-numerals"
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const dur = parseInt(customDuration, 10)
+                  if (dur > 0 && dur <= 999) {
+                    setCountdown(dur)
+                    setCountdownRunning(false)
+                    setCustomDuration('')
+                  }
+                }}
+              >
+                تعيين
+              </Button>
             </div>
           </div>
         </div>

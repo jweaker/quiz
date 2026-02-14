@@ -11,6 +11,7 @@ export function TimerDisplay() {
   const rightTimeMs = useTimerStore((s) => s.rightTimeMs)
   const leftTimeMs = useTimerStore((s) => s.leftTimeMs)
   const activeTimer = useTimerStore((s) => s.activeTimer)
+  const verseCount = useTimerStore((s) => s.verseCount)
 
   // Determine which mode to display
   const isChessClockActive = activeTimer !== null || rightTimeMs < 100_000 || leftTimeMs < 100_000
@@ -63,6 +64,9 @@ export function TimerDisplay() {
             <p className="text-white/80 text-3xl font-medium">
               = <span className="western-numerals">{rightPoints}</span> نقطة
             </p>
+            <p className="text-white/60 text-xl mt-1">
+              <span className="western-numerals">{verseCount.right}</span> بيت
+            </p>
           </div>
         </div>
 
@@ -88,6 +92,9 @@ export function TimerDisplay() {
           <div className="mt-4 text-center">
             <p className="text-white/80 text-3xl font-medium">
               = <span className="western-numerals">{leftPoints}</span> نقطة
+            </p>
+            <p className="text-white/60 text-xl mt-1">
+              <span className="western-numerals">{verseCount.left}</span> بيت
             </p>
           </div>
         </div>
