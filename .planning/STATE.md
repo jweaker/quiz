@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 4 of 7 (Timer System) — COMPLETE
-Plan: 3 of 3 complete
-Status: Complete timer system with chess clock, pass mechanic, and letter display
-Last activity: 2026-02-14 — Completed 04-03 (Poetic Chase Integration)
+Plan: 4 of 4 complete
+Status: All UAT gaps closed, timer system production-ready
+Last activity: 2026-02-15 — Completed 04-04 (UAT Gap Closure)
 
-Progress: [████████████░░░░░░░░░░░░] 12/25 (48%)
+Progress: [█████████████░░░░░░░░░░░] 13/25 (52%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 4 min
-- Total execution time: 1.1 hours
+- Total plans completed: 13
+- Average duration: 3.8 min
+- Total execution time: 1.2 hours
 
 **By Phase:**
 
@@ -30,14 +30,15 @@ Progress: [████████████░░░░░░░░░░░
 | 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
-| 4 - Timer System | 3/3 ✅ | 7 min | 2 min |
+| 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (3 min), 03-02 (3 min), 04-01 (2 min), 04-02 (3 min), 04-03 (2 min)
-- Trend: Accelerating (2-3 min range, recent plans averaging ~2.5 min)
+- Last 5 plans: 03-02 (3 min), 04-01 (2 min), 04-02 (3 min), 04-03 (2 min), 04-04 (2 min)
+- Trend: Accelerating (2-3 min range, recent plans averaging ~2.4 min)
 
 *Updated after each plan completion*
 | Phase 04 P03 | 2 | 2 tasks | 6 files |
+| Phase 04-timer-system P04 | 2 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,8 @@ Recent decisions affecting current work:
 - Local state for pass tracking: passActive and passedToTeam stored in hook state, not global store (transient flow state) (04-03)
 - Pass scoring rules: +1pt for receiving team on pass, +1pt additional bonus for correct answer after pass (04-03)
 - Letter keys conflict-free: a-z verified no conflicts with scoring (numbers), timer (t/p/[/]\), pass (g/v/x) (04-03)
+- [Phase 04-timer-system]: KeyboardEvent.code names for react-hotkeys-hook v5 bracket/backslash support (04-04)
+- [Phase 04-timer-system]: Elapsed time offset for pause/resume: startTimeRef accounts for (duration - remaining) (04-04)
 
 ### Pending Todos
 
@@ -98,7 +101,8 @@ None.
 - Plan 04-01 complete — Timer infrastructure with drift-corrected countdown and audio cues
 - Plan 04-02 complete — Chess clock UI with operator controls and audience display
 - Plan 04-03 complete — Poetic Chase pass mechanic and letter display integration
-- All timer features ready: countdown, chess clock, pass mechanic, letter display
+- Plan 04-04 complete — UAT gap closure (pause/resume fix, audio wiring, keyboard shortcuts, custom input, verse counter)
+- All 5 UAT gaps closed, timer system production-ready
 
 **Phase 5 (Visual System):**
 - CRITICAL USER FEEDBACK: Operator panel layout is badly designed — long vertical scroll, redundant options, poor use of space for a live TV operator who needs to glance and act quickly. Phase 5 must redesign the operator layout, not just add more panels on top of the existing mess.
