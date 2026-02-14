@@ -2,6 +2,7 @@ import { useShowStore } from '@/state'
 import { ThemeToggle } from '@/components/operator/ThemeToggle'
 import { TeamScore } from '@/components/score/TeamScore'
 import { ScoringPanel } from '@/components/operator/ScoringPanel'
+import { TimerPanel } from '@/components/operator/TimerPanel'
 import { useScoreControls } from '@/hooks/useScoreControls'
 import { Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
@@ -78,6 +79,11 @@ export default function OperatorControls() {
 
         {/* Scoring controls panel */}
         <ScoringPanel />
+
+        {/* Timer controls panel */}
+        <div className="mt-8 pt-8 border-t max-w-2xl mx-auto">
+          <TimerPanel />
+        </div>
       </div>
     </div>
   )

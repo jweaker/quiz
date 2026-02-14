@@ -1,6 +1,7 @@
 import { useOperatorStore } from '@/state'
 import { getContentStyle } from '@/lib/safeArea'
 import { ScoreOverlay } from '@/components/audience/ScoreOverlay'
+import { TimerDisplay } from '@/components/audience/TimerDisplay'
 
 /**
  * Audience-facing broadcast display.
@@ -29,6 +30,9 @@ export default function AudienceDisplay() {
         >
           بشائر المعرفة
         </h1>
+
+        {/* Timer display (countdown or chess clock) */}
+        <TimerDisplay />
       </div>
     </div>
   )
