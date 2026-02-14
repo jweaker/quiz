@@ -1,16 +1,19 @@
 import { useShowStore } from '@/state'
 import { ThemeToggle } from '@/components/operator/ThemeToggle'
 import { TeamScore } from '@/components/score/TeamScore'
-import { Monitor, Settings } from 'lucide-react'
+import { ScoringPanel } from '@/components/operator/ScoringPanel'
+import { useScoreControls } from '@/hooks/useScoreControls'
+import { Settings } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 /**
  * Main operator controls area.
- * Shows current show state (scores, team names, turn) and header with theme toggle.
- * Placeholder content — actual show controls will be added in later phases.
+ * Shows current show state (scores, team names, turn) and full scoring controls.
  */
 export default function OperatorControls() {
+  // Register global keyboard shortcuts
+  useScoreControls()
   const leftScore = useShowStore((s) => s.leftScore)
   const rightScore = useShowStore((s) => s.rightScore)
   const data = useShowStore((s) => s.data)
@@ -41,15 +44,6 @@ export default function OperatorControls() {
             <Settings className="size-4 me-1" />
             الإعدادات
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled
-            title="سيتم التفعيل في الخطة 03"
-          >
-            <Monitor className="size-4 me-1" />
-            فتح شاشة الجمهور
-          </Button>
           <ThemeToggle />
         </div>
       </header>
@@ -73,14 +67,17 @@ export default function OperatorControls() {
           />
         </div>
 
-        {/* Show status */}
-        <div className="mt-8 max-w-2xl mx-auto text-center">
+        {/* Turn indicator */}
+        <div className="mt-6 max-w-2xl mx-auto text-center">
           <p className="text-sm text-muted-foreground">
             {turned
               ? `الدور: ${rightsTurn ? rightTeamName : leftTeamName}`
               : 'لم يبدأ الدور بعد'}
           </p>
         </div>
+
+        {/* Scoring controls panel */}
+        <ScoringPanel />
       </div>
     </div>
   )
