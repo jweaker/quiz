@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 2 complete — Dual-Screen Architecture verified. Ready for Phase 3 (Game State & Scoring)
+**Current focus:** Phase 3 (Game State & Scoring) — In Progress
 
 ## Current Position
 
-Phase: 2 of 7 (Dual-Screen Architecture) — COMPLETE
-Plan: 3 of 3 complete
-Status: Phase complete — verified (5/5 must-haves passed)
-Last activity: 2026-02-12 — Phase 2 verified and complete
+Phase: 3 of 7 (Game State & Scoring) — IN PROGRESS
+Plan: 1 of 2 complete
+Status: Plan 03-01 complete — Score state and display foundation ready
+Last activity: 2026-02-14 — Completed 03-01 (Score State & Display)
 
-Progress: [███████░░░░░░░░░░░░░░░░░░] 7/25 (28%)
+Progress: [████████░░░░░░░░░░░░░░░░] 8/25 (32%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
-- Average duration: 7 min
-- Total execution time: 0.8 hours
+- Total plans completed: 8
+- Average duration: 6 min
+- Total execution time: 0.9 hours
 
 **By Phase:**
 
@@ -29,10 +29,11 @@ Progress: [███████░░░░░░░░░░░░░░░░
 |-------|-------|-------|----------|
 | 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
+| 3 - Game State & Scoring | 1/2 🚧 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (10 min), 01-04 (11 min), 02-01 (6 min), 02-02 (7 min), 02-03 (~5 min)
-- Trend: Consistent ~5-11 min per plan
+- Last 5 plans: 01-04 (11 min), 02-01 (6 min), 02-02 (7 min), 02-03 (~5 min), 03-01 (3 min)
+- Trend: Accelerating (3-11 min range, recent plans averaging ~5 min)
 
 *Updated after each plan completion*
 
@@ -55,6 +56,11 @@ Recent decisions affecting current work:
 - Lazy-loaded route screens: React.lazy() for OperatorPanel, AudienceDisplay, Settings (02-02)
 - Safe area defaults: bottom 15% margin for broadcast lower-third space (02-02)
 - Unit toggle resets margins: Switching px/% resets values to avoid nonsensical conversions (02-02)
+- Temporal middleware ordering: broadcast(persist(temporal(creator))) ensures temporal captures state before persist/broadcast (03-01)
+- Temporal partialization: only track score-related fields to avoid undo affecting non-scoring state (03-01)
+- Pop & scale animation: chosen over rolling counter/flip for simplicity, reliability, and broadcast sync (03-01)
+- Single gold accent color: for active team glow, not team-specific colors (03-01)
+- First-render skip: useScoreDelta prevents spurious delta indicators on page load (03-01)
 
 ### Pending Todos
 
@@ -66,6 +72,10 @@ None.
 
 **Phase 2 (Dual-Screen):** ✅ COMPLETE
 
+**Phase 3 (Game State & Scoring):** 🚧 IN PROGRESS
+- Plan 03-01 complete — temporal middleware and score display foundation ready
+- Plan 03-02 next — keyboard controls for scoring and undo/redo
+
 **Phase 4 (Timer System):**
 - Web Worker timer implementation patterns need research before detailed planning (MEDIUM confidence)
 
@@ -74,7 +84,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-12
-Stopped at: Completed Phase 2 — all 3 plans done and verified (02-01 State Sync, 02-02 Dual-Screen UI, 02-03 Window Lifecycle)
+Last session: 2026-02-14
+Stopped at: Completed 03-01-PLAN.md (Score State & Display)
 Resume file: None
-Next step: Begin Phase 3 planning (Game State & Scoring)
+Next step: Execute 03-02-PLAN.md (Keyboard Controls) — keyboard shortcuts for scoring, turn toggle, undo/redo, and side swap
