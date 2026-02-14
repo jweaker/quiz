@@ -100,6 +100,10 @@ None.
 - Plan 04-03 complete — Poetic Chase pass mechanic and letter display integration
 - All timer features ready: countdown, chess clock, pass mechanic, letter display
 
+**Phase 5 (Visual System):**
+- CRITICAL USER FEEDBACK: Operator panel layout is badly designed — long vertical scroll, redundant options, poor use of space for a live TV operator who needs to glance and act quickly. Phase 5 must redesign the operator layout, not just add more panels on top of the existing mess.
+- The current approach of stacking ScoringPanel + TimerPanel vertically is not sustainable — need a compact, information-dense layout.
+
 **Phase 6 (Quiz Sections):**
 - 72 animal photos need collection/licensing before Ask Intelligently section implementation
 
