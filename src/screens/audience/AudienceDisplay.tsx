@@ -2,6 +2,7 @@ import { useOperatorStore } from '@/state'
 import { getContentStyle } from '@/lib/safeArea'
 import { ScoreOverlay } from '@/components/audience/ScoreOverlay'
 import { TimerDisplay } from '@/components/audience/TimerDisplay'
+import { LetterDisplay } from '@/components/audience/LetterDisplay'
 
 /**
  * Audience-facing broadcast display.
@@ -20,6 +21,9 @@ export default function AudienceDisplay() {
     >
       {/* Score overlay - always visible at top */}
       <ScoreOverlay />
+
+      {/* Letter display overlay - appears above content when letter is set */}
+      <LetterDisplay />
 
       {/* Content area positioned by safe area margins */}
       <div style={contentStyle} className="flex flex-col items-center justify-center">
