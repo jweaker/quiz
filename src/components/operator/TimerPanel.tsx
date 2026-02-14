@@ -3,7 +3,9 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useTimerStore } from '@/state'
 import { useChessClock } from '@/hooks/useChessClock'
 import { useCountdown } from '@/hooks/useCountdown'
+import { useLetterDisplay } from '@/hooks/useLetterDisplay'
 import { Button } from '@/components/ui/button'
+import { PassControls } from '@/components/operator/PassControls'
 import { Play, Pause, RotateCcw, Timer, Users } from 'lucide-react'
 
 type TimerMode = 'countdown' | 'chess-clock'
@@ -35,6 +37,9 @@ export function TimerPanel() {
 
   // Countdown hooks
   useCountdown()
+
+  // Letter display hook (active when TimerPanel is mounted)
+  useLetterDisplay()
 
   // Countdown keyboard shortcuts
   useHotkeys('t', () => {
@@ -282,6 +287,9 @@ export function TimerPanel() {
               </Button>
             </div>
           </div>
+
+          {/* Pass mechanic controls */}
+          <PassControls />
         </div>
       )}
     </div>
