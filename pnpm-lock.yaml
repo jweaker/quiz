@@ -35,6 +35,9 @@ importers:
       react-error-boundary:
         specifier: ^6.1.0
         version: 6.1.0(react@18.3.1)
+      react-hotkeys-hook:
+        specifier: ^5.2.4
+        version: 5.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-icons:
         specifier: ^4.3.1
         version: 4.12.0(react@18.3.1)
@@ -47,6 +50,12 @@ importers:
       tailwind-merge:
         specifier: ^3.4.0
         version: 3.4.0
+      worker-timers:
+        specifier: ^8.0.30
+        version: 8.0.30
+      zundo:
+        specifier: ^2.3.0
+        version: 2.3.0(zustand@5.0.11(@types/react@18.3.28)(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1)))
       zustand:
         specifier: ^5.0.11
         version: 5.0.11(@types/react@18.3.28)(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
@@ -216,6 +225,10 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
+
+  '@babel/runtime@7.28.6':
+    resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
     resolution: {integrity: sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==}
@@ -1641,6 +1654,9 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
+  broker-factory@3.1.13:
+    resolution: {integrity: sha512-H2VALe31mEtO/SRcNp4cUU5BAm1biwhc/JaF77AigUuni/1YT0FLCJfbUxwIEs9y6Kssjk2fmXgf+Y9ALvmKlw==}
+
   browserslist@4.28.1:
     resolution: {integrity: sha512-ZC5Bd0LgJXgwGqUknZY/vkUQ04r8NXnJZ3yYi4vDmSiZmC/pdSN0NbNRPxZpbtO4uAfDUAFffO8IZoM3Gj8IkA==}
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
@@ -1958,6 +1974,10 @@ packages:
 
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
+
+  fast-unique-numbers@9.0.26:
+    resolution: {integrity: sha512-3Mtq8p1zQinjGyWfKeuBunbuFoixG72AUkk4VvzbX4ykCW9Q4FzRaNyIlfQhUjnKw2ARVP+/CKnoyr6wfHftig==}
+    engines: {node: '>=18.2.0'}
 
   fast-uri@3.1.0:
     resolution: {integrity: sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==}
@@ -2646,6 +2666,12 @@ packages:
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
 
+  react-hotkeys-hook@5.2.4:
+    resolution: {integrity: sha512-BgKg+A1+TawkYluh5Bo4cTmcgMN5L29uhJbDUQdHwPX+qgXRjIPYU5kIDHyxnAwCkCBiu9V5OpB2mpyeluVF2A==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
   react-icons@4.12.0:
     resolution: {integrity: sha512-IBaDuHiShdZqmfc/TwHu6+d6k2ltNCf3AszxNmjJc1KUfXdEeRJOKyNvLmAHaarhzGmTSVygNdyu8/opXv2gaw==}
     peerDependencies:
@@ -3111,6 +3137,18 @@ packages:
     engines: {node: ^16.13.0 || >=18.0.0}
     hasBin: true
 
+  worker-factory@7.0.48:
+    resolution: {integrity: sha512-CGmBy3tJvpBPjUvb0t4PrpKubUsfkI1Ohg0/GGFU2RvA9j/tiVYwKU8O7yu7gH06YtzbeJLzdUR29lmZKn5pag==}
+
+  worker-timers-broker@8.0.15:
+    resolution: {integrity: sha512-Te+EiVUMzG5TtHdmaBZvBrZSFNauym6ImDaCAnzQUxvjnw+oGjMT2idmAOgDy30vOZMLejd0bcsc90Axu6XPWA==}
+
+  worker-timers-worker@9.0.13:
+    resolution: {integrity: sha512-qjn18szGb1kjcmh2traAdki1eiIS5ikFo+L90nfMOvSRpuDw1hAcR1nzkP2+Hkdqz5thIRnfuWx7QSpsEUsA6Q==}
+
+  worker-timers@8.0.30:
+    resolution: {integrity: sha512-8P7YoMHWN0Tz7mg+9oEhuZdjBIn2z6gfjlJqFcHiDd9no/oLnMGCARCDkV1LR3ccQus62ZdtIp7t3aTKrMLHOg==}
+
   wrap-ansi@6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==}
     engines: {node: '>=8'}
@@ -3156,6 +3194,11 @@ packages:
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+
+  zundo@2.3.0:
+    resolution: {integrity: sha512-4GXYxXA17SIKYhVbWHdSEU04P697IMyVGXrC2TnzoyohEAWytFNOKqOp5gTGvaW93F/PM5Y0evbGtOPF0PWQwQ==}
+    peerDependencies:
+      zustand: ^4.3.0 || ^5.0.0
 
   zustand@5.0.11:
     resolution: {integrity: sha512-fdZY+dk7zn/vbWNCYmzZULHRrss0jx5pPFiOuMZ/5HJN6Yv3u+1Wswy/4MpZEkEGhtNH+pwxZB8OKgUBPzYAGg==}
@@ -3356,6 +3399,8 @@ snapshots:
       '@babel/plugin-transform-typescript': 7.28.6(@babel/core@7.29.0)
     transitivePeerDependencies:
       - supports-color
+
+  '@babel/runtime@7.28.6': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -4749,6 +4794,13 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
+  broker-factory@3.1.13:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      fast-unique-numbers: 9.0.26
+      tslib: 2.8.1
+      worker-factory: 7.0.48
+
   browserslist@4.28.1:
     dependencies:
       baseline-browser-mapping: 2.9.19
@@ -5062,6 +5114,11 @@ snapshots:
       micromatch: 4.0.8
 
   fast-json-stable-stringify@2.1.0: {}
+
+  fast-unique-numbers@9.0.26:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      tslib: 2.8.1
 
   fast-uri@3.1.0: {}
 
@@ -5695,6 +5752,11 @@ snapshots:
     dependencies:
       react: 18.3.1
 
+  react-hotkeys-hook@5.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   react-icons@4.12.0(react@18.3.1):
     dependencies:
       react: 18.3.1
@@ -6195,6 +6257,33 @@ snapshots:
     dependencies:
       isexe: 3.1.5
 
+  worker-factory@7.0.48:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      fast-unique-numbers: 9.0.26
+      tslib: 2.8.1
+
+  worker-timers-broker@8.0.15:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      broker-factory: 3.1.13
+      fast-unique-numbers: 9.0.26
+      tslib: 2.8.1
+      worker-timers-worker: 9.0.13
+
+  worker-timers-worker@9.0.13:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      tslib: 2.8.1
+      worker-factory: 7.0.48
+
+  worker-timers@8.0.30:
+    dependencies:
+      '@babel/runtime': 7.28.6
+      tslib: 2.8.1
+      worker-timers-broker: 8.0.15
+      worker-timers-worker: 9.0.13
+
   wrap-ansi@6.2.0:
     dependencies:
       ansi-styles: 4.3.0
@@ -6239,6 +6328,10 @@ snapshots:
       zod: 3.25.76
 
   zod@3.25.76: {}
+
+  zundo@2.3.0(zustand@5.0.11(@types/react@18.3.28)(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))):
+    dependencies:
+      zustand: 5.0.11(@types/react@18.3.28)(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1))
 
   zustand@5.0.11(@types/react@18.3.28)(react@18.3.1)(use-sync-external-store@1.6.0(react@18.3.1)):
     optionalDependencies:
