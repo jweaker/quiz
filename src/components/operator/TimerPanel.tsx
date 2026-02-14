@@ -3,6 +3,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { useTimerStore } from '@/state'
 import { useChessClock } from '@/hooks/useChessClock'
 import { useCountdown } from '@/hooks/useCountdown'
+import { useTimerAudio } from '@/hooks/useTimerAudio'
 import { useLetterDisplay } from '@/hooks/useLetterDisplay'
 import { Button } from '@/components/ui/button'
 import { PassControls } from '@/components/operator/PassControls'
@@ -19,6 +20,7 @@ export function TimerPanel() {
 
   const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
   const countdownRunning = useTimerStore((s) => s.countdownRunning)
+  const countdownDuration = useTimerStore((s) => s.countdownDuration)
   const setCountdown = useTimerStore((s) => s.setCountdown)
   const setCountdownRunning = useTimerStore((s) => s.setCountdownRunning)
   const verseCount = useTimerStore((s) => s.verseCount)
@@ -35,8 +37,9 @@ export function TimerPanel() {
     resetClock,
   } = useChessClock()
 
-  // Countdown hooks
-  useCountdown()
+  // Countdown hooks with audio
+  const { playBeep } = useTimerAudio()
+  useCountdown({ onThreshold: (seconds) => playBeep(seconds as 10 | 5 | 0) })
 
   // Letter display hook (only active in chess-clock / Poetic Chase mode)
   useLetterDisplay(mode === 'chess-clock')
@@ -49,22 +52,22 @@ export function TimerPanel() {
 
   useHotkeys('shift+t', () => {
     if (mode !== 'countdown') return
-    setCountdown(countdownRemaining || 60)
+    setCountdown(countdownDuration || 60)
     setCountdownRunning(false)
-  }, { enableOnFormTags: false }, [mode, countdownRemaining])
+  }, { enableOnFormTags: false }, [mode, countdownDuration])
 
-  // Chess clock keyboard shortcuts
-  useHotkeys('[', () => {
+  // Chess clock keyboard shortcuts (using KeyboardEvent.code for brackets/backslash)
+  useHotkeys('BracketLeft', () => {
     if (mode !== 'chess-clock') return
     startClock('right')
   }, { enableOnFormTags: false }, [mode])
 
-  useHotkeys(']', () => {
+  useHotkeys('BracketRight', () => {
     if (mode !== 'chess-clock') return
     startClock('left')
   }, { enableOnFormTags: false }, [mode])
 
-  useHotkeys('\\', () => {
+  useHotkeys('Backslash', () => {
     if (mode !== 'chess-clock') return
     switchClock()
   }, { enableOnFormTags: false }, [mode])
@@ -153,7 +156,7 @@ export function TimerPanel() {
               variant="outline"
               size="sm"
               onClick={() => {
-                setCountdown(countdownRemaining || 60)
+                setCountdown(countdownDuration || 60)
                 setCountdownRunning(false)
               }}
             >

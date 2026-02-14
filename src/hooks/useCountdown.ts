@@ -11,6 +11,7 @@ interface UseCountdownParams {
 export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownParams = {}) {
   const countdownRunning = useTimerStore((s) => s.countdownRunning)
   const countdownDuration = useTimerStore((s) => s.countdownDuration)
+  const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
   const setCountdownRemaining = useTimerStore((s) => s.setCountdownRemaining)
   const setCountdownRunning = useTimerStore((s) => s.setCountdownRunning)
 
@@ -20,9 +21,12 @@ export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownPa
 
   useEffect(() => {
     if (countdownRunning) {
-      // Reset thresholds when countdown starts
-      thresholdsTriggeredRef.current = new Set()
-      startTimeRef.current = performance.now()
+      // Reset thresholds only when starting fresh (not on resume)
+      if (countdownRemaining === countdownDuration) {
+        thresholdsTriggeredRef.current = new Set()
+      }
+      // Calculate startTime to account for already-elapsed time on resume
+      startTimeRef.current = performance.now() - ((countdownDuration - countdownRemaining) * 1000)
       const durationMs = countdownDuration * 1000
 
       // Worker-timers setInterval for background-tab resilience
@@ -67,5 +71,5 @@ export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownPa
         intervalIdRef.current = undefined
       }
     }
-  }, [countdownRunning, countdownDuration, setCountdownRemaining, setCountdownRunning, onTick, onComplete, onThreshold])
+  }, [countdownRunning, countdownDuration, countdownRemaining, setCountdownRemaining, setCountdownRunning, onTick, onComplete, onThreshold])
 }
