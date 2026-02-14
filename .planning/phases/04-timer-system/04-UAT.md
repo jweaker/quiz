@@ -64,15 +64,15 @@ skipped: 0
   reason: "User reported: pause/resume jumps back instead of resuming from same time, reset doesn't reset back to 60"
   severity: major
   test: 1
-  root_cause: "useCountdown.ts:25 resets startTimeRef on every resume and line 26 always uses countdownDuration (full duration) not countdownRemaining. On resume, timer recalculates from full duration. Reset handler in TimerPanel.tsx:52 uses countdownRemaining instead of countdownDuration."
+  root_cause: "useCountdown.ts resets startTimeRef on every resume and always uses countdownDuration (full duration) not countdownRemaining. On resume elapsed=0 so timer jumps to full duration. Reset handler uses countdownRemaining instead of countdownDuration."
   artifacts:
     - path: "src/hooks/useCountdown.ts"
-      issue: "startTimeRef reset on every resume, durationMs always from countdownDuration"
+      issue: "Lines 22-26: startTimeRef reset on every resume, durationMs always uses full countdownDuration"
     - path: "src/components/operator/TimerPanel.tsx"
-      issue: "Reset handler uses countdownRemaining instead of countdownDuration"
+      issue: "Line 52: setCountdown(countdownRemaining || 60) should use countdownDuration"
   missing:
-    - "Adjust startTimeRef on resume: performance.now() - ((countdownDuration - countdownRemaining) * 1000)"
-    - "Reset handler should use countdownDuration || 60"
+    - "Adjust startTimeRef on resume: startTimeRef = performance.now() - ((countdownDuration - countdownRemaining) * 1000)"
+    - "Reset handler should use countdownDuration || 60 instead of countdownRemaining || 60"
   debug_session: ".planning/debug/countdown-timer-pause-reset.md"
 
 - truth: "Letter keys only display during Poetic Chase mode, not during general countdown"
@@ -94,11 +94,17 @@ skipped: 0
   reason: "User reported: requires a more fun timer with better design, good sound design, colors and animations. Also: bell ring on chess clock timeout isn't great, no ticking sounds, bland experience. Pass/verse info not shown on audience."
   severity: major
   test: 1
-  root_cause: "Design/UX enhancement — current timer is functional but visually basic. Belongs in Phase 5 (Visual System) scope."
-  artifacts: []
+  root_cause: "Design gap — current timer UI is functional but minimal. No animations, no ticking sounds, no visual flair. This is Phase 5 (Visual System) scope."
+  artifacts:
+    - path: "src/components/operator/TimerPanel.tsx"
+      issue: "Basic functional UI without animations or polish"
+    - path: "src/components/audience/TimerDisplay.tsx"
+      issue: "Basic display without animations or visual flair"
   missing:
-    - "Broadcast-quality timer design with animations (Phase 5 scope)"
-    - "Better sound design with ticking effects (Phase 7 scope)"
+    - "Animated countdown with circular progress or radial timer"
+    - "Ticking sound effects during countdown"
+    - "Better bell/buzzer sounds"
+    - "Visual flourishes and animations"
   debug_session: ""
 
 - truth: "Operator can manually input custom time duration for timer"
@@ -106,28 +112,27 @@ skipped: 0
   reason: "User reported: should be able to manually input time for timer"
   severity: major
   test: 1
-  root_cause: "Missing feature — TimerPanel only has preset buttons (30/60/100/120s), no custom input field"
+  root_cause: "Missing feature — only preset durations (30/60/100/120) exist. No custom number input field."
   artifacts:
     - path: "src/components/operator/TimerPanel.tsx"
-      issue: "Only preset duration buttons, no number input"
+      issue: "Only preset buttons, no custom input"
   missing:
-    - "Add number input field for custom duration in countdown mode"
+    - "Add number input field for custom timer duration"
   debug_session: ""
 
 - truth: "Audio beeps play at 10s, 5s, and 0s thresholds during countdown"
   status: failed
-  reason: "User reported: no sound on countdown timer. Bell ring DOES play on chess clock timeout but not on countdown."
+  reason: "User reported: no sound on countdown timer. Bell ring DOES play on chess clock timeout but not on countdown. No ticking or intermediate sound effects."
   severity: major
   test: 2
-  root_cause: "TimerPanel.tsx:39 calls useCountdown() with no params — no onThreshold callback provided. useChessClock internally uses useTimerAudio (line 19, 64) which is why chess clock audio works."
+  root_cause: "TimerPanel.tsx line 39 calls useCountdown() with no params — no onThreshold callback. useChessClock internally uses useTimerAudio (self-contained), but useCountdown expects caller to wire audio (composition pattern). TimerPanel never connects them."
   artifacts:
     - path: "src/components/operator/TimerPanel.tsx"
-      issue: "useCountdown() called without onThreshold callback"
+      issue: "Line 39: useCountdown() called with no onThreshold callback"
     - path: "src/hooks/useCountdown.ts"
-      issue: "Hook correctly calls onThreshold but no listener provided"
+      issue: "Correctly calls onThreshold but no callback provided"
   missing:
-    - "Import useTimerAudio in TimerPanel"
-    - "Wire playBeep to useCountdown({ onThreshold: (s) => playBeep(s as 10|5|0) })"
+    - "Import useTimerAudio in TimerPanel, pass playBeep as onThreshold to useCountdown()"
   debug_session: ".planning/debug/countdown-audio-missing.md"
 
 - truth: "Chess clock keyboard shortcuts [ ] \\ work to start/switch clocks"
@@ -135,14 +140,12 @@ skipped: 0
   reason: "User reported: keyboard shortcuts aren't working, only p works, buttons work fine."
   severity: major
   test: 3
-  root_cause: "react-hotkeys-hook v5.2.4 bug #1125 — parseHotkeys.ts doesn't recognize '[', ']', '\\' as key strings. Must use KeyboardEvent.code names instead."
+  root_cause: "react-hotkeys-hook v5.2.4 bug (GitHub #1125): special characters [ ] \\ not parsed correctly in parseHotkeys.ts. Must use KeyboardEvent.code names (BracketLeft, BracketRight, Backslash) instead of single-char strings."
   artifacts:
     - path: "src/components/operator/TimerPanel.tsx"
-      issue: "Lines 57, 62, 67 use '[', ']', '\\\\' — not recognized by react-hotkeys-hook"
+      issue: "Lines 57/62/67: '[', ']', '\\\\' not recognized by react-hotkeys-hook"
   missing:
-    - "Change '[' to 'BracketLeft'"
-    - "Change ']' to 'BracketRight'"
-    - "Change '\\\\' to 'Backslash'"
+    - "Change '[' to 'BracketLeft', ']' to 'BracketRight', '\\\\' to 'Backslash'"
   debug_session: ".planning/debug/chess-clock-shortcuts-broken.md"
 
 - truth: "Audience display shows live verse counter and pass status during Poetic Chase"
@@ -150,11 +153,11 @@ skipped: 0
   reason: "User reported: no live verse counter for audience, pass/verse info not shown on audience display"
   severity: major
   test: 6
-  root_cause: "Missing feature — audience TimerDisplay component only shows clock times and points, not verse count or pass status"
+  root_cause: "Missing feature — audience TimerDisplay component shows clocks and points but not verse count or pass status"
   artifacts:
     - path: "src/components/audience/TimerDisplay.tsx"
-      issue: "No verse counter or pass indicator in audience display"
+      issue: "No verse count or pass status display"
   missing:
-    - "Add verse count display per team in audience TimerDisplay"
-    - "Add pass status indicator in audience display"
+    - "Add verse count per team to audience chess clock display"
+    - "Add pass status indicator to audience display"
   debug_session: ""
