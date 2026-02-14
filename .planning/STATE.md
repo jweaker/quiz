@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 3 (Game State & Scoring) — In Progress
+**Current focus:** Phase 4 (Timer System) — Complete
 
 ## Current Position
 
-Phase: 4 of 7 (Timer System) — IN PROGRESS
-Plan: 2 of 3 complete
-Status: Chess clock with dual timers and operator/audience UI ready
-Last activity: 2026-02-14 — Completed 04-02 (Chess Clock UI)
+Phase: 4 of 7 (Timer System) — COMPLETE
+Plan: 3 of 3 complete
+Status: Complete timer system with chess clock, pass mechanic, and letter display
+Last activity: 2026-02-14 — Completed 04-03 (Poetic Chase Integration)
 
-Progress: [██████████░░░░░░░░░░░░░░] 11/25 (44%)
+Progress: [████████████░░░░░░░░░░░░] 12/25 (48%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 5 min
-- Total execution time: 1.0 hours
+- Total plans completed: 12
+- Average duration: 4 min
+- Total execution time: 1.1 hours
 
 **By Phase:**
 
@@ -30,14 +30,14 @@ Progress: [██████████░░░░░░░░░░░░░
 | 1 - Foundation & Migration | 4/4 ✅ | 36 min | 9 min |
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
-| 4 - Timer System | 2/3 🔄 | 5 min | 3 min |
+| 4 - Timer System | 3/3 ✅ | 7 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (~5 min), 03-01 (3 min), 03-02 (3 min), 04-01 (2 min), 04-02 (3 min)
-- Trend: Accelerating (2-5 min range, recent plans averaging ~3 min)
+- Last 5 plans: 03-01 (3 min), 03-02 (3 min), 04-01 (2 min), 04-02 (3 min), 04-03 (2 min)
+- Trend: Accelerating (2-3 min range, recent plans averaging ~2.5 min)
 
 *Updated after each plan completion*
-| Phase 04 P02 | 3 | 2 tasks | 5 files |
+| Phase 04 P03 | 2 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -75,6 +75,9 @@ Recent decisions affecting current work:
 - Points conversion formula: Math.floor(timeMs / 5000) for conservative rounding in Poetic Chase (5s = 1pt) (04-02)
 - Dual-mode timer UI: TimerPanel toggles between countdown and chess clock modes with dedicated keyboard shortcuts (04-02)
 - Western numerals for timers: All timer digits use western-numerals class for broadcast clarity (04-02)
+- Local state for pass tracking: passActive and passedToTeam stored in hook state, not global store (transient flow state) (04-03)
+- Pass scoring rules: +1pt for receiving team on pass, +1pt additional bonus for correct answer after pass (04-03)
+- Letter keys conflict-free: a-z verified no conflicts with scoring (numbers), timer (t/p/[/]\), pass (g/v/x) (04-03)
 
 ### Pending Todos
 
@@ -91,10 +94,11 @@ None.
 - Plan 03-02 complete — keyboard controls for scoring and undo/redo
 - All scoring workflow operable via keyboard only (zero mouse dependency)
 
-**Phase 4 (Timer System):** 🔄 IN PROGRESS
+**Phase 4 (Timer System):** ✅ COMPLETE
 - Plan 04-01 complete — Timer infrastructure with drift-corrected countdown and audio cues
 - Plan 04-02 complete — Chess clock UI with operator controls and audience display
-- Next: Plan 04-03 (Poetic Chase integration)
+- Plan 04-03 complete — Poetic Chase pass mechanic and letter display integration
+- All timer features ready: countdown, chess clock, pass mechanic, letter display
 
 **Phase 6 (Quiz Sections):**
 - 72 animal photos need collection/licensing before Ask Intelligently section implementation
@@ -102,6 +106,6 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-14
-Stopped at: Completed 04-02-PLAN.md (Chess Clock UI)
+Stopped at: Completed 04-03-PLAN.md (Poetic Chase Integration)
 Resume file: None
-Next step: Continue Phase 4 with 04-03 (Poetic Chase integration)
+Next step: Begin Phase 5 (Episode Manager) - JSON episode loader and question data management
