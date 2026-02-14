@@ -6,7 +6,7 @@ import { useTimerStore } from '@/state'
  * Used during Poetic Chase section to show which Arabic letter the next verse must start with.
  * Operator presses any A-Z key to display that letter, Escape to clear.
  */
-export function useLetterDisplay() {
+export function useLetterDisplay(enabled: boolean = true) {
   const setRequiredLetter = useTimerStore((s) => s.setRequiredLetter)
 
   // Register all 26 letter keys (a-z)
@@ -16,7 +16,7 @@ export function useLetterDisplay() {
     (e) => {
       setRequiredLetter(e.key.toUpperCase())
     },
-    { enableOnFormTags: false, preventDefault: true }
+    { enableOnFormTags: false, preventDefault: true, enabled }
   )
 
   // Escape clears the letter display
@@ -25,6 +25,6 @@ export function useLetterDisplay() {
     () => {
       setRequiredLetter(null)
     },
-    { enableOnFormTags: false, preventDefault: true }
+    { enableOnFormTags: false, preventDefault: true, enabled }
   )
 }

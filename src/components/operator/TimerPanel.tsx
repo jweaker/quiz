@@ -38,8 +38,8 @@ export function TimerPanel() {
   // Countdown hooks
   useCountdown()
 
-  // Letter display hook (active when TimerPanel is mounted)
-  useLetterDisplay()
+  // Letter display hook (only active in chess-clock / Poetic Chase mode)
+  useLetterDisplay(mode === 'chess-clock')
 
   // Countdown keyboard shortcuts
   useHotkeys('t', () => {
