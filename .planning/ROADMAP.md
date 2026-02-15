@@ -107,10 +107,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 05-01: Framer Motion setup with core animation variants
-- [ ] 05-02: Score and section transition animations
-- [ ] 05-03: Operator panel UI with keyboard reference
-- [ ] 05-04: Rundown view and episode progress visualization
+- [ ] 05-01-PLAN.md — Motion library setup, animation presets, MotionConfig, TypewriterText, WipeTransition, dynamic section backgrounds
+- [ ] 05-02-PLAN.md — Score celebration effects (confetti/flash) and Minefield visual treatment (screen shake, red flash, stakes flash, pulsing glow)
+- [ ] 05-03-PLAN.md — Operator panel redesign: context-adaptive layout, mission-control density, keyboard shortcut overlay
+- [ ] 05-04-PLAN.md — Episode section state, horizontal rundown rail with click-to-jump, audience display section wiring
 
 ### Phase 6: Quiz Sections
 **Goal**: All 8 section types implemented with specialized UI and interactions
