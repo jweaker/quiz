@@ -7,16 +7,19 @@ import { useTimerAudio } from '@/hooks/useTimerAudio'
 import { useLetterDisplay } from '@/hooks/useLetterDisplay'
 import { Button } from '@/components/ui/button'
 import { PassControls } from '@/components/operator/PassControls'
-import { Play, Pause, RotateCcw, Timer, Users } from 'lucide-react'
+import { Play, Pause, RotateCcw } from 'lucide-react'
 
-type TimerMode = 'countdown' | 'chess-clock'
+interface TimerPanelProps {
+  /** Which mode to render controls for */
+  mode: 'countdown' | 'chess-clock'
+}
 
 /**
- * Operator controls for countdown timer and chess clock (Poetic Chase).
- * Full keyboard control with visual indicators.
+ * Compact operator controls for countdown timer and chess clock.
+ * Mode is controlled by parent (OperatorControls adaptive zone switcher).
+ * No large countdown display — persistent zone shows that.
  */
-export function TimerPanel() {
-  const [mode, setMode] = useState<TimerMode>('countdown')
+export function TimerPanel({ mode }: TimerPanelProps) {
   const [customDuration, setCustomDuration] = useState('')
 
   const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
@@ -42,7 +45,7 @@ export function TimerPanel() {
   const { playBeep } = useTimerAudio()
   useCountdown({ onThreshold: (seconds) => playBeep(seconds as 10 | 5 | 0) })
 
-  // Letter display hook (only active in chess-clock / Poetic Chase mode)
+  // Letter display hook (only active in chess-clock mode)
   useLetterDisplay(mode === 'chess-clock')
 
   // Countdown keyboard shortcuts
@@ -57,7 +60,7 @@ export function TimerPanel() {
     setCountdownRunning(false)
   }, { enableOnFormTags: false }, [mode, countdownDuration])
 
-  // Chess clock keyboard shortcuts (using KeyboardEvent.code for brackets/backslash)
+  // Chess clock keyboard shortcuts
   useHotkeys('BracketLeft', () => {
     if (mode !== 'chess-clock') return
     startClock('right')
@@ -83,7 +86,7 @@ export function TimerPanel() {
     resetClock()
   }, { enableOnFormTags: false }, [mode])
 
-  // Format time display: MM:SS or SS
+  // Format time display
   const formatTime = (seconds: number) => {
     if (seconds >= 60) {
       const mins = Math.floor(seconds / 60)
@@ -93,249 +96,193 @@ export function TimerPanel() {
     return `${seconds}`
   }
 
-  return (
-    <div className="space-y-6 mt-6 max-w-2xl mx-auto">
-      {/* Section header with mode toggle */}
-      <div className="border-b pb-2">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-semibold">المؤقتات</h2>
-            <p className="text-xs text-muted-foreground mt-1">
-              التحكم بالعد التنازلي وساعة الشطرنج (المطاردة الشعرية)
-            </p>
-          </div>
-          {/* Mode toggle buttons */}
-          <div className="flex gap-2">
-            <Button
-              variant={mode === 'countdown' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMode('countdown')}
-            >
-              <Timer className="size-4 me-1" />
-              عد تنازلي
-            </Button>
-            <Button
-              variant={mode === 'chess-clock' ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setMode('chess-clock')}
-            >
-              <Users className="size-4 me-1" />
-              المطاردة الشعرية
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Countdown mode */}
-      {mode === 'countdown' && (
-        <div className="space-y-4">
-          {/* Countdown display */}
-          <div className="text-center p-6 border rounded-lg bg-card">
-            <p className="text-sm text-muted-foreground mb-2">الوقت المتبقي</p>
-            <p className="text-5xl font-bold tabular-nums western-numerals">
+  // ── Countdown mode ──
+  if (mode === 'countdown') {
+    return (
+      <div className="space-y-2 pt-1">
+        {/* Compact countdown readout + controls inline */}
+        <div className="flex items-center gap-2">
+          <div className="border rounded px-3 py-1.5 bg-card text-center min-w-[80px]">
+            <p className="text-2xl font-bold tabular-nums western-numerals leading-tight">
               {formatTime(countdownRemaining)}
             </p>
-            <p className="text-xs text-muted-foreground mt-2">ثانية</p>
           </div>
+          <Button
+            variant="outline"
+            className="h-8 px-2 text-xs"
+            onClick={() => setCountdownRunning(!countdownRunning)}
+          >
+            {countdownRunning ? (
+              <Pause className="size-3 me-1" />
+            ) : (
+              <Play className="size-3 me-1" />
+            )}
+            {countdownRunning ? 'إيقاف' : 'بدء'}
+            <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">T</kbd>
+          </Button>
+          <Button
+            variant="outline"
+            className="h-8 px-2 text-xs"
+            onClick={() => {
+              setCountdown(countdownDuration || 60)
+              setCountdownRunning(false)
+            }}
+          >
+            <RotateCcw className="size-3 me-1" />
+            إعادة
+            <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">⇧T</kbd>
+          </Button>
+        </div>
 
-          {/* Countdown controls */}
-          <div className="flex flex-wrap gap-2">
+        {/* Duration presets + custom — compact row */}
+        <div className="flex flex-wrap items-center gap-1">
+          {[30, 60, 100, 120].map((duration) => (
             <Button
+              key={duration}
               variant="outline"
-              size="sm"
-              onClick={() => setCountdownRunning(!countdownRunning)}
-            >
-              {countdownRunning ? (
-                <Pause className="size-4 me-1" />
-              ) : (
-                <Play className="size-4 me-1" />
-              )}
-              {countdownRunning ? 'إيقاف' : 'بدء'}
-              <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">t</kbd>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
+              className="h-7 px-2 text-xs"
               onClick={() => {
-                setCountdown(countdownDuration || 60)
+                setCountdown(duration)
                 setCountdownRunning(false)
               }}
             >
-              <RotateCcw className="size-4 me-1" />
-              إعادة تعيين
-              <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">⇧T</kbd>
+              <span className="western-numerals">{duration}</span>s
             </Button>
-          </div>
-
-          {/* Duration presets */}
-          <div>
-            <p className="text-sm font-medium mb-2">المدة المحددة مسبقًا</p>
-            <div className="flex flex-wrap gap-2">
-              {[30, 60, 100, 120].map((duration) => (
-                <Button
-                  key={duration}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setCountdown(duration)
-                    setCountdownRunning(false)
-                  }}
-                >
-                  <span className="western-numerals">{duration}</span> ثانية
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Custom duration input */}
-          <div>
-            <p className="text-sm font-medium mb-2">مدة مخصصة (ثانية)</p>
-            <div className="flex gap-2">
-              <input
-                type="number"
-                min={1}
-                max={999}
-                placeholder="مدة مخصصة"
-                value={customDuration}
-                onChange={(e) => setCustomDuration(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    const dur = parseInt(customDuration, 10)
-                    if (dur > 0 && dur <= 999) {
-                      setCountdown(dur)
-                      setCountdownRunning(false)
-                      setCustomDuration('')
-                    }
-                  }
-                }}
-                className="w-24 px-2 py-1 text-sm border rounded bg-background western-numerals"
-              />
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
+          ))}
+          <div className="flex items-center gap-1 ms-1">
+            <input
+              type="number"
+              min={1}
+              max={999}
+              placeholder="مخصص"
+              value={customDuration}
+              onChange={(e) => setCustomDuration(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
                   const dur = parseInt(customDuration, 10)
                   if (dur > 0 && dur <= 999) {
                     setCountdown(dur)
                     setCountdownRunning(false)
                     setCustomDuration('')
                   }
-                }}
-              >
-                تعيين
-              </Button>
-            </div>
+                }
+              }}
+              className="w-16 h-7 px-2 text-xs border rounded bg-background western-numerals"
+            />
+            <Button
+              variant="outline"
+              className="h-7 px-2 text-xs"
+              onClick={() => {
+                const dur = parseInt(customDuration, 10)
+                if (dur > 0 && dur <= 999) {
+                  setCountdown(dur)
+                  setCountdownRunning(false)
+                  setCustomDuration('')
+                }
+              }}
+            >
+              تعيين
+            </Button>
           </div>
         </div>
-      )}
+      </div>
+    )
+  }
 
-      {/* Chess clock mode */}
-      {mode === 'chess-clock' && (
-        <div className="space-y-4">
-          {/* Chess clock display */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* Right team */}
-            <div
-              className={
-                'p-4 border rounded-lg text-center transition-all ' +
-                (activeTimer === 'right'
-                  ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary/30'
-                  : 'border-border bg-card')
-              }
-            >
-              <p className="text-xs text-muted-foreground mb-2">الفريق الأيمن</p>
-              <p className="text-4xl font-bold tabular-nums western-numerals">
-                {formatTime(rightSeconds)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">ثانية</p>
-              <div className="mt-3 pt-3 border-t">
-                <p className="text-sm font-medium">
-                  <span className="western-numerals">{rightPoints}</span> نقطة
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  <span className="western-numerals">{verseCount.right}</span> بيت
-                </p>
-              </div>
-            </div>
-
-            {/* Left team */}
-            <div
-              className={
-                'p-4 border rounded-lg text-center transition-all ' +
-                (activeTimer === 'left'
-                  ? 'border-primary bg-primary/5 shadow-md ring-2 ring-primary/30'
-                  : 'border-border bg-card')
-              }
-            >
-              <p className="text-xs text-muted-foreground mb-2">الفريق الأيسر</p>
-              <p className="text-4xl font-bold tabular-nums western-numerals">
-                {formatTime(leftSeconds)}
-              </p>
-              <p className="text-xs text-muted-foreground mt-1">ثانية</p>
-              <div className="mt-3 pt-3 border-t">
-                <p className="text-sm font-medium">
-                  <span className="western-numerals">{leftPoints}</span> نقطة
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  <span className="western-numerals">{verseCount.left}</span> بيت
-                </p>
-              </div>
-            </div>
+  // ── Chess clock mode ──
+  return (
+    <div className="space-y-2 pt-1">
+      {/* Compact two-column clock display */}
+      <div className="grid grid-cols-2 gap-2">
+        {/* Right team */}
+        <div
+          className={
+            'p-2 border rounded text-center transition-all ' +
+            (activeTimer === 'right'
+              ? 'border-primary bg-primary/5 ring-1 ring-primary/30'
+              : 'border-border bg-card')
+          }
+        >
+          <p className="text-[10px] text-muted-foreground">الأيمن</p>
+          <p className="text-2xl font-bold tabular-nums western-numerals leading-tight">
+            {formatTime(rightSeconds)}
+          </p>
+          <div className="flex justify-center gap-2 text-[10px] text-muted-foreground mt-0.5">
+            <span className="western-numerals">{rightPoints} نقطة</span>
+            <span>·</span>
+            <span className="western-numerals">{verseCount.right} بيت</span>
           </div>
-
-          {/* Chess clock controls */}
-          <div>
-            <p className="text-sm font-medium mb-2">التحكم</p>
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => startClock('right')}
-              >
-                بدء الأيمن
-                <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">[</kbd>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => startClock('left')}
-              >
-                بدء الأيسر
-                <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">]</kbd>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => switchClock()}
-              >
-                تبديل الساعة
-                <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">\</kbd>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => pauseClock()}
-              >
-                <Pause className="size-4 me-1" />
-                إيقاف
-                <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">p</kbd>
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => resetClock()}
-              >
-                <RotateCcw className="size-4 me-1" />
-                إعادة تعيين
-                <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">⇧P</kbd>
-              </Button>
-            </div>
-          </div>
-
-          {/* Pass mechanic controls */}
-          <PassControls />
         </div>
-      )}
+
+        {/* Left team */}
+        <div
+          className={
+            'p-2 border rounded text-center transition-all ' +
+            (activeTimer === 'left'
+              ? 'border-primary bg-primary/5 ring-1 ring-primary/30'
+              : 'border-border bg-card')
+          }
+        >
+          <p className="text-[10px] text-muted-foreground">الأيسر</p>
+          <p className="text-2xl font-bold tabular-nums western-numerals leading-tight">
+            {formatTime(leftSeconds)}
+          </p>
+          <div className="flex justify-center gap-2 text-[10px] text-muted-foreground mt-0.5">
+            <span className="western-numerals">{leftPoints} نقطة</span>
+            <span>·</span>
+            <span className="western-numerals">{verseCount.left} بيت</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Chess clock controls — horizontal compact row */}
+      <div className="flex flex-wrap gap-1">
+        <Button
+          variant="outline"
+          className="h-7 px-2 text-xs"
+          onClick={() => startClock('right')}
+        >
+          بدء الأيمن
+          <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">[</kbd>
+        </Button>
+        <Button
+          variant="outline"
+          className="h-7 px-2 text-xs"
+          onClick={() => startClock('left')}
+        >
+          بدء الأيسر
+          <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">]</kbd>
+        </Button>
+        <Button
+          variant="outline"
+          className="h-7 px-2 text-xs"
+          onClick={() => switchClock()}
+        >
+          تبديل
+          <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">\</kbd>
+        </Button>
+        <Button
+          variant="outline"
+          className="h-7 px-2 text-xs"
+          onClick={() => pauseClock()}
+        >
+          <Pause className="size-3 me-1" />
+          إيقاف
+          <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">P</kbd>
+        </Button>
+        <Button
+          variant="outline"
+          className="h-7 px-2 text-xs"
+          onClick={() => resetClock()}
+        >
+          <RotateCcw className="size-3 me-1" />
+          إعادة
+          <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">⇧P</kbd>
+        </Button>
+      </div>
+
+      {/* Pass mechanic controls */}
+      <PassControls />
     </div>
   )
 }
