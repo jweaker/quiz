@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useScoreDelta } from '@/hooks/useScoreDelta'
+import { ScoreFlash } from '@/components/animations/ScoreFlash'
 
 interface TeamScoreProps {
   teamName: string
@@ -46,19 +47,8 @@ export function TeamScore({ teamName, score, isActive, variant }: TeamScoreProps
             height: 'clamp(6rem, 12vw, 14rem)',
           }}
         >
-          {/* Delta indicator */}
-          {delta !== null && (
-            <div
-              className={
-                'absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full font-bold animate-delta-fade ' +
-                (delta > 0 ? 'text-green-400' : 'text-red-400')
-              }
-              style={{ fontSize: 'clamp(1rem, 3vw, 3rem)' }}
-            >
-              {delta > 0 ? '+' : ''}
-              {delta}
-            </div>
-          )}
+          {/* Score celebration with confetti (audience only) */}
+          {delta !== null && <ScoreFlash delta={delta} />}
           {/* Score number */}
           <span
             className={

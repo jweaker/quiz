@@ -1,10 +1,13 @@
 import { useShowStore } from '@/state'
 import { TeamScore } from '@/components/score/TeamScore'
+import { motion } from 'motion/react'
+import { animationPresets } from '@/lib/animationPresets'
 
 /**
  * Compact score overlay for audience display.
  * Fixed position at top of screen, always visible.
  * Shows both team scores with animations and active team glow.
+ * Slides down with entrance animation on mount.
  */
 export function ScoreOverlay() {
   const rightScore = useShowStore((s) => s.rightScore)
@@ -17,7 +20,12 @@ export function ScoreOverlay() {
   const rightTeamName = data?.rightTeamName ?? 'الفريق الأيمن'
 
   return (
-    <div className="fixed top-6 left-0 right-0 flex items-center justify-center gap-8 px-6 z-10">
+    <motion.div
+      className="fixed top-6 left-0 right-0 flex items-center justify-center gap-8 px-6 z-10"
+      initial={{ y: -40, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={animationPresets.entrance}
+    >
       {/* Right team */}
       <TeamScore
         variant="audience"
@@ -41,6 +49,6 @@ export function ScoreOverlay() {
         score={leftScore}
         isActive={!rightsTurn && turned}
       />
-    </div>
+    </motion.div>
   )
 }
