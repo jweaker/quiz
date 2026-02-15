@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 4 (Timer System) — Complete
+**Current focus:** Phase 5 (Visual System) — In Progress
 
 ## Current Position
 
-Phase: 4 of 7 (Timer System) — COMPLETE
-Plan: 4 of 4 complete
-Status: All UAT gaps closed, timer system production-ready
-Last activity: 2026-02-15 — Completed 04-04 (UAT Gap Closure)
+Phase: 5 of 7 (Visual System) — IN PROGRESS
+Plan: 1 of 4 complete
+Status: Motion foundation installed, animation presets and core components ready
+Last activity: 2026-02-15 — Completed 05-01 (Motion Foundation)
 
-Progress: [█████████████░░░░░░░░░░░] 13/25 (52%)
+Progress: [██████████████░░░░░░░░░░] 14/26 (54%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 3.8 min
-- Total execution time: 1.2 hours
+- Total plans completed: 14
+- Average duration: 3.7 min
+- Total execution time: 1.3 hours
 
 **By Phase:**
 
@@ -31,14 +31,16 @@ Progress: [█████████████░░░░░░░░░░
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
+| 5 - Visual System | 1/4 | 4 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (3 min), 04-01 (2 min), 04-02 (3 min), 04-03 (2 min), 04-04 (2 min)
-- Trend: Accelerating (2-3 min range, recent plans averaging ~2.4 min)
+- Last 5 plans: 04-01 (2 min), 04-02 (3 min), 04-03 (2 min), 04-04 (2 min), 05-01 (4 min)
+- Trend: Consistent 2-4 min range
 
 *Updated after each plan completion*
 | Phase 04 P03 | 2 | 2 tasks | 6 files |
 | Phase 04-timer-system P04 | 2 | 2 tasks | 3 files |
+| Phase 05-visual-system P01 | 4 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -81,6 +83,9 @@ Recent decisions affecting current work:
 - Letter keys conflict-free: a-z verified no conflicts with scoring (numbers), timer (t/p/[/]\), pass (g/v/x) (04-03)
 - [Phase 04-timer-system]: KeyboardEvent.code names for react-hotkeys-hook v5 bracket/backslash support (04-04)
 - [Phase 04-timer-system]: Elapsed time offset for pause/resume: startTimeRef accounts for (duration - remaining) (04-04)
+- [Phase 05-visual-system]: Motion ^12.34.0 installed as latest stable; MotionConfig wraps app with reducedMotion='user' (05-01)
+- [Phase 05-visual-system]: TypewriterText at 50ms stagger for show title (slower than 30ms default for dramatic Arabic reveal) (05-01)
+- [Phase 05-visual-system]: Hardcoded 'idle' section type until Plan 05-04 adds section state to showStore (05-01)
 
 ### Pending Todos
 
@@ -113,7 +118,7 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-14
-Stopped at: Completed 04-03-PLAN.md (Poetic Chase Integration)
+Last session: 2026-02-15
+Stopped at: Completed 05-01-PLAN.md (Motion Foundation)
 Resume file: None
-Next step: Begin Phase 5 (Episode Manager) - JSON episode loader and question data management
+Next step: Execute Phase 5 Plan 02 (Score celebrations and Minefield visual treatment)
