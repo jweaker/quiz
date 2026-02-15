@@ -35,6 +35,7 @@ export default function AudienceDisplay() {
       <LetterDisplay />
 
       {/* Content area positioned by safe area margins */}
+      {/* MinefieldLayout and ScreenShake wrap content when currentSection === 'minefield' -- wired in Plan 05-04 */}
       <div style={contentStyle} className="flex flex-col items-center justify-center">
         {/* Show title with typewriter entrance animation */}
         <TypewriterText
