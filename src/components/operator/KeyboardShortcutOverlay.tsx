@@ -9,7 +9,7 @@ import {
 import type { ShortcutCategory } from '@/lib/shortcutRegistry'
 import { X } from 'lucide-react'
 
-const CATEGORIES: ShortcutCategory[] = ['scoring', 'timer', 'chess-clock', 'general']
+const CATEGORIES: ShortcutCategory[] = ['scoring', 'timer', 'chess-clock', 'navigation', 'general']
 
 /**
  * Full keyboard shortcut reference overlay.
