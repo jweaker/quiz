@@ -3,7 +3,30 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 import { temporal } from 'zundo'
 import { broadcast } from './sync/broadcastMiddleware'
 
-// Question data types (re-exported from contexts for backward compatibility)
+// ─── Episode section types ──────────────────────────────────────
+
+export type SectionStatus = 'pending' | 'active' | 'done'
+
+export type SectionType =
+  | 'speed-question'      // سؤال السرعة
+  | 'windows'             // نوافذ المعرفة (includes minefield)
+  | 'puzzle'              // الألغاز
+  | 'debate'              // النقاش
+  | 'poetic-chase'        // المطاردة الشعرية
+  | 'ask-intelligently'   // اسأل بذكاء
+  | 'rapid-questions'     // الرشق السريع
+  | 'audience-questions'  // أسئلة الجمهور
+
+export interface EpisodeSection {
+  id: string           // unique id like 'speed-question'
+  type: SectionType
+  name: string         // Arabic display name
+  status: SectionStatus
+  order: number        // position in episode
+}
+
+// ─── Question data types ────────────────────────────────────────
+// (re-exported from contexts for backward compatibility)
 interface QuestionItem {
   text: string
   answer: string
@@ -64,6 +87,10 @@ export interface ShowState {
   // Episode data
   data: EpisodeData | null
 
+  // Episode sections
+  sections: EpisodeSection[]
+  currentSection: string | null  // section id
+
   // Actions
   setRightScore: (score: number) => void
   setLeftScore: (score: number) => void
@@ -77,6 +104,10 @@ export interface ShowState {
   setAudienceQuestion: (index: number) => void
   setData: (data: EpisodeData) => void
   updateData: (updater: (data: EpisodeData) => EpisodeData) => void
+  jumpToSection: (sectionId: string) => void
+  setSectionStatus: (sectionId: string, status: SectionStatus) => void
+  nextSection: () => void
+  prevSection: () => void
   reset: () => void
 }
 
@@ -89,6 +120,17 @@ const initialState = {
   quickQuestion: 0,
   audienceQuestion: 0,
   data: null as EpisodeData | null,
+  sections: [
+    { id: 'speed-question', type: 'speed-question' as SectionType, name: 'سؤال السرعة', status: 'pending' as SectionStatus, order: 0 },
+    { id: 'windows', type: 'windows' as SectionType, name: 'نوافذ المعرفة', status: 'pending' as SectionStatus, order: 1 },
+    { id: 'puzzle', type: 'puzzle' as SectionType, name: 'الألغاز', status: 'pending' as SectionStatus, order: 2 },
+    { id: 'debate', type: 'debate' as SectionType, name: 'النقاش', status: 'pending' as SectionStatus, order: 3 },
+    { id: 'poetic-chase', type: 'poetic-chase' as SectionType, name: 'المطاردة الشعرية', status: 'pending' as SectionStatus, order: 4 },
+    { id: 'ask-intelligently', type: 'ask-intelligently' as SectionType, name: 'اسأل بذكاء', status: 'pending' as SectionStatus, order: 5 },
+    { id: 'rapid-questions', type: 'rapid-questions' as SectionType, name: 'الرشق السريع', status: 'pending' as SectionStatus, order: 6 },
+    { id: 'audience-questions', type: 'audience-questions' as SectionType, name: 'أسئلة الجمهور', status: 'pending' as SectionStatus, order: 7 },
+  ],
+  currentSection: null as string | null,
 }
 
 export const useShowStore = create<ShowState>()(
@@ -129,6 +171,64 @@ export const useShowStore = create<ShowState>()(
               return { data: updater(state.data) }
             }),
           reset: () => set(initialState),
+
+          // Section navigation actions
+          jumpToSection: (sectionId) =>
+            set((state) => {
+              const sections = state.sections.map((s) => {
+                if (s.id === state.currentSection && s.status === 'active') {
+                  return { ...s, status: 'done' as SectionStatus }
+                }
+                if (s.id === sectionId) {
+                  return { ...s, status: 'active' as SectionStatus }
+                }
+                return s
+              })
+              return { sections, currentSection: sectionId }
+            }),
+
+          setSectionStatus: (sectionId, status) =>
+            set((state) => ({
+              sections: state.sections.map((s) =>
+                s.id === sectionId ? { ...s, status } : s
+              ),
+            })),
+
+          nextSection: () =>
+            set((state) => {
+              const current = state.sections.find((s) => s.id === state.currentSection)
+              const nextOrder = current ? current.order + 1 : 0
+              const next = state.sections.find((s) => s.order === nextOrder)
+              if (!next) return state
+              const sections = state.sections.map((s) => {
+                if (s.id === state.currentSection && s.status === 'active') {
+                  return { ...s, status: 'done' as SectionStatus }
+                }
+                if (s.id === next.id) {
+                  return { ...s, status: 'active' as SectionStatus }
+                }
+                return s
+              })
+              return { sections, currentSection: next.id }
+            }),
+
+          prevSection: () =>
+            set((state) => {
+              const current = state.sections.find((s) => s.id === state.currentSection)
+              if (!current || current.order === 0) return state
+              const prev = state.sections.find((s) => s.order === current.order - 1)
+              if (!prev) return state
+              const sections = state.sections.map((s) => {
+                if (s.id === state.currentSection && s.status === 'active') {
+                  return { ...s, status: 'done' as SectionStatus }
+                }
+                if (s.id === prev.id) {
+                  return { ...s, status: 'active' as SectionStatus }
+                }
+                return s
+              })
+              return { sections, currentSection: prev.id }
+            }),
         }),
         {
           limit: 50,

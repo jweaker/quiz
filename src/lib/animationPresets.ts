@@ -85,14 +85,15 @@ export function wipeVariants(direction: WipeDirection): Variants {
 const sectionBackgrounds: Record<string, string> = {
   idle: 'radial-gradient(circle, rgba(89,133,227,1) 0%, rgba(20,37,74,1) 100%)',
   default: 'radial-gradient(circle, rgba(89,133,227,1) 0%, rgba(20,37,74,1) 100%)',
-  speedQuestions: 'radial-gradient(circle, rgba(30,100,200,1) 0%, rgba(10,25,60,1) 100%)',
+  'speed-question': 'radial-gradient(circle, rgba(30,100,200,1) 0%, rgba(10,25,60,1) 100%)',
   minefield: 'radial-gradient(circle, rgba(60,10,10,1) 0%, rgba(15,5,5,1) 100%)',
   debate: 'radial-gradient(circle, rgba(140,80,20,1) 0%, rgba(40,20,5,1) 100%)',
   windows: 'radial-gradient(circle, rgba(20,100,80,1) 0%, rgba(5,30,25,1) 100%)',
-  puzzles: 'radial-gradient(circle, rgba(100,50,150,1) 0%, rgba(25,10,40,1) 100%)',
-  poeticChase: 'radial-gradient(circle, rgba(150,120,50,1) 0%, rgba(40,30,10,1) 100%)',
-  audienceQuestions: 'radial-gradient(circle, rgba(50,120,100,1) 0%, rgba(10,30,25,1) 100%)',
-  quickQuestions: 'radial-gradient(circle, rgba(70,100,180,1) 0%, rgba(15,25,50,1) 100%)',
+  puzzle: 'radial-gradient(circle, rgba(100,50,150,1) 0%, rgba(25,10,40,1) 100%)',
+  'poetic-chase': 'radial-gradient(circle, rgba(150,120,50,1) 0%, rgba(40,30,10,1) 100%)',
+  'ask-intelligently': 'radial-gradient(circle, rgba(80,130,180,1) 0%, rgba(20,35,50,1) 100%)',
+  'audience-questions': 'radial-gradient(circle, rgba(50,120,100,1) 0%, rgba(10,30,25,1) 100%)',
+  'rapid-questions': 'radial-gradient(circle, rgba(70,100,180,1) 0%, rgba(15,25,50,1) 100%)',
 }
 
 /**

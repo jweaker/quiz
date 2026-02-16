@@ -51,6 +51,11 @@ export const SHORTCUTS: Record<string, ShortcutDef> = {
   'open-audience': { keys: 'mod+shift+a', label: 'فتح العرض', category: 'general', description: 'فتح شاشة الجمهور' },
   'shortcuts-overlay': { keys: '?', label: 'الاختصارات', category: 'general', description: 'مرجع الاختصارات' },
   'escape': { keys: 'escape', label: 'رجوع', category: 'general' },
+
+  // Navigation
+  'toggle-rundown': { keys: 'r', label: 'إظهار/إخفاء الخطة', category: 'navigation' },
+  'next-section': { keys: 'mod+right', label: 'القسم التالي', category: 'navigation' },
+  'prev-section': { keys: 'mod+left', label: 'القسم السابق', category: 'navigation' },
 }
 
 /**
