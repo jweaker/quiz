@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 
 ## Current Position
 
-Phase: 5 of 7 (Visual System) — IN PROGRESS
-Plan: 2 of 4 complete
-Status: Score celebrations, Minefield effects, and animation barrel ready
-Last activity: 2026-02-15 — Completed 05-02 (Score Celebrations & Minefield Effects)
+Phase: 5 of 7 (Visual System) — COMPLETE
+Plan: 4 of 4 complete
+Status: Phase 5 complete — rundown rail, section state, and audience display wired
+Last activity: 2026-02-16 — Completed 05-04 (Rundown Rail & Section State)
 
-Progress: [███████████████░░░░░░░░░] 15/26 (58%)
+Progress: [██████████████████░░░░░] 18/26 (69%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Average duration: 3.7 min
-- Total execution time: 1.3 hours
+- Total plans completed: 18
+- Average duration: 4.5 min
+- Total execution time: 1.6 hours
 
 **By Phase:**
 
@@ -31,16 +31,17 @@ Progress: [███████████████░░░░░░░░
 | 2 - Dual-Screen Architecture | 3/3 ✅ | 13 min | 4 min |
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
-| 5 - Visual System | 1/4 | 4 min | 4 min |
+| 5 - Visual System | 4/4 ✅ | 21 min | 5.25 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (2 min), 04-02 (3 min), 04-03 (2 min), 04-04 (2 min), 05-01 (4 min)
-- Trend: Consistent 2-4 min range
+- Last 5 plans: 04-04 (2 min), 05-01 (4 min), 05-02 (4 min), 05-03 (4 min), 05-04 (9 min)
+- Trend: Consistent 2-9 min range
 
 *Updated after each plan completion*
 | Phase 04 P03 | 2 | 2 tasks | 6 files |
 | Phase 04-timer-system P04 | 2 | 2 tasks | 3 files |
 | Phase 05-visual-system P01 | 4 | 2 tasks | 8 files |
+| Phase 05-visual-system P04 | 9 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,9 @@ Recent decisions affecting current work:
 - [Phase 05-visual-system]: Motion ^12.34.0 installed as latest stable; MotionConfig wraps app with reducedMotion='user' (05-01)
 - [Phase 05-visual-system]: TypewriterText at 50ms stagger for show title (slower than 30ms default for dramatic Arabic reveal) (05-01)
 - [Phase 05-visual-system]: Hardcoded 'idle' section type until Plan 05-04 adds section state to showStore (05-01)
+- [Phase 05-visual-system]: Section IDs use kebab-case matching SectionType union; background keys aligned accordingly (05-04)
+- [Phase 05-visual-system]: RundownRail placed between persistent and adaptive zones as natural divider (05-04)
+- [Phase 05-visual-system]: MinefieldLayout activates for entire windows section type; Phase 6 adds granular detection (05-04)
 
 ### Pending Todos
 
@@ -109,16 +113,19 @@ None.
 - Plan 04-04 complete — UAT gap closure (pause/resume fix, audio wiring, keyboard shortcuts, custom input, verse counter)
 - All 5 UAT gaps closed, timer system production-ready
 
-**Phase 5 (Visual System):**
-- CRITICAL USER FEEDBACK: Operator panel layout is badly designed — long vertical scroll, redundant options, poor use of space for a live TV operator who needs to glance and act quickly. Phase 5 must redesign the operator layout, not just add more panels on top of the existing mess.
-- The current approach of stacking ScoringPanel + TimerPanel vertically is not sustainable — need a compact, information-dense layout.
+**Phase 5 (Visual System):** ✅ COMPLETE
+- Plan 05-01 complete — Motion foundation with animation presets, TypewriterText, WipeTransition
+- Plan 05-02 complete — Score celebrations and Minefield visual effects
+- Plan 05-03 complete — Operator panel redesign with persistent+adaptive zones, shortcut registry
+- Plan 05-04 complete — Rundown rail, section state, audience display section wiring
+- CRITICAL USER FEEDBACK addressed: operator panel redesigned from broken vertical scroll to compact mission-control density
 
 **Phase 6 (Quiz Sections):**
 - 72 animal photos need collection/licensing before Ask Intelligently section implementation
 
 ## Session Continuity
 
-Last session: 2026-02-15
-Stopped at: Completed 05-01-PLAN.md (Motion Foundation)
+Last session: 2026-02-16
+Stopped at: Completed 05-04-PLAN.md (Rundown Rail & Section State) — Phase 5 complete
 Resume file: None
-Next step: Execute Phase 5 Plan 02 (Score celebrations and Minefield visual treatment)
+Next step: Plan Phase 6 (Quiz Sections)

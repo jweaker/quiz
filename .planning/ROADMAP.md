@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Dual-Screen Architecture** - Operator panel + audience display with state synchronization
 - [x] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
 - [x] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
-- [ ] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (In progress)
+- [x] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (Complete)
 - [ ] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
 - [ ] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
 
@@ -108,9 +108,9 @@ Plans:
 
 Plans:
 - [x] 05-01-PLAN.md — Motion library setup, animation presets, MotionConfig, TypewriterText, WipeTransition, dynamic section backgrounds
-- [ ] 05-02-PLAN.md — Score celebration effects (confetti/flash) and Minefield visual treatment (screen shake, red flash, stakes flash, pulsing glow)
-- [ ] 05-03-PLAN.md — Operator panel redesign: context-adaptive layout, mission-control density, keyboard shortcut overlay
-- [ ] 05-04-PLAN.md — Episode section state, horizontal rundown rail with click-to-jump, audience display section wiring
+- [x] 05-02-PLAN.md — Score celebration effects (confetti/flash) and Minefield visual treatment (screen shake, red flash, stakes flash, pulsing glow)
+- [x] 05-03-PLAN.md — Operator panel redesign: context-adaptive layout, mission-control density, keyboard shortcut overlay
+- [x] 05-04-PLAN.md — Episode section state, horizontal rundown rail with click-to-jump, audience display section wiring
 
 ### Phase 6: Quiz Sections
 **Goal**: All 8 section types implemented with specialized UI and interactions
@@ -166,8 +166,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Dual-Screen Architecture | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
-| 5. Visual System | 1/4 | In progress | - |
+| 5. Visual System | 4/4 | ✓ Complete | 2026-02-16 |
 | 6. Quiz Sections | 0/5 | Not started | - |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 14/26 plans complete (54%)
+**Total:** 18/26 plans complete (69%)
