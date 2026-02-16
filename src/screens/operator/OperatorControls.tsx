@@ -3,6 +3,7 @@ import { useShowStore, useTimerStore } from '@/state'
 import { ThemeToggle } from '@/components/operator/ThemeToggle'
 import { ScoringPanel } from '@/components/operator/ScoringPanel'
 import { TimerPanel } from '@/components/operator/TimerPanel'
+import { RundownRail } from '@/components/operator/RundownRail'
 import { useScoreControls } from '@/hooks/useScoreControls'
 import {
   Settings,
@@ -234,6 +235,13 @@ export default function OperatorControls() {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════ */}
+      {/* RUNDOWN RAIL — section overview between zones       */}
+      {/* ═══════════════════════════════════════════════════ */}
+      <div className="border-b">
+        <RundownRail />
       </div>
 
       {/* ═══════════════════════════════════════════════════ */}
