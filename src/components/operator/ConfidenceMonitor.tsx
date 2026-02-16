@@ -46,9 +46,12 @@ export function ConfidenceMonitor() {
   }, [])
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="px-3 py-1.5 border-b bg-muted/50">
-        <span className="text-xs font-medium text-muted-foreground">Live Preview</span>
+    <div className="h-full flex flex-col border-s border-border">
+      <div className="px-3 py-1 border-b bg-muted/50 flex items-center gap-1.5">
+        <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/70">
+          PREVIEW
+        </span>
+        <span className="size-1.5 rounded-full bg-green-500 animate-pulse" />
       </div>
       <div
         ref={containerRef}

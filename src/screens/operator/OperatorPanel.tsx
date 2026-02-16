@@ -7,6 +7,7 @@ import {
 } from '@/components/ui/resizable'
 import OperatorControls from './OperatorControls'
 import { DisconnectBanner } from '@/components/operator/DisconnectBanner'
+import { KeyboardShortcutOverlay } from '@/components/operator/KeyboardShortcutOverlay'
 import { WindowLauncher } from '@/components/operator/WindowLauncher'
 import { ConfidenceMonitor } from '@/components/operator/ConfidenceMonitor'
 import { useAudienceWindow } from '@/hooks/useAudienceWindow'
@@ -43,6 +44,7 @@ export default function OperatorPanel() {
   return (
     <div className="h-screen flex flex-col">
       <DisconnectBanner />
+      <KeyboardShortcutOverlay />
       <div className="flex items-center justify-between px-4 py-2 border-b bg-background">
         <h1 className="text-sm font-semibold text-foreground">Operator Panel</h1>
         <WindowLauncher />
