@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react'
-import { motion } from 'motion/react'
-import { typewriterVariants } from '@/lib/animationPresets'
+import { motion, useReducedMotion } from 'motion/react'
 
 interface TypewriterTextProps {
   text: string
@@ -14,9 +13,9 @@ interface TypewriterTextProps {
 }
 
 /**
- * RTL-aware letter-by-letter text reveal component.
- * Letters slide up from below with opacity fade, staggered at 30ms intervals.
- * Arabic text renders right-to-left in correct reading order.
+ * RTL-aware text reveal component using clip-path animation.
+ * Keeps all text in a single DOM element to preserve Arabic contextual shaping
+ * (connected cursive letter forms). Reveals right-to-left via clip-path inset.
  */
 export function TypewriterText({
   text,
@@ -25,38 +24,36 @@ export function TypewriterText({
   style: externalStyle,
   onComplete,
 }: TypewriterTextProps) {
-  const letters = text.split('')
+  const prefersReducedMotion = useReducedMotion()
+  const duration = text.length * speed
 
-  // Build custom container variants if speed differs from default
-  const containerVariants =
-    speed === 0.03
-      ? typewriterVariants.container
-      : {
-          hidden: { opacity: 0 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: speed,
-              delayChildren: 0.2,
-            },
-          },
-        }
+  if (prefersReducedMotion) {
+    return (
+      <div
+        dir="rtl"
+        style={{ direction: 'rtl', textAlign: 'right', ...externalStyle }}
+        className={className}
+      >
+        {text}
+      </div>
+    )
+  }
 
   return (
     <motion.div
       dir="rtl"
-      style={{ direction: 'rtl', textAlign: 'right', display: 'inline-flex', flexWrap: 'wrap', ...externalStyle }}
+      style={{ direction: 'rtl', textAlign: 'right', ...externalStyle }}
       className={className}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+      initial={{ opacity: 0, y: 20, clipPath: 'inset(0 0 0 100%)' }}
+      animate={{ opacity: 1, y: 0, clipPath: 'inset(0 0 0 0%)' }}
+      transition={{
+        opacity: { duration: 0.3, delay: 0.2 },
+        y: { duration: 0.4, delay: 0.2 },
+        clipPath: { duration, delay: 0.4, ease: 'linear' },
+      }}
       onAnimationComplete={() => onComplete?.()}
     >
-      {letters.map((letter, i) => (
-        <motion.span key={i} variants={typewriterVariants.letter}>
-          {letter === ' ' ? '\u00A0' : letter}
-        </motion.span>
-      ))}
+      {text}
     </motion.div>
   )
 }
