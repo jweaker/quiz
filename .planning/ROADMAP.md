@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Dual-Screen Architecture** - Operator panel + audience display with state synchronization
 - [x] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
 - [x] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
-- [x] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (Complete)
+- [ ] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (UAT gap closure)
 - [ ] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
 - [ ] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
 
@@ -104,13 +104,16 @@ Plans:
   5. Operator panel shows keyboard shortcut reference and all available controls
   6. Rundown view displays episode timeline with progress indicators and click-to-jump navigation
   7. All animations respect prefers-reduced-motion and run at 60fps on MacBook Pro
-**Plans**: 4 plans
+**Plans**: 7 plans
 
 Plans:
 - [x] 05-01-PLAN.md — Motion library setup, animation presets, MotionConfig, TypewriterText, WipeTransition, dynamic section backgrounds
 - [x] 05-02-PLAN.md — Score celebration effects (confetti/flash) and Minefield visual treatment (screen shake, red flash, stakes flash, pulsing glow)
 - [x] 05-03-PLAN.md — Operator panel redesign: context-adaptive layout, mission-control density, keyboard shortcut overlay
 - [x] 05-04-PLAN.md — Episode section state, horizontal rundown rail with click-to-jump, audience display section wiring
+- [ ] 05-05-PLAN.md — UAT gap closure: Arabic typewriter fix, score celebration positioning/parallel animations, ScreenShake wiring
+- [ ] 05-06-PLAN.md — UAT gap closure: editable operator scores, tab cycling shortcut, ? key fix, RTL navigation swap
+- [ ] 05-07-PLAN.md — UAT gap closure: Web Audio API for smooth timer tick playback (Phase 4 carryover)
 
 ### Phase 6: Quiz Sections
 **Goal**: All 8 section types implemented with specialized UI and interactions
@@ -166,8 +169,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Dual-Screen Architecture | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
-| 5. Visual System | 4/4 | ✓ Complete | 2026-02-16 |
+| 5. Visual System | 4/7 | UAT Gap Closure | - |
 | 6. Quiz Sections | 0/5 | Not started | - |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 18/26 plans complete (69%)
+**Total:** 18/29 plans complete (62%)
