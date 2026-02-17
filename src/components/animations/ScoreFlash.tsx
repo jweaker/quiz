@@ -35,7 +35,7 @@ export function ScoreFlash({ delta, onComplete }: ScoreFlashProps) {
     return (
       <div
         className={
-          'absolute -top-4 left-1/2 -translate-x-1/2 -translate-y-full font-bold z-20 ' +
+          'absolute -bottom-4 left-1/2 -translate-x-1/2 translate-y-full font-bold z-20 ' +
           (delta > 0 ? 'text-amber-400' : 'text-red-500')
         }
         style={{ fontSize: 'clamp(1.5rem, 4vw, 4rem)' }}
@@ -59,12 +59,13 @@ export function ScoreFlash({ delta, onComplete }: ScoreFlashProps) {
         {/* Floating score delta with scale animation */}
         <AnimatePresence>
           <motion.div
-            className="absolute -top-4 left-1/2 -translate-x-1/2 -translate-y-full font-bold text-amber-400 z-20 drop-shadow-lg"
+            className="absolute -bottom-4 left-1/2 -translate-x-1/2 translate-y-full font-bold text-amber-400 z-20 drop-shadow-lg"
             style={{ fontSize: 'clamp(1.5rem, 4vw, 4rem)' }}
-            initial={{ scale: 1, opacity: 1 }}
+            initial={{ scale: 1, opacity: 1, y: -20 }}
             animate={{
               scale: [1, 1.8, 1.2],
               opacity: [1, 1, 0],
+              y: [0, 10, 20],
             }}
             transition={{
               duration: 0.5,
@@ -83,12 +84,13 @@ export function ScoreFlash({ delta, onComplete }: ScoreFlashProps) {
   return (
     <AnimatePresence>
       <motion.div
-        className="absolute -top-4 left-1/2 -translate-x-1/2 -translate-y-full font-bold text-red-500 z-20 drop-shadow-lg"
+        className="absolute -bottom-4 left-1/2 -translate-x-1/2 translate-y-full font-bold text-red-500 z-20 drop-shadow-lg"
         style={{ fontSize: 'clamp(1.5rem, 4vw, 4rem)' }}
-        initial={{ x: 0, opacity: 1 }}
+        initial={{ x: 0, opacity: 1, y: -20 }}
         animate={{
           x: [0, -8, 8, -8, 8, -4, 4, 0],
           opacity: [1, 1, 1, 1, 1, 1, 0.5, 0],
+          y: [0, 10, 20],
         }}
         transition={{
           duration: 0.6,

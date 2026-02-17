@@ -33,7 +33,7 @@ export function TeamScore({ teamName, score, isActive, variant }: TeamScoreProps
       <div className="flex flex-col items-center gap-3">
         <span
           className="text-white/80 font-medium drop-shadow-md"
-          style={{ fontSize: 'clamp(0.8rem, 2vw, 2.5rem)' }}
+          style={{ fontSize: 'clamp(1.2rem, 3vw, 3rem)' }}
         >
           {teamName}
         </span>
@@ -47,8 +47,10 @@ export function TeamScore({ teamName, score, isActive, variant }: TeamScoreProps
             height: 'clamp(6rem, 12vw, 14rem)',
           }}
         >
-          {/* Score celebration with confetti (audience only) */}
-          {delta !== null && <ScoreFlash delta={delta} />}
+          {/* Score celebration with confetti (audience only) - parallel animations */}
+          {delta.map((d) => (
+            <ScoreFlash key={d.id} delta={d.value} />
+          ))}
           {/* Score number */}
           <span
             className={
@@ -64,7 +66,7 @@ export function TeamScore({ teamName, score, isActive, variant }: TeamScoreProps
     )
   }
 
-  // Operator variant
+  // Operator variant - also uses delta array
   return (
     <div
       className={
@@ -77,18 +79,19 @@ export function TeamScore({ teamName, score, isActive, variant }: TeamScoreProps
       <p className="text-sm font-medium text-muted-foreground mb-2">{teamName}</p>
 
       <div className="relative inline-block">
-        {/* Delta indicator */}
-        {delta !== null && (
+        {/* Delta indicator - parallel animations */}
+        {delta.map((d) => (
           <div
+            key={d.id}
             className={
               'absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full font-bold text-2xl animate-delta-fade ' +
-              (delta > 0 ? 'text-green-600' : 'text-red-600')
+              (d.value > 0 ? 'text-green-600' : 'text-red-600')
             }
           >
-            {delta > 0 ? '+' : ''}
-            {delta}
+            {d.value > 0 ? '+' : ''}
+            {d.value}
           </div>
-        )}
+        ))}
 
         {/* Score number */}
         <p
