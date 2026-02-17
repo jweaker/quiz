@@ -11,14 +11,13 @@ import {
   ArrowLeftRight,
   Undo,
   Redo,
-  Timer,
-  Users,
   Play,
   Pause,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { AnimatePresence, motion } from 'motion/react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 type AdaptiveMode = 'scoring' | 'countdown' | 'chess-clock'
 
@@ -34,6 +33,41 @@ export default function OperatorControls() {
   useScoreControls()
 
   const [adaptiveMode, setAdaptiveMode] = useState<AdaptiveMode>('scoring')
+
+  // Tab cycling: backtick cycles through scoring -> countdown -> chess-clock -> scoring
+  useHotkeys(
+    'Backquote',
+    () => {
+      setAdaptiveMode((current) => {
+        if (current === 'scoring') return 'countdown'
+        if (current === 'countdown') return 'chess-clock'
+        return 'scoring'
+      })
+    },
+    { enableOnFormTags: false },
+    []
+  )
+
+  // Section navigation (RTL-swapped: Cmd+Right = backward, Cmd+Left = forward)
+  useHotkeys(
+    'meta+right, ctrl+right',
+    (e) => {
+      e.preventDefault()
+      useShowStore.getState().prevSection()
+    },
+    { enableOnFormTags: false, preventDefault: true },
+    []
+  )
+
+  useHotkeys(
+    'meta+left, ctrl+left',
+    (e) => {
+      e.preventDefault()
+      useShowStore.getState().nextSection()
+    },
+    { enableOnFormTags: false, preventDefault: true },
+    []
+  )
 
   // Show store
   const leftScore = useShowStore((s) => s.leftScore)
@@ -278,7 +312,6 @@ export default function OperatorControls() {
             className="h-6 px-2 text-[11px]"
             onClick={() => setAdaptiveMode('countdown')}
           >
-            <Timer className="size-3 me-1" />
             عد تنازلي
           </Button>
           <Button
@@ -287,7 +320,6 @@ export default function OperatorControls() {
             className="h-6 px-2 text-[11px]"
             onClick={() => setAdaptiveMode('chess-clock')}
           >
-            <Users className="size-3 me-1" />
             المطاردة
           </Button>
         </div>
