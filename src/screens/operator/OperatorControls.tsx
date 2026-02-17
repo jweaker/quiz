@@ -54,6 +54,10 @@ export default function OperatorControls() {
   const leftTeamName = data?.leftTeamName ?? 'الفريق الأيسر'
   const rightTeamName = data?.rightTeamName ?? 'الفريق الأيمن'
 
+  // Score setters
+  const setRightScore = useShowStore((s) => s.setRightScore)
+  const setLeftScore = useShowStore((s) => s.setLeftScore)
+
   // Format seconds to MM:SS or SS
   const formatTime = (seconds: number) => {
     if (seconds >= 60) {
@@ -108,7 +112,7 @@ export default function OperatorControls() {
             {/* Right team (displayed first in RTL) */}
             <div
               className={
-                'flex-1 rounded border px-3 py-2 text-center transition-all min-w-0 ' +
+                'flex-1 rounded border px-3 py-2 text-center transition-all min-w-0 flex flex-col justify-center items-center h-full ' +
                 (rightsTurn && turned
                   ? 'border-primary bg-primary/5 ring-1 ring-primary/30'
                   : 'border-border bg-card')
@@ -117,7 +121,12 @@ export default function OperatorControls() {
               <p className="text-[10px] font-medium text-muted-foreground truncate">
                 {rightTeamName}
               </p>
-              <p className="text-3xl font-bold tabular-nums leading-tight">{rightScore}</p>
+              <input
+                type="number"
+                value={rightScore}
+                onChange={(e) => setRightScore(Number(e.target.value))}
+                className="text-3xl font-bold tabular-nums leading-tight text-center bg-transparent border-none outline-none w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
               {rightsTurn && turned && (
                 <span className="text-[9px] text-primary font-medium">الدور</span>
               )}
@@ -126,7 +135,7 @@ export default function OperatorControls() {
             {/* Left team */}
             <div
               className={
-                'flex-1 rounded border px-3 py-2 text-center transition-all min-w-0 ' +
+                'flex-1 rounded border px-3 py-2 text-center transition-all min-w-0 flex flex-col justify-center items-center h-full ' +
                 (!rightsTurn && turned
                   ? 'border-primary bg-primary/5 ring-1 ring-primary/30'
                   : 'border-border bg-card')
@@ -135,7 +144,12 @@ export default function OperatorControls() {
               <p className="text-[10px] font-medium text-muted-foreground truncate">
                 {leftTeamName}
               </p>
-              <p className="text-3xl font-bold tabular-nums leading-tight">{leftScore}</p>
+              <input
+                type="number"
+                value={leftScore}
+                onChange={(e) => setLeftScore(Number(e.target.value))}
+                className="text-3xl font-bold tabular-nums leading-tight text-center bg-transparent border-none outline-none w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              />
               {!rightsTurn && turned && (
                 <span className="text-[9px] text-primary font-medium">الدور</span>
               )}
