@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 6 of 7 (Quiz Sections) — IN PROGRESS
-Plan: 1 of 5 complete
-Status: Plan 06-01 complete — section infrastructure + Speed Question + Audience Questions
-Last activity: 2026-02-19 — Completed 06-01 (Section Infrastructure + Speed Question + Audience Questions)
+Plan: 2 of 5 complete
+Status: Plan 06-05 complete — Ask Intelligently section with animal grid and point deduction
+Last activity: 2026-02-19 — Completed 06-05 (Ask Intelligently Section)
 
-Progress: [████████████████████░░░] 21/26 (81%)
+Progress: [██████████████████████░░] 22/26 (85%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 21
-- Average duration: 4.3 min
-- Total execution time: 1.9 hours
+- Total plans completed: 22
+- Average duration: 4.2 min
+- Total execution time: 2.0 hours
 
 **By Phase:**
 
@@ -32,11 +32,11 @@ Progress: [████████████████████░░░
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
-| 6 - Quiz Sections | 1/5 | 7 min | 7 min |
+| 6 - Quiz Sections | 2/5 | 9 min | 4.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-04 (9 min), 05-06 (2 min), 05-07 (4 min), 05-05 (4 min), 06-01 (7 min)
-- Trend: Consistent 2-9 min range
+- Last 5 plans: 05-06 (2 min), 05-07 (4 min), 05-05 (4 min), 06-01 (7 min), 06-05 (2 min)
+- Trend: Consistent 2-7 min range
 
 *Updated after each plan completion*
 | Phase 04 P03 | 2 | 2 tasks | 6 files |
@@ -47,6 +47,7 @@ Progress: [████████████████████░░░
 | Phase 05-visual-system P07 | 4 | 1 task | 2 files |
 | Phase 05-visual-system P05 | 4 | 2 tasks | 4 files |
 | Phase 06-quiz-sections P01 | 7 | 2 tasks | 8 files |
+| Phase 06-quiz-sections P05 | 2 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -101,6 +102,8 @@ Recent decisions affecting current work:
 - [Phase 06-quiz-sections]: sectionState reset on every section jump prevents question state bleed between sections (06-01)
 - [Phase 06-quiz-sections]: MinefieldLayout activation switched to sectionState.isMinefieldQuestion for granular per-question control (06-01)
 - [Phase 06-quiz-sections]: Section adaptive mode auto-activates via useEffect, excluded from backtick tab cycling (06-01)
+- [Phase 06-quiz-sections]: Ask Intelligently uses local started state for operator-only pre-start/active phase tracking (06-05)
+- [Phase 06-quiz-sections]: Composite animals.png as single image placeholder until individual images collected (06-05)
 
 ### Pending Todos
 
@@ -136,11 +139,12 @@ None.
 
 **Phase 6 (Quiz Sections):**
 - Plan 06-01 complete — section infrastructure, Speed Question, Audience Questions
-- 72 animal photos need collection/licensing before Ask Intelligently section implementation
+- Plan 06-05 complete — Ask Intelligently with composite animal grid and point deduction
+- 72 animal photos need collection/licensing for Ask Intelligently grid upgrade
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-01-PLAN.md (Section Infrastructure + Speed Question + Audience Questions)
+Stopped at: Completed 06-05-PLAN.md (Ask Intelligently Section)
 Resume file: None
 Next step: Execute Phase 6 Plan 02
