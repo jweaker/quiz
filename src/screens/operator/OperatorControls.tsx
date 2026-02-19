@@ -6,7 +6,8 @@ import { TimerPanel } from '@/components/operator/TimerPanel'
 import { RundownRail } from '@/components/operator/RundownRail'
 import { SpeedQuestionPanel } from '@/components/operator/sections/SpeedQuestionPanel'
 import { AudienceQuestionsPanel } from '@/components/operator/sections/AudienceQuestionsPanel'
-// Plans 06-02 through 06-05 add remaining imports
+import { AskIntelligentlyPanel } from '@/components/operator/sections/AskIntelligentlyPanel'
+// Plans 06-02 through 06-04 add remaining imports
 import { useScoreControls } from '@/hooks/useScoreControls'
 import {
   Settings,
@@ -394,7 +395,8 @@ export default function OperatorControls() {
               >
                 {currentSection === 'speed-question' && <SpeedQuestionPanel />}
                 {currentSection === 'audience-questions' && <AudienceQuestionsPanel />}
-                {/* Plans 06-02 through 06-05 add remaining section panels */}
+                {currentSection === 'ask-intelligently' && <AskIntelligentlyPanel />}
+                {/* Plans 06-02 through 06-04 add remaining section panels */}
               </motion.div>
             )}
           </AnimatePresence>
