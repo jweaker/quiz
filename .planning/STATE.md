@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 6 (Quiz Sections) — Complete. Phase 7 (Audio & Episode Management) next.
+**Current focus:** Phase 6 (Quiz Sections) — Complete (incl. gap closure). Phase 7 (Audio & Episode Management) next.
 
 ## Current Position
 
 Phase: 6 of 7 (Quiz Sections) — COMPLETE
-Plan: 5 of 5 complete
-Status: Phase 6 complete — All 8 quiz sections implemented
-Last activity: 2026-02-19 — Completed 06-03 (Puzzle & Rapid Questions)
+Plan: 6 of 6 complete (incl. gap closure plan 06-06)
+Status: Phase 6 complete — All 8 quiz sections implemented + grid overlay gap closed
+Last activity: 2026-02-19 — Completed 06-06 (Ask Intelligently Grid Overlay)
 
-Progress: [█████████████████████████] 25/29 (86%)
+Progress: [██████████████████████████] 26/30 (87%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 25
-- Average duration: 4.0 min
-- Total execution time: 2.2 hours
+- Total plans completed: 26
+- Average duration: 3.9 min
+- Total execution time: 2.3 hours
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [███████████████████████
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
-| 6 - Quiz Sections | 5/5 ✅ | 23 min | 4.6 min |
+| 6 - Quiz Sections | 6/6 ✅ | 26 min | 4.3 min |
 
 **Recent Trend:**
-- Last 5 plans: 06-01 (7 min), 06-02 (4 min), 06-05 (2 min), 06-04 (5 min), 06-03 (5 min)
+- Last 5 plans: 06-06 (3 min), 06-01 (7 min), 06-02 (4 min), 06-05 (2 min), 06-04 (5 min)
 - Trend: Consistent 2-7 min range
 
 *Updated after each plan completion*
@@ -51,6 +51,7 @@ Progress: [███████████████████████
 | Phase 06-quiz-sections P04 | 5 | 2 tasks | 4 files |
 | Phase 06-quiz-sections P03 | 5 | 2 tasks | 6 files |
 | Phase 06-quiz-sections P02 | 4 | 2 tasks | 5 files |
+| Phase 06-quiz-sections P06 | 3 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -117,6 +118,8 @@ Recent decisions affecting current work:
 - [Phase 06-quiz-sections]: Dual-solve uses existing scoring hotkeys (0/5) for split scoring rather than new mechanic (06-03)
 - [Phase 06-quiz-sections]: No team indicator on audience display for Rapid Questions — headphones isolation per SECT-10 (06-03)
 - [Phase 06-quiz-sections]: Team switching with timer isolation: pause → reset to 60s → switch → wait for manual start (06-03)
+- [Phase 06-quiz-sections]: CSS grid overlay on bg-cover container for per-animal interaction — 72 divs over animals.png (06-06)
+- [Phase 06-quiz-sections]: revealedAnimals as number[] for simple cell-index tracking, AnimatePresence per-cell for independent reveal animations (06-06)
 
 ### Pending Todos
 
@@ -156,12 +159,13 @@ None.
 - Plan 06-03 complete — Puzzle with configurable timer and dual-solve, Rapid Questions with team switching
 - Plan 06-04 complete — Debate section with vote entry form and dramatic sequential reveal
 - Plan 06-05 complete — Ask Intelligently with composite animal grid and point deduction
+- Plan 06-06 complete — Ask Intelligently grid overlay with per-animal reveal and animated audience highlights
 - All 8 quiz sections implemented: Speed Question, Audience Questions, Windows of Knowledge, Minefield, Puzzle, Debate, Ask Intelligently, Rapid Questions
-- 72 animal photos need collection/licensing for Ask Intelligently grid upgrade
+- SECT-09 gap closed: 72-cell interactive grid with per-animal reveal state and BroadcastChannel sync
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-03-PLAN.md (Puzzle & Rapid Questions) — Phase 6 fully complete
+Stopped at: Completed 06-06-PLAN.md (Ask Intelligently Grid Overlay gap closure)
 Resume file: None
 Next step: Execute Phase 7 Plan 01 (Audio Manager)
