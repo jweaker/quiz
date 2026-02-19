@@ -401,7 +401,8 @@ export default function OperatorControls() {
                 {currentSection === 'ask-intelligently' && <AskIntelligentlyPanel />}
                 {currentSection === 'windows' && <WindowsPanel />}
                 {currentSection === 'puzzle' && <PuzzlePanel />}
-                {/* Plan 06-04 adds remaining section panels */}
+                {currentSection === 'debate' && <DebatePanel />}
+                {/* Plan 06-05 adds remaining section panels */}
               </motion.div>
             )}
           </AnimatePresence>

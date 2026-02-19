@@ -9,7 +9,9 @@ import { MinefieldLayout } from '@/components/animations/MinefieldLayout'
 import { SpeedQuestionDisplay } from '@/components/audience/sections/SpeedQuestionDisplay'
 import { AudienceQuestionsDisplay } from '@/components/audience/sections/AudienceQuestionsDisplay'
 import { AskIntelligentlyDisplay } from '@/components/audience/sections/AskIntelligentlyDisplay'
-// Plans 06-02 through 06-04 add remaining imports
+import { PuzzleDisplay } from '@/components/audience/sections/PuzzleDisplay'
+import { WindowsDisplay } from '@/components/audience/sections/WindowsDisplay'
+// Plan 06-04 adds remaining imports
 import { motion } from 'motion/react'
 import { getSectionBackground, animationPresets } from '@/lib/animationPresets'
 
@@ -47,7 +49,9 @@ export default function AudienceDisplay() {
           {currentSection === 'speed-question' && <SpeedQuestionDisplay />}
           {currentSection === 'audience-questions' && <AudienceQuestionsDisplay />}
           {currentSection === 'ask-intelligently' && <AskIntelligentlyDisplay />}
-          {/* Plans 06-02 through 06-04 add: windows, puzzle, debate, rapid-questions */}
+          {currentSection === 'puzzle' && <PuzzleDisplay />}
+          {currentSection === 'windows' && <WindowsDisplay />}
+          {/* Plan 06-04 adds: debate, rapid-questions */}
           {!currentSection && (
             <div style={contentStyle} className="flex flex-col items-center justify-center h-full">
               {/* Show title with typewriter entrance animation */}
