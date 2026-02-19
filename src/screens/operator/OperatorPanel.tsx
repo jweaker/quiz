@@ -1,5 +1,5 @@
-import { useEffect, useCallback } from 'react'
-import { useOperatorStore } from '@/state'
+import { useEffect, useCallback, useRef } from 'react'
+import { useOperatorStore, useShowStore } from '@/state'
 import {
   ResizablePanelGroup,
   ResizablePanel,
@@ -11,6 +11,9 @@ import { KeyboardShortcutOverlay } from '@/components/operator/KeyboardShortcutO
 import { WindowLauncher } from '@/components/operator/WindowLauncher'
 import { ConfidenceMonitor } from '@/components/operator/ConfidenceMonitor'
 import { useAudienceWindow } from '@/hooks/useAudienceWindow'
+import { validateEpisode } from '@/lib/episodeSchema'
+import { FileUp } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 const MONITOR_PANEL_ID = 'confidence-monitor'
 
@@ -24,6 +27,38 @@ export default function OperatorPanel() {
   const confidenceMonitorSize = useOperatorStore((s) => s.confidenceMonitorSize)
   const setConfidenceMonitorSize = useOperatorStore((s) => s.setConfidenceMonitorSize)
   const { openAudience } = useAudienceWindow()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // ─── Episode file picker ─────────────────────────────────────────
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+
+      const reader = new FileReader()
+      reader.onload = (evt) => {
+        try {
+          const json = JSON.parse(evt.target?.result as string)
+          const result = validateEpisode(json)
+          if (result.success && result.data) {
+            useShowStore.getState().setData(result.data)
+          } else {
+            const msgs = result.errors
+              ? Object.values(result.errors).flat().slice(0, 3).join('\n')
+              : 'ملف غير صالح'
+            window.alert(`خطأ في ملف الحلقة:\n${msgs}`)
+          }
+        } catch {
+          window.alert('خطأ في قراءة الملف — تأكد أنه JSON صالح')
+        }
+      }
+      reader.readAsText(file)
+
+      // Reset input so re-selecting same file triggers onChange
+      if (fileInputRef.current) fileInputRef.current.value = ''
+    },
+    []
+  )
 
   // Keyboard shortcut: Cmd+Shift+A (Mac) / Ctrl+Shift+A (Windows)
   const handleKeyDown = useCallback(
@@ -47,7 +82,25 @@ export default function OperatorPanel() {
       <KeyboardShortcutOverlay />
       <div className="flex items-center justify-between px-4 py-2 border-b bg-background">
         <h1 className="text-sm font-semibold text-foreground">Operator Panel</h1>
-        <WindowLauncher />
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <FileUp className="size-4" />
+            تحميل حلقة
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json"
+            className="hidden"
+            onChange={handleFileSelect}
+          />
+          <WindowLauncher />
+        </div>
       </div>
       <div className="flex-1 min-h-0">
         <ResizablePanelGroup
