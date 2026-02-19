@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 6 of 7 (Quiz Sections) — IN PROGRESS
-Plan: 2 of 5 complete
-Status: Plan 06-05 complete — Ask Intelligently section with animal grid and point deduction
-Last activity: 2026-02-19 — Completed 06-05 (Ask Intelligently Section)
+Plan: 4 of 5 complete
+Status: Plan 06-04 complete — Debate section with vote entry and dramatic reveal
+Last activity: 2026-02-19 — Completed 06-04 (Debate Section)
 
-Progress: [██████████████████████░░] 22/26 (85%)
+Progress: [████████████████████████] 24/26 (92%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 22
-- Average duration: 4.2 min
-- Total execution time: 2.0 hours
+- Total plans completed: 24
+- Average duration: 4.0 min
+- Total execution time: 2.1 hours
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [██████████████████████░
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
-| 6 - Quiz Sections | 2/5 | 9 min | 4.5 min |
+| 6 - Quiz Sections | 4/5 | 18 min | 4.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-06 (2 min), 05-07 (4 min), 05-05 (4 min), 06-01 (7 min), 06-05 (2 min)
+- Last 5 plans: 05-07 (4 min), 05-05 (4 min), 06-01 (7 min), 06-05 (2 min), 06-04 (5 min)
 - Trend: Consistent 2-7 min range
 
 *Updated after each plan completion*
@@ -48,6 +48,7 @@ Progress: [██████████████████████░
 | Phase 05-visual-system P05 | 4 | 2 tasks | 4 files |
 | Phase 06-quiz-sections P01 | 7 | 2 tasks | 8 files |
 | Phase 06-quiz-sections P05 | 2 | 2 tasks | 4 files |
+| Phase 06-quiz-sections P04 | 5 | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -104,6 +105,9 @@ Recent decisions affecting current work:
 - [Phase 06-quiz-sections]: Section adaptive mode auto-activates via useEffect, excluded from backtick tab cycling (06-01)
 - [Phase 06-quiz-sections]: Ask Intelligently uses local started state for operator-only pre-start/active phase tracking (06-05)
 - [Phase 06-quiz-sections]: Composite animals.png as single image placeholder until individual images collected (06-05)
+- [Phase 06-quiz-sections]: Enter key gated with enableOnFormTags: false and debateVotes !== null for form-coexisting hotkeys (06-04)
+- [Phase 06-quiz-sections]: Sequential reveal pattern: revealedCount threshold controls progressive slot visibility with AnimatePresence (06-04)
+- [Phase 06-quiz-sections]: revealedCount === 4 signals scores-applied state beyond 3 vote slots (06-04)
 
 ### Pending Todos
 
@@ -140,11 +144,12 @@ None.
 **Phase 6 (Quiz Sections):**
 - Plan 06-01 complete — section infrastructure, Speed Question, Audience Questions
 - Plan 06-05 complete — Ask Intelligently with composite animal grid and point deduction
+- Plan 06-04 complete — Debate section with vote entry form and dramatic sequential reveal
 - 72 animal photos need collection/licensing for Ask Intelligently grid upgrade
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-05-PLAN.md (Ask Intelligently Section)
+Stopped at: Completed 06-04-PLAN.md (Debate Section)
 Resume file: None
-Next step: Execute Phase 6 Plan 02
+Next step: Execute Phase 6 Plan 03
