@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 6 (Quiz Sections) — Complete (incl. gap closure). Phase 7 (Audio & Episode Management) next.
+**Current focus:** Phase 7 (Audio & Episode Management) — In Progress. Plan 01 complete.
 
 ## Current Position
 
-Phase: 6 of 7 (Quiz Sections) — COMPLETE
-Plan: 6 of 6 complete (incl. gap closure plan 06-06)
-Status: Phase 6 complete — All 8 quiz sections implemented + grid overlay gap closed
-Last activity: 2026-02-19 — Completed 06-06 (Ask Intelligently Grid Overlay)
+Phase: 7 of 7 (Audio & Episode Management) — IN PROGRESS
+Plan: 1 of 6 complete
+Status: Plan 07-01 complete — AudioManager singleton with GainNode routing and timer audio migration
+Last activity: 2026-02-19 — Completed 07-01 (Audio Manager)
 
-Progress: [██████████████████████████] 26/30 (87%)
+Progress: [███████████████████████████] 27/32 (84%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 26
+- Total plans completed: 27
 - Average duration: 3.9 min
-- Total execution time: 2.3 hours
+- Total execution time: 2.4 hours
 
 **By Phase:**
 
@@ -33,9 +33,10 @@ Progress: [███████████████████████
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
 | 6 - Quiz Sections | 6/6 ✅ | 26 min | 4.3 min |
+| 7 - Audio & Episode Mgmt | 1/6 | 5 min | 5 min |
 
 **Recent Trend:**
-- Last 5 plans: 06-06 (3 min), 06-01 (7 min), 06-02 (4 min), 06-05 (2 min), 06-04 (5 min)
+- Last 5 plans: 07-01 (5 min), 06-06 (3 min), 06-01 (7 min), 06-02 (4 min), 06-05 (2 min)
 - Trend: Consistent 2-7 min range
 
 *Updated after each plan completion*
@@ -52,6 +53,7 @@ Progress: [███████████████████████
 | Phase 06-quiz-sections P03 | 5 | 2 tasks | 6 files |
 | Phase 06-quiz-sections P02 | 4 | 2 tasks | 5 files |
 | Phase 06-quiz-sections P06 | 3 | 2 tasks | 3 files |
+| Phase 07-audio-episode-management P01 | 5 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -120,6 +122,9 @@ Recent decisions affecting current work:
 - [Phase 06-quiz-sections]: Team switching with timer isolation: pause → reset to 60s → switch → wait for manual start (06-03)
 - [Phase 06-quiz-sections]: CSS grid overlay on bg-cover container for per-animal interaction — 72 divs over animals.png (06-06)
 - [Phase 06-quiz-sections]: revealedAnimals as number[] for simple cell-index tracking, AnimatePresence per-cell for independent reveal animations (06-06)
+- [Phase 07-audio-episode-management]: AudioManager singleton with lazy AudioContext creation, GainNode category routing chain (07-01)
+- [Phase 07-audio-episode-management]: SOUND_FILE_NAMES mapping bridges beep-* file names to timer-* sound IDs for backward compat (07-01)
+- [Phase 07-audio-episode-management]: Promise.allSettled in preloadAll for resilient loading — missing files don't break audio (07-01)
 
 ### Pending Todos
 
@@ -163,9 +168,13 @@ None.
 - All 8 quiz sections implemented: Speed Question, Audience Questions, Windows of Knowledge, Minefield, Puzzle, Debate, Ask Intelligently, Rapid Questions
 - SECT-09 gap closed: 72-cell interactive grid with per-animal reveal state and BroadcastChannel sync
 
+**Phase 7 (Audio & Episode Management):** 🔄 IN PROGRESS
+- Plan 07-01 complete — AudioManager singleton with GainNode routing, useTimerAudio migrated
+- AudioManager foundation ready for sound effects (07-02) and episode management (07-03+)
+
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-06-PLAN.md (Ask Intelligently Grid Overlay gap closure)
+Stopped at: Completed 07-01-PLAN.md (AudioManager singleton)
 Resume file: None
-Next step: Execute Phase 7 Plan 01 (Audio Manager)
+Next step: Execute Phase 7 Plan 02 (Sound Effects)
