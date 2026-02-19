@@ -3,6 +3,8 @@ import { useShowStore, useTimerStore } from '@/state'
 import { useHotkeys } from 'react-hotkeys-hook'
 import animalsImage from '@/assets/animals.png'
 
+const TOTAL_CELLS = 72
+
 export function AskIntelligentlyPanel() {
   const currentSection = useShowStore((s) => s.currentSection)
   const sectionState = useShowStore((s) => s.sectionState)
@@ -28,7 +30,7 @@ export function AskIntelligentlyPanel() {
     }
     useTimerStore.getState().setCountdown(120)
     useTimerStore.getState().setCountdownRunning(true)
-    useShowStore.getState().setSectionState({ askedQuestions: 0 })
+    useShowStore.getState().setSectionState({ askedQuestions: 0, revealedAnimals: [] })
     setStarted(true)
   }
 
@@ -47,13 +49,35 @@ export function AskIntelligentlyPanel() {
     }
   }
 
+  // Click a specific animal cell to reveal it
+  const handleCellClick = (index: number) => {
+    if (!started) return
+    const state = useShowStore.getState().sectionState
+    if (state.revealedAnimals.includes(index)) return // already revealed
+    const rem = 20 - state.askedQuestions
+    if (rem <= 0) return
+
+    // Deduct point
+    const { rightsTurn: isRight } = useShowStore.getState()
+    if (isRight) {
+      useShowStore.getState().addRightScore(-1)
+    } else {
+      useShowStore.getState().addLeftScore(-1)
+    }
+
+    useShowStore.getState().setSectionState({
+      askedQuestions: state.askedQuestions + 1,
+      revealedAnimals: [...state.revealedAnimals, index],
+    })
+  }
+
   // End section early
   const handleEnd = () => {
     useTimerStore.getState().setCountdownRunning(false)
     setStarted(false)
   }
 
-  // Q key: deduct 1 point
+  // Q key: deduct 1 point (without specific cell)
   useHotkeys(
     'q',
     handleDeduct,
@@ -76,20 +100,48 @@ export function AskIntelligentlyPanel() {
     remaining > 10 ? 'bg-green-500' : remaining > 5 ? 'bg-amber-500' : 'bg-red-500'
   const barPercent = (remaining / 20) * 100
 
+  // Animal grid overlay component
+  const animalGrid = (
+    <div
+      className="relative w-full rounded border border-border overflow-hidden"
+      style={{
+        aspectRatio: '16 / 9',
+        backgroundImage: `url(${animalsImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className="absolute inset-0 grid grid-cols-9" style={{ gridTemplateRows: 'repeat(8, 1fr)' }}>
+        {Array.from({ length: TOTAL_CELLS }, (_, i) => {
+          const isRevealed = sectionState.revealedAnimals.includes(i)
+          return (
+            <div
+              key={i}
+              onClick={() => handleCellClick(i)}
+              className={[
+                'border border-white/10 transition-colors',
+                started ? 'cursor-pointer' : 'cursor-default',
+                isRevealed
+                  ? 'bg-black/60'
+                  : started
+                    ? 'hover:bg-white/20'
+                    : '',
+              ].join(' ')}
+            />
+          )
+        })}
+      </div>
+    </div>
+  )
+
   if (!started) {
     // Pre-start phase
     return (
       <div className="space-y-3 pt-1">
         <span className="text-xs font-medium text-muted-foreground">اسأل بذكاء</span>
 
-        {/* Animal grid thumbnail */}
-        <div className="rounded border border-border bg-card p-2 flex items-center justify-center">
-          <img
-            src={animalsImage}
-            alt="شبكة الحيوانات"
-            className="max-h-40 object-contain rounded"
-          />
-        </div>
+        {/* Animal grid */}
+        {animalGrid}
 
         {/* Info */}
         <div className="text-xs text-muted-foreground space-y-1">
@@ -125,6 +177,9 @@ export function AskIntelligentlyPanel() {
           style={{ width: `${barPercent}%` }}
         />
       </div>
+
+      {/* Animal grid */}
+      {animalGrid}
 
       {/* Controls */}
       <div className="grid grid-cols-2 gap-2">

@@ -103,6 +103,7 @@ export interface ShowState {
     } | null
     debateRevealedCount: number   // 0=none, 1=judges revealed, 2=+audience, 3=+guest
     askedQuestions: number        // yes/no questions asked in Ask Intelligently (deducted from 20)
+    revealedAnimals: number[]     // cell indices (0-71) revealed in Ask Intelligently grid
     rapidActiveTeam: 'right' | 'left' | null
   }
 
@@ -136,6 +137,7 @@ const defaultSectionState: ShowState['sectionState'] = {
   debateVotes: null,
   debateRevealedCount: 0,
   askedQuestions: 0,
+  revealedAnimals: [],
   rapidActiveTeam: null,
 }
 
