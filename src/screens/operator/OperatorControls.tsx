@@ -10,6 +10,7 @@ import { AskIntelligentlyPanel } from '@/components/operator/sections/AskIntelli
 import { WindowsPanel } from '@/components/operator/sections/WindowsPanel'
 import { PuzzlePanel } from '@/components/operator/sections/PuzzlePanel'
 import { DebatePanel } from '@/components/operator/sections/DebatePanel'
+import { RapidQuestionsPanel } from '@/components/operator/sections/RapidQuestionsPanel'
 // Plan 06-05 adds remaining imports
 import { useScoreControls } from '@/hooks/useScoreControls'
 import {
@@ -402,6 +403,7 @@ export default function OperatorControls() {
                 {currentSection === 'windows' && <WindowsPanel />}
                 {currentSection === 'puzzle' && <PuzzlePanel />}
                 {currentSection === 'debate' && <DebatePanel />}
+                {currentSection === 'rapid-questions' && <RapidQuestionsPanel />}
                 {/* Plan 06-05 adds remaining section panels */}
               </motion.div>
             )}

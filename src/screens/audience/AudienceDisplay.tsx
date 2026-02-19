@@ -12,6 +12,7 @@ import { AskIntelligentlyDisplay } from '@/components/audience/sections/AskIntel
 import { PuzzleDisplay } from '@/components/audience/sections/PuzzleDisplay'
 import { WindowsDisplay } from '@/components/audience/sections/WindowsDisplay'
 import { DebateDisplay } from '@/components/audience/sections/DebateDisplay'
+import { RapidQuestionsDisplay } from '@/components/audience/sections/RapidQuestionsDisplay'
 // Plan 06-05 adds remaining imports
 import { motion } from 'motion/react'
 import { getSectionBackground, animationPresets } from '@/lib/animationPresets'
@@ -53,6 +54,7 @@ export default function AudienceDisplay() {
           {currentSection === 'puzzle' && <PuzzleDisplay />}
           {currentSection === 'windows' && <WindowsDisplay />}
           {currentSection === 'debate' && <DebateDisplay />}
+          {currentSection === 'rapid-questions' && <RapidQuestionsDisplay />}
           {/* Plan 06-05 adds remaining section displays */}
           {!currentSection && (
             <div style={contentStyle} className="flex flex-col items-center justify-center h-full">
