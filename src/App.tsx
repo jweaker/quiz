@@ -16,6 +16,7 @@ import { lazy, Suspense } from "react";
 const OperatorPanel = lazy(() => import("./screens/operator/OperatorPanel"));
 const AudienceDisplay = lazy(() => import("./screens/audience/AudienceDisplay"));
 const Settings = lazy(() => import("./screens/operator/Settings"));
+const EpisodeEditor = lazy(() => import("./screens/editor/EpisodeEditor"));
 
 export default function App() {
   // Load default episode data if store has none (first load or after reset)
@@ -36,6 +37,9 @@ export default function App() {
           <Route index element={<OperatorPanel />} />
           <Route path="settings" element={<Settings />} />
         </Route>
+
+        {/* Editor route */}
+        <Route path="/editor" element={<EpisodeEditor />} />
 
         {/* Audience routes */}
         <Route path="/audience" element={<AudienceRoot />}>
