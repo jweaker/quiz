@@ -151,13 +151,15 @@ Plans:
   6. Episode editor validates data and shows clear error messages before saving
   7. Episodes can be imported from JSON files and exported after editing
   8. All keyboard shortcuts work globally and section-specific shortcuts appear contextually
-**Plans**: 4 plans
+**Plans**: 6 plans
 
 Plans:
 - [ ] 07-01-PLAN.md — AudioManager singleton with GainNode routing, useAudio hook, volume state, mute shortcut
-- [ ] 07-02-PLAN.md — Sound files, audio event integration, mute wiring, and full AudioMixer panel
+- [ ] 07-02-PLAN.md — Synthesized sound files, audio event integration, mute wiring, and full AudioMixer panel
 - [ ] 07-03-PLAN.md — Zod episode schema, validation utilities, factory functions, showStore type migration
-- [ ] 07-04-PLAN.md — Episode editor UI at /editor with all section forms, paste parser, import/export, operator file picker
+- [ ] 07-04-PLAN.md — Editor route, shell, header, metadata form, and validation summary
+- [ ] 07-05-PLAN.md — Paste parser, QuestionListEditor, SpeedQuestions/Windows/Puzzle forms
+- [ ] 07-06-PLAN.md — Debate/Rapid/Audience forms and operator panel file picker
 
 ## Progress
 
