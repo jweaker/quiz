@@ -1,6 +1,7 @@
 import { useShowStore, useOperatorStore } from '@/state'
 import { getContentStyle } from '@/lib/safeArea'
 import { motion, AnimatePresence } from 'motion/react'
+import type { WindowsCategoryKey } from '@/lib/episodeSchema'
 
 const WINDOWS_CATEGORIES = [
   { key: 'naturalSciences', label: 'العلوم الطبيعية', icon: '🔬' },
@@ -26,7 +27,7 @@ export function WindowsDisplay() {
   const catQuestions = activeCategory === 'minefield'
     ? (windows?.misc ?? [])
     : activeCategory
-      ? (windows?.[activeCategory] ?? [])
+      ? (windows?.[activeCategory as WindowsCategoryKey] ?? [])
       : []
   const currentQ = catQuestions[sectionState.questionIndex]
 

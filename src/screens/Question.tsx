@@ -39,7 +39,9 @@ export default function Question() {
   const DATA = data;
 
   // Get current question data from DATA
-  const currentWindow = (DATA.parts[type] as Record<string, unknown>)?.[
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const partsAny = DATA.parts as Record<string, any>
+  const currentWindow = partsAny[type]?.[
     id as string
   ];
   const question: {
@@ -78,7 +80,7 @@ export default function Question() {
             answer?: string;
             done?: boolean;
           })
-    : ((DATA.parts[type] as {
+    : ((partsAny[type] as {
         text?: string;
         duration?: number;
         file?: string;

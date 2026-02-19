@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 import { temporal } from 'zundo'
 import { broadcast } from './sync/broadcastMiddleware'
+import type { Episode } from '@/lib/episodeSchema'
 
 // ─── Episode section types ──────────────────────────────────────
 
@@ -25,48 +26,8 @@ export interface EpisodeSection {
   order: number        // position in episode
 }
 
-// ─── Question data types ────────────────────────────────────────
-// (re-exported from contexts for backward compatibility)
-interface QuestionItem {
-  text: string
-  answer: string
-  duration: number
-  marks: number
-  file?: string
-  isImage?: boolean
-  done?: boolean
-}
-
-interface QuickQuestionSet {
-  title: string
-  questions: QuestionItem[]
-}
-
-interface WindowsData {
-  naturalSciences: QuestionItem[]
-  humanSciences: QuestionItem[]
-  misc: QuestionItem[]
-  arts: QuestionItem[]
-  religion: QuestionItem[]
-  [key: string]: QuestionItem[]
-}
-
-interface EpisodeParts {
-  speedQuestions: QuestionItem[]
-  debate: QuestionItem
-  puzzles: QuestionItem[]
-  windows: WindowsData
-  audienceQuestions: QuestionItem[]
-  quickQuestions: QuickQuestionSet[]
-  [key: string]: unknown
-}
-
-export interface EpisodeData {
-  leftTeamName: string
-  rightTeamName: string
-  parts: EpisodeParts
-  [key: string]: unknown
-}
+/** @deprecated Use `Episode` from `@/lib/episodeSchema` instead */
+export type EpisodeData = Episode
 
 export interface ShowState {
   // Scores
@@ -85,7 +46,7 @@ export interface ShowState {
   audienceQuestion: number
 
   // Episode data
-  data: EpisodeData | null
+  data: Episode | null
 
   // Episode sections
   sections: EpisodeSection[]
@@ -118,8 +79,8 @@ export interface ShowState {
   swapSides: () => void
   setQuickQuestion: (index: number) => void
   setAudienceQuestion: (index: number) => void
-  setData: (data: EpisodeData) => void
-  updateData: (updater: (data: EpisodeData) => EpisodeData) => void
+  setData: (data: Episode) => void
+  updateData: (updater: (data: Episode) => Episode) => void
   jumpToSection: (sectionId: string) => void
   setSectionStatus: (sectionId: string, status: SectionStatus) => void
   setSectionState: (update: Partial<ShowState['sectionState']>) => void
@@ -149,7 +110,7 @@ const initialState = {
   sidesSwapped: false,
   quickQuestion: 0,
   audienceQuestion: 0,
-  data: null as EpisodeData | null,
+  data: null as Episode | null,
   sectionState: { ...defaultSectionState },
   sections: [
     { id: 'speed-question', type: 'speed-question' as SectionType, name: 'سؤال السرعة', status: 'pending' as SectionStatus, order: 0 },

@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useShowStore } from "./state";
-import type { EpisodeData } from "./state";
+import type { Episode } from "./lib/episodeSchema";
 import defaultData from "./config/data.json";
 import Home from "./screens/Home";
 import Question from "./screens/Question";
@@ -18,42 +18,12 @@ const AudienceDisplay = lazy(() => import("./screens/audience/AudienceDisplay"))
 const Settings = lazy(() => import("./screens/operator/Settings"));
 
 export default function App() {
-  const [hideCursor, setHideCursor] = useState<boolean>(false);
-  const toggleTurn = useShowStore((state) => state.toggleTurn);
-  const navigate = useNavigate();
-
   // Load default episode data if store has none (first load or after reset)
   useEffect(() => {
     if (useShowStore.getState().data === null) {
-      useShowStore.getState().setData(defaultData as EpisodeData);
+      useShowStore.getState().setData(defaultData as Episode);
     }
   }, []);
-
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      console.log(e.key);
-      switch (e.key) {
-        case "Escape":
-          if (window.location.pathname !== "/") navigate(-1);
-          break;
-        case "c":
-          setHideCursor((prev) => !prev);
-          break;
-        case "s":
-          toggleTurn();
-          break;
-        default:
-          break;
-      }
-    },
-    [navigate, toggleTurn],
-  );
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handleKeyDown]);
 
   return (
     <Suspense fallback={null}>
@@ -74,7 +44,7 @@ export default function App() {
 
         {/* Legacy routes (existing show screens) */}
         <Route path="/legacy" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="windows" element={<Windows />} />
@@ -89,32 +59,32 @@ export default function App() {
 
         {/* Keep original routes at root level for backward compatibility during migration */}
         <Route path="windows" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <Windows />
           </div>
         } />
         <Route path="questionpicker/:id" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <QuestionPicker />
           </div>
         } />
         <Route path="question/:type/:id/:index" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <Question />
           </div>
         } />
         <Route path="question/:type/:id" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <Question />
           </div>
         } />
         <Route path="question/:type" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <Question />
           </div>
         } />
         <Route path="rate/:type" element={
-          <div className={"w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]" + (hideCursor ? " cursor-none" : "")}>
+          <div className="w-screen h-screen p-0 m-0 bg-[radial-gradient(circle,rgba(89,133,227,1)_0%,rgba(20,37,74,1)_100%)]">
             <Rate />
           </div>
         } />

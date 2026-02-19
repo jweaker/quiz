@@ -25,8 +25,8 @@ export default function QuestionPicker() {
   if (!DATA) return null;
 
   const section = isntWindows
-    ? (DATA.parts[id] as Array<{ done?: boolean }>)
-    : DATA.parts.windows[id];
+    ? (DATA.parts[id as keyof typeof DATA.parts] as Array<{ done?: boolean }>)
+    : DATA.parts.windows[id as keyof typeof DATA.parts.windows];
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       console.log(e.key);

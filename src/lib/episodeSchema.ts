@@ -8,6 +8,7 @@ export const QuestionSchema = z.object({
   marks: z.number().min(0).default(0),
   file: z.string().optional(),
   isImage: z.boolean().optional(),
+  done: z.boolean().optional(),
 })
 
 export type Question = z.infer<typeof QuestionSchema>
