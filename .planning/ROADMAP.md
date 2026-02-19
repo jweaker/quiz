@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
 - [x] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
 - [x] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (UAT gap closure)
-- [x] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
+- [x] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features (incl. gap closure)
 - [ ] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
 
 ## Phase Details
@@ -136,7 +136,7 @@ Plans:
 - [x] 06-03-PLAN.md — Puzzle with configurable timer and dual-solve (SECT-04) + Rapid Questions with team switching (SECT-10)
 - [x] 06-04-PLAN.md — Debate vote entry with sequential dramatic reveal on audience display (SECT-05)
 - [x] 06-05-PLAN.md — Ask Intelligently with composite animal grid and point deduction mechanics (SECT-09)
-- [ ] 06-06-PLAN.md — Gap closure: Ask Intelligently dynamic 72-animal grid with per-cell reveal interactions (SECT-09)
+- [x] 06-06-PLAN.md — Gap closure: Ask Intelligently dynamic 72-animal grid with per-cell reveal interactions (SECT-09)
 
 ### Phase 7: Audio & Episode Management
 **Goal**: Audio feedback system and episode editor for production workflow
@@ -171,7 +171,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
 | 5. Visual System | 7/7 | ✓ Complete | 2026-02-19 |
-| 6. Quiz Sections | 5/6 | Gap closure | 2026-02-19 |
+| 6. Quiz Sections | 6/6 | ✓ Complete | 2026-02-19 |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 25/30 plans complete (83%)
+**Total:** 26/30 plans complete (87%)
