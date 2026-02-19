@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 5 (Visual System) — Complete
+**Current focus:** Phase 6 (Quiz Sections) — In Progress
 
 ## Current Position
 
-Phase: 5 of 7 (Visual System) — COMPLETE
-Plan: 7 of 7 complete
-Status: Phase 5 complete - all UAT gaps closed, visual system production-ready
-Last activity: 2026-02-17 — Completed 05-07 (Timer Audio Web Audio API)
+Phase: 6 of 7 (Quiz Sections) — IN PROGRESS
+Plan: 1 of 5 complete
+Status: Plan 06-01 complete — section infrastructure + Speed Question + Audience Questions
+Last activity: 2026-02-19 — Completed 06-01 (Section Infrastructure + Speed Question + Audience Questions)
 
-Progress: [███████████████████░░░░] 20/26 (77%)
+Progress: [████████████████████░░░] 21/26 (81%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
-- Average duration: 4.2 min
-- Total execution time: 1.8 hours
+- Total plans completed: 21
+- Average duration: 4.3 min
+- Total execution time: 1.9 hours
 
 **By Phase:**
 
@@ -32,10 +32,11 @@ Progress: [███████████████████░░░░
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
+| 6 - Quiz Sections | 1/5 | 7 min | 7 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-02 (4 min), 05-03 (4 min), 05-04 (9 min), 05-06 (2 min), 05-07 (4 min)
-- Trend: Consistent 2-9 min range, UAT gap closures maintaining fast pace
+- Last 5 plans: 05-04 (9 min), 05-06 (2 min), 05-07 (4 min), 05-05 (4 min), 06-01 (7 min)
+- Trend: Consistent 2-9 min range
 
 *Updated after each plan completion*
 | Phase 04 P03 | 2 | 2 tasks | 6 files |
@@ -45,6 +46,7 @@ Progress: [███████████████████░░░░
 | Phase 05-visual-system P06 | 2 | 2 tasks | 2 files |
 | Phase 05-visual-system P07 | 4 | 1 task | 2 files |
 | Phase 05-visual-system P05 | 4 | 2 tasks | 4 files |
+| Phase 06-quiz-sections P01 | 7 | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -96,6 +98,9 @@ Recent decisions affecting current work:
 - [Phase 05-visual-system]: Backtick key for tab cycling instead of Tab or backslash to avoid conflicts (05-06)
 - [Phase 05-visual-system]: RTL navigation swap: Cmd+Right=backward, Cmd+Left=forward for spatial consistency (05-06)
 - [Phase 05-visual-system]: Web Audio API for timer sounds: AudioContext singleton, AudioBuffer preloading, BufferSourceNode per play for overlap-free rapid playback (05-07)
+- [Phase 06-quiz-sections]: sectionState reset on every section jump prevents question state bleed between sections (06-01)
+- [Phase 06-quiz-sections]: MinefieldLayout activation switched to sectionState.isMinefieldQuestion for granular per-question control (06-01)
+- [Phase 06-quiz-sections]: Section adaptive mode auto-activates via useEffect, excluded from backtick tab cycling (06-01)
 
 ### Pending Todos
 
@@ -130,11 +135,12 @@ None.
 - All 9 UAT gaps closed, visual system production-ready
 
 **Phase 6 (Quiz Sections):**
+- Plan 06-01 complete — section infrastructure, Speed Question, Audience Questions
 - 72 animal photos need collection/licensing before Ask Intelligently section implementation
 
 ## Session Continuity
 
-Last session: 2026-02-17
-Stopped at: Completed 05-07-PLAN.md (Timer Audio Web Audio API) — Phase 5 complete
+Last session: 2026-02-19
+Stopped at: Completed 06-01-PLAN.md (Section Infrastructure + Speed Question + Audience Questions)
 Resume file: None
-Next step: Plan Phase 6 (Quiz Sections)
+Next step: Execute Phase 6 Plan 02
