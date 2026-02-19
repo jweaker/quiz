@@ -16,11 +16,13 @@ export function PuzzlePanel() {
   const currentPuzzle = puzzles[puzzleIndex]
   const duration = currentPuzzle?.duration ?? 90
 
-  // T: toggle timer (start/stop). Wires to existing timerStore.
+  // T: toggle timer (start/stop). Only resets if at 0 (supports pause/resume).
   useHotkeys('t', () => {
     const timerStore = useTimerStore.getState()
     if (!timerStore.countdownRunning) {
-      timerStore.setCountdown(duration)
+      if (timerStore.countdownRemaining === 0) {
+        timerStore.setCountdown(duration)
+      }
       timerStore.setCountdownRunning(true)
     } else {
       timerStore.setCountdownRunning(false)
@@ -103,7 +105,9 @@ export function PuzzlePanel() {
           onClick={() => {
             const timerStore = useTimerStore.getState()
             if (!timerStore.countdownRunning) {
-              timerStore.setCountdown(duration)
+              if (timerStore.countdownRemaining === 0) {
+                timerStore.setCountdown(duration)
+              }
               timerStore.setCountdownRunning(true)
             } else {
               timerStore.setCountdownRunning(false)

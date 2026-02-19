@@ -10,10 +10,14 @@ interface UseCountdownParams {
 
 export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownParams = {}) {
   const countdownRunning = useTimerStore((s) => s.countdownRunning)
-  const countdownDuration = useTimerStore((s) => s.countdownDuration)
-  const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
-  const setCountdownRemaining = useTimerStore((s) => s.setCountdownRemaining)
-  const setCountdownRunning = useTimerStore((s) => s.setCountdownRunning)
+
+  // Use refs for callbacks to avoid recreating the interval when callbacks change
+  const onTickRef = useRef(onTick)
+  const onCompleteRef = useRef(onComplete)
+  const onThresholdRef = useRef(onThreshold)
+  onTickRef.current = onTick
+  onCompleteRef.current = onComplete
+  onThresholdRef.current = onThreshold
 
   const startTimeRef = useRef<number>(0)
   const intervalIdRef = useRef<number | undefined>(undefined)
@@ -21,6 +25,9 @@ export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownPa
 
   useEffect(() => {
     if (countdownRunning) {
+      // Read current values via getState() — no subscription needed
+      const { countdownDuration, countdownRemaining } = useTimerStore.getState()
+
       // Reset thresholds only when starting fresh (not on resume)
       if (countdownRemaining === countdownDuration) {
         thresholdsTriggeredRef.current = new Set()
@@ -34,15 +41,15 @@ export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownPa
         const elapsed = performance.now() - startTimeRef.current
         const remaining = Math.max(0, Math.ceil((durationMs - elapsed) / 1000))
 
-        setCountdownRemaining(remaining)
-        onTick?.(remaining)
+        useTimerStore.getState().setCountdownRemaining(remaining)
+        onTickRef.current?.(remaining)
 
         // Check thresholds (10s, 5s, 0s) - only trigger once per threshold
         const thresholds = [10, 5, 0]
         for (const threshold of thresholds) {
           if (remaining <= threshold && !thresholdsTriggeredRef.current.has(threshold)) {
             thresholdsTriggeredRef.current.add(threshold)
-            onThreshold?.(threshold)
+            onThresholdRef.current?.(threshold)
           }
         }
 
@@ -52,8 +59,8 @@ export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownPa
             clearInterval(intervalIdRef.current)
             intervalIdRef.current = undefined
           }
-          setCountdownRunning(false)
-          onComplete?.()
+          useTimerStore.getState().setCountdownRunning(false)
+          onCompleteRef.current?.()
         }
       }, 100) // 100ms for smooth updates
     } else {
@@ -71,5 +78,5 @@ export function useCountdown({ onTick, onComplete, onThreshold }: UseCountdownPa
         intervalIdRef.current = undefined
       }
     }
-  }, [countdownRunning, countdownDuration, countdownRemaining, setCountdownRemaining, setCountdownRunning, onTick, onComplete, onThreshold])
+  }, [countdownRunning])
 }

@@ -2,9 +2,6 @@ import { useState } from 'react'
 import { useHotkeys } from 'react-hotkeys-hook'
 import { useTimerStore } from '@/state'
 import { useChessClock } from '@/hooks/useChessClock'
-import { useCountdown } from '@/hooks/useCountdown'
-import { useTimerAudio } from '@/hooks/useTimerAudio'
-import { useLetterDisplay } from '@/hooks/useLetterDisplay'
 import { Button } from '@/components/ui/button'
 import { PassControls } from '@/components/operator/PassControls'
 import { Play, Pause, RotateCcw } from 'lucide-react'
@@ -18,15 +15,16 @@ interface TimerPanelProps {
  * Compact operator controls for countdown timer and chess clock.
  * Mode is controlled by parent (OperatorControls adaptive zone switcher).
  * No large countdown display — persistent zone shows that.
+ *
+ * NOTE: useCountdown + useTimerAudio + useLetterDisplay are now lifted
+ * to OperatorControls so they stay mounted when the adaptive zone switches.
+ * This component is pure UI + hotkeys.
  */
 export function TimerPanel({ mode }: TimerPanelProps) {
   const [customDuration, setCustomDuration] = useState('')
 
   const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
   const countdownRunning = useTimerStore((s) => s.countdownRunning)
-  const countdownDuration = useTimerStore((s) => s.countdownDuration)
-  const setCountdown = useTimerStore((s) => s.setCountdown)
-  const setCountdownRunning = useTimerStore((s) => s.setCountdownRunning)
   const verseCount = useTimerStore((s) => s.verseCount)
 
   const {
@@ -41,24 +39,19 @@ export function TimerPanel({ mode }: TimerPanelProps) {
     resetClock,
   } = useChessClock()
 
-  // Countdown hooks with audio
-  const { playBeep } = useTimerAudio()
-  useCountdown({ onThreshold: (seconds) => playBeep(seconds as 10 | 5 | 0) })
-
-  // Letter display hook (only active in chess-clock mode)
-  useLetterDisplay(mode === 'chess-clock')
-
-  // Countdown keyboard shortcuts
+  // Countdown keyboard shortcuts — use getState() to avoid stale closures
   useHotkeys('t', () => {
     if (mode !== 'countdown') return
-    setCountdownRunning(!countdownRunning)
-  }, { enableOnFormTags: false }, [mode, countdownRunning])
+    const running = useTimerStore.getState().countdownRunning
+    useTimerStore.getState().setCountdownRunning(!running)
+  }, { enableOnFormTags: false }, [mode])
 
   useHotkeys('shift+t', () => {
     if (mode !== 'countdown') return
-    setCountdown(countdownDuration || 60)
-    setCountdownRunning(false)
-  }, { enableOnFormTags: false }, [mode, countdownDuration])
+    const duration = useTimerStore.getState().countdownDuration || 60
+    useTimerStore.getState().setCountdown(duration)
+    useTimerStore.getState().setCountdownRunning(false)
+  }, { enableOnFormTags: false }, [mode])
 
   // Chess clock keyboard shortcuts
   useHotkeys('BracketLeft', () => {
@@ -110,7 +103,10 @@ export function TimerPanel({ mode }: TimerPanelProps) {
           <Button
             variant="outline"
             className="h-8 px-2 text-xs"
-            onClick={() => setCountdownRunning(!countdownRunning)}
+            onClick={() => {
+              const running = useTimerStore.getState().countdownRunning
+              useTimerStore.getState().setCountdownRunning(!running)
+            }}
           >
             {countdownRunning ? (
               <Pause className="size-3 me-1" />
@@ -124,8 +120,9 @@ export function TimerPanel({ mode }: TimerPanelProps) {
             variant="outline"
             className="h-8 px-2 text-xs"
             onClick={() => {
-              setCountdown(countdownDuration || 60)
-              setCountdownRunning(false)
+              const duration = useTimerStore.getState().countdownDuration || 60
+              useTimerStore.getState().setCountdown(duration)
+              useTimerStore.getState().setCountdownRunning(false)
             }}
           >
             <RotateCcw className="size-3 me-1" />
@@ -142,8 +139,8 @@ export function TimerPanel({ mode }: TimerPanelProps) {
               variant="outline"
               className="h-7 px-2 text-xs"
               onClick={() => {
-                setCountdown(duration)
-                setCountdownRunning(false)
+                useTimerStore.getState().setCountdown(duration)
+                useTimerStore.getState().setCountdownRunning(false)
               }}
             >
               <span className="western-numerals">{duration}</span>s
@@ -161,8 +158,8 @@ export function TimerPanel({ mode }: TimerPanelProps) {
                 if (e.key === 'Enter') {
                   const dur = parseInt(customDuration, 10)
                   if (dur > 0 && dur <= 999) {
-                    setCountdown(dur)
-                    setCountdownRunning(false)
+                    useTimerStore.getState().setCountdown(dur)
+                    useTimerStore.getState().setCountdownRunning(false)
                     setCustomDuration('')
                   }
                 }
@@ -175,8 +172,8 @@ export function TimerPanel({ mode }: TimerPanelProps) {
               onClick={() => {
                 const dur = parseInt(customDuration, 10)
                 if (dur > 0 && dur <= 999) {
-                  setCountdown(dur)
-                  setCountdownRunning(false)
+                  useTimerStore.getState().setCountdown(dur)
+                  useTimerStore.getState().setCountdownRunning(false)
                   setCustomDuration('')
                 }
               }}

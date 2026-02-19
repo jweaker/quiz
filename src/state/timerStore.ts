@@ -76,6 +76,12 @@ export const useTimerStore = create<TimerState>()(
       {
         name: 'timer-storage', // localStorage key (different from show-storage)
         storage: createJSONStorage(() => localStorage),
+        partialize: (state) => {
+          // Exclude requiredLetter from persistence — it's ephemeral UI state
+          // that should not survive page reloads (causes stuck letter overlay)
+          const { requiredLetter, ...rest } = state
+          return rest
+        },
       }
     ),
     'quiz-timer-state' // BroadcastChannel name (different from quiz-show-state)

@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { setInterval, clearInterval } from 'worker-timers'
 import { useTimerStore } from '@/state'
-import { useTimerAudio } from './useTimerAudio'
 
 interface UseChessClockParams {
   onTimerExpired?: (expiredTeam: 'right' | 'left') => void
@@ -9,20 +8,19 @@ interface UseChessClockParams {
 
 export function useChessClock({ onTimerExpired }: UseChessClockParams = {}) {
   const activeTimer = useTimerStore((s) => s.activeTimer)
-  const rightTimeMs = useTimerStore((s) => s.rightTimeMs)
-  const leftTimeMs = useTimerStore((s) => s.leftTimeMs)
-  const setRightTimeMs = useTimerStore((s) => s.setRightTimeMs)
-  const setLeftTimeMs = useTimerStore((s) => s.setLeftTimeMs)
-  const setActiveTimer = useTimerStore((s) => s.setActiveTimer)
-  const resetChessClock = useTimerStore((s) => s.resetChessClock)
 
-  const { playBeep } = useTimerAudio()
+  // Use refs for callbacks and playBeep to avoid deps churn
+  const onTimerExpiredRef = useRef(onTimerExpired)
+  onTimerExpiredRef.current = onTimerExpired
 
   const startTimeRef = useRef<number>(0)
   const intervalIdRef = useRef<number | undefined>(undefined)
   const thresholdsTriggeredRef = useRef<Set<number>>(new Set())
+  // Capture which timer side was started so we read it inside the interval
+  const activeTimerRef = useRef(activeTimer)
+  activeTimerRef.current = activeTimer
 
-  // Main timer effect - runs when activeTimer changes
+  // Main timer effect - runs only when activeTimer identity changes (right/left/null)
   useEffect(() => {
     if (activeTimer === null) {
       // No active timer - clear interval
@@ -40,14 +38,18 @@ export function useChessClock({ onTimerExpired }: UseChessClockParams = {}) {
     // Start worker-timers interval for background-tab resilience
     intervalIdRef.current = setInterval(() => {
       const elapsed = performance.now() - startTimeRef.current
-      const currentTimeMs = activeTimer === 'right' ? rightTimeMs : leftTimeMs
+      const state = useTimerStore.getState()
+      const side = activeTimerRef.current
+      if (side === null) return
+
+      const currentTimeMs = side === 'right' ? state.rightTimeMs : state.leftTimeMs
       const newTimeMs = Math.max(0, currentTimeMs - elapsed)
 
       // Update the active team's time
-      if (activeTimer === 'right') {
-        setRightTimeMs(newTimeMs)
+      if (side === 'right') {
+        state.setRightTimeMs(newTimeMs)
       } else {
-        setLeftTimeMs(newTimeMs)
+        state.setLeftTimeMs(newTimeMs)
       }
 
       // Reset start time for next tick (drift correction)
@@ -61,7 +63,7 @@ export function useChessClock({ onTimerExpired }: UseChessClockParams = {}) {
       for (const threshold of thresholds) {
         if (remainingSeconds <= threshold && !thresholdsTriggeredRef.current.has(threshold)) {
           thresholdsTriggeredRef.current.add(threshold)
-          playBeep(threshold)
+          // Audio is now handled externally via onThreshold or by the caller
         }
       }
 
@@ -71,8 +73,8 @@ export function useChessClock({ onTimerExpired }: UseChessClockParams = {}) {
           clearInterval(intervalIdRef.current)
           intervalIdRef.current = undefined
         }
-        setActiveTimer(null)
-        onTimerExpired?.(activeTimer)
+        state.setActiveTimer(null)
+        onTimerExpiredRef.current?.(side)
       }
     }, 100) // 100ms for smooth updates
 
@@ -83,27 +85,30 @@ export function useChessClock({ onTimerExpired }: UseChessClockParams = {}) {
         intervalIdRef.current = undefined
       }
     }
-  }, [activeTimer, rightTimeMs, leftTimeMs, setRightTimeMs, setLeftTimeMs, setActiveTimer, playBeep, onTimerExpired])
+  }, [activeTimer])
 
-  // Exposed actions
+  // Exposed actions — use getState() to avoid stale closures
   const startClock = (team: 'right' | 'left') => {
-    setActiveTimer(team)
+    useTimerStore.getState().setActiveTimer(team)
   }
 
   const switchClock = () => {
-    if (activeTimer === null) return
-    setActiveTimer(activeTimer === 'right' ? 'left' : 'right')
+    const current = useTimerStore.getState().activeTimer
+    if (current === null) return
+    useTimerStore.getState().setActiveTimer(current === 'right' ? 'left' : 'right')
   }
 
   const pauseClock = () => {
-    setActiveTimer(null)
+    useTimerStore.getState().setActiveTimer(null)
   }
 
   const resetClock = (durationMs = 100_000) => {
-    resetChessClock(durationMs)
+    useTimerStore.getState().resetChessClock(durationMs)
   }
 
-  // Computed values for display
+  // Computed values for display (still subscribed for rendering)
+  const rightTimeMs = useTimerStore((s) => s.rightTimeMs)
+  const leftTimeMs = useTimerStore((s) => s.leftTimeMs)
   const rightSeconds = Math.ceil(rightTimeMs / 1000)
   const leftSeconds = Math.ceil(leftTimeMs / 1000)
   const rightPoints = Math.floor(rightTimeMs / 5000)
