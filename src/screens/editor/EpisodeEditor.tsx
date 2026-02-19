@@ -11,6 +11,9 @@ import ValidationSummary from './components/ValidationSummary'
 import SpeedQuestionsForm from './components/SpeedQuestionsForm'
 import WindowsForm from './components/WindowsForm'
 import PuzzleForm from './components/PuzzleForm'
+import DebateForm from './components/DebateForm'
+import RapidQuestionsForm from './components/RapidQuestionsForm'
+import AudienceQuestionsForm from './components/AudienceQuestionsForm'
 
 type EditorErrors = Record<string, string[]>
 
@@ -125,13 +128,7 @@ export default function EpisodeEditor() {
     [handleImport, runValidation]
   )
 
-  // ─── Remaining section placeholders (replaced in 07-06) ─────────
-
-  const remainingPlaceholders: { id: string; name: string }[] = [
-    { id: 'section-debate', name: 'النقاش' },
-    { id: 'section-rapid-questions', name: 'الرشق السريع' },
-    { id: 'section-audience-questions', name: 'أسئلة الجمهور' },
-  ]
+  // ─── Render ─────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-background text-foreground" dir="rtl">
@@ -199,19 +196,33 @@ export default function EpisodeEditor() {
           errors={errors}
         />
 
-        {/* Remaining section placeholders — replaced in 07-06 */}
-        {remainingPlaceholders.map((section) => (
-          <div
-            key={section.id}
-            id={section.id}
-            className="rounded-lg border border-border bg-card p-6 shadow-sm"
-          >
-            <h2 className="text-lg font-semibold">{section.name}</h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              سيتم إضافة نموذج التحرير في الخطة التالية
-            </p>
-          </div>
-        ))}
+        {/* Debate section — single question */}
+        <DebateForm
+          debate={episode.parts.debate}
+          onChange={(d) => updateParts('debate', d)}
+          debateDuration={episode.settings?.debateDuration ?? 60}
+          onDurationChange={(d) =>
+            updateEpisode((prev) => ({
+              ...prev,
+              settings: { ...prev.settings!, debateDuration: d },
+            }))
+          }
+          errors={errors}
+        />
+
+        {/* Rapid questions section */}
+        <RapidQuestionsForm
+          quickQuestions={episode.parts.quickQuestions}
+          onChange={(q) => updateParts('quickQuestions', q)}
+          errors={errors}
+        />
+
+        {/* Audience questions section */}
+        <AudienceQuestionsForm
+          questions={episode.parts.audienceQuestions}
+          onChange={(q) => updateParts('audienceQuestions', q)}
+          errors={errors}
+        />
 
         <ValidationSummary errors={errors} />
       </div>
