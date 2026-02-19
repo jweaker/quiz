@@ -91,6 +91,20 @@ export interface ShowState {
   sections: EpisodeSection[]
   currentSection: string | null  // section id
 
+  // Section-specific state (broadcast-synced, temporal-excluded)
+  sectionState: {
+    questionIndex: number         // 0-based, current question shown on audience
+    answerRevealed: boolean       // whether answer is visible on audience display
+    isMinefieldQuestion: boolean  // true when operator activates minefield visual treatment
+    debateVotes: {
+      right: { judges: number; audience: number; guest: number }
+      left:  { judges: number; audience: number; guest: number }
+    } | null
+    debateRevealedCount: number   // 0=none, 1=judges revealed, 2=+audience, 3=+guest
+    askedQuestions: number        // yes/no questions asked in Ask Intelligently (deducted from 20)
+    rapidActiveTeam: 'right' | 'left' | null
+  }
+
   // Actions
   setRightScore: (score: number) => void
   setLeftScore: (score: number) => void
@@ -106,9 +120,21 @@ export interface ShowState {
   updateData: (updater: (data: EpisodeData) => EpisodeData) => void
   jumpToSection: (sectionId: string) => void
   setSectionStatus: (sectionId: string, status: SectionStatus) => void
+  setSectionState: (update: Partial<ShowState['sectionState']>) => void
+  resetSectionState: () => void
   nextSection: () => void
   prevSection: () => void
   reset: () => void
+}
+
+const defaultSectionState: ShowState['sectionState'] = {
+  questionIndex: 0,
+  answerRevealed: false,
+  isMinefieldQuestion: false,
+  debateVotes: null,
+  debateRevealedCount: 0,
+  askedQuestions: 0,
+  rapidActiveTeam: null,
 }
 
 const initialState = {
@@ -120,6 +146,7 @@ const initialState = {
   quickQuestion: 0,
   audienceQuestion: 0,
   data: null as EpisodeData | null,
+  sectionState: { ...defaultSectionState },
   sections: [
     { id: 'speed-question', type: 'speed-question' as SectionType, name: 'سؤال السرعة', status: 'pending' as SectionStatus, order: 0 },
     { id: 'windows', type: 'windows' as SectionType, name: 'نوافذ المعرفة', status: 'pending' as SectionStatus, order: 1 },
@@ -172,6 +199,12 @@ export const useShowStore = create<ShowState>()(
             }),
           reset: () => set(initialState),
 
+          // Section state actions
+          setSectionState: (update) =>
+            set((state) => ({ sectionState: { ...state.sectionState, ...update } })),
+          resetSectionState: () =>
+            set({ sectionState: { ...defaultSectionState } }),
+
           // Section navigation actions
           jumpToSection: (sectionId) =>
             set((state) => {
@@ -184,7 +217,11 @@ export const useShowStore = create<ShowState>()(
                 }
                 return s
               })
-              return { sections, currentSection: sectionId }
+              return {
+                sections,
+                currentSection: sectionId,
+                sectionState: { ...defaultSectionState },
+              }
             }),
 
           setSectionStatus: (sectionId, status) =>
@@ -209,7 +246,7 @@ export const useShowStore = create<ShowState>()(
                 }
                 return s
               })
-              return { sections, currentSection: next.id }
+              return { sections, currentSection: next.id, sectionState: { ...defaultSectionState } }
             }),
 
           prevSection: () =>
@@ -227,7 +264,7 @@ export const useShowStore = create<ShowState>()(
                 }
                 return s
               })
-              return { sections, currentSection: prev.id }
+              return { sections, currentSection: prev.id, sectionState: { ...defaultSectionState } }
             }),
         }),
         {

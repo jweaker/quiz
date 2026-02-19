@@ -1,9 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useShowStore, useTimerStore } from '@/state'
 import { ThemeToggle } from '@/components/operator/ThemeToggle'
 import { ScoringPanel } from '@/components/operator/ScoringPanel'
 import { TimerPanel } from '@/components/operator/TimerPanel'
 import { RundownRail } from '@/components/operator/RundownRail'
+import { SpeedQuestionPanel } from '@/components/operator/sections/SpeedQuestionPanel'
+import { AudienceQuestionsPanel } from '@/components/operator/sections/AudienceQuestionsPanel'
+// Plans 06-02 through 06-05 add remaining imports
 import { useScoreControls } from '@/hooks/useScoreControls'
 import {
   Settings,
@@ -19,7 +22,7 @@ import { Button } from '@/components/ui/button'
 import { AnimatePresence, motion } from 'motion/react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-type AdaptiveMode = 'scoring' | 'countdown' | 'chess-clock'
+type AdaptiveMode = 'scoring' | 'countdown' | 'chess-clock' | 'section'
 
 /**
  * Redesigned operator controls with persistent + adaptive zones.
@@ -34,14 +37,25 @@ export default function OperatorControls() {
 
   const [adaptiveMode, setAdaptiveMode] = useState<AdaptiveMode>('scoring')
 
+  // Subscribe to current section
+  const currentSection = useShowStore((s) => s.currentSection)
+
+  // Auto-switch to section mode when a section becomes active
+  useEffect(() => {
+    if (currentSection) {
+      setAdaptiveMode('section')
+    }
+  }, [currentSection])
+
   // Tab cycling: backtick cycles through scoring -> countdown -> chess-clock -> scoring
+  // (section mode activates automatically, not via backtick)
   useHotkeys(
     'Backquote',
     () => {
       setAdaptiveMode((current) => {
         if (current === 'scoring') return 'countdown'
         if (current === 'countdown') return 'chess-clock'
-        return 'scoring'
+        return 'scoring' // chess-clock or section returns to scoring
       })
     },
     { enableOnFormTags: false },
@@ -322,6 +336,16 @@ export default function OperatorControls() {
           >
             المطاردة
           </Button>
+          {currentSection && (
+            <Button
+              variant={adaptiveMode === 'section' ? 'default' : 'ghost'}
+              size="sm"
+              className="h-6 px-2 text-[11px]"
+              onClick={() => setAdaptiveMode('section')}
+            >
+              القسم
+            </Button>
+          )}
         </div>
 
         {/* Adaptive content with animated transitions */}
@@ -358,6 +382,19 @@ export default function OperatorControls() {
                 transition={{ duration: 0.2 }}
               >
                 <TimerPanel mode="chess-clock" />
+              </motion.div>
+            )}
+            {adaptiveMode === 'section' && (
+              <motion.div
+                key="section"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                {currentSection === 'speed-question' && <SpeedQuestionPanel />}
+                {currentSection === 'audience-questions' && <AudienceQuestionsPanel />}
+                {/* Plans 06-02 through 06-05 add remaining section panels */}
               </motion.div>
             )}
           </AnimatePresence>

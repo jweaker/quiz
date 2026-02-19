@@ -3,7 +3,7 @@
  * Used by both inline hints on buttons and the full shortcut overlay.
  */
 
-export type ShortcutCategory = 'scoring' | 'timer' | 'navigation' | 'chess-clock' | 'general'
+export type ShortcutCategory = 'scoring' | 'timer' | 'navigation' | 'chess-clock' | 'general' | 'section'
 
 export interface ShortcutDef {
   keys: string
@@ -57,6 +57,20 @@ export const SHORTCUTS: Record<string, ShortcutDef> = {
   'toggle-rundown': { keys: 'r', label: 'إظهار/إخفاء الخطة', category: 'navigation' },
   'next-section': { keys: 'mod+left', label: 'القسم التالي', category: 'navigation' },
   'prev-section': { keys: 'mod+right', label: 'القسم السابق', category: 'navigation' },
+
+  // Section — question flow (all sections)
+  'section-show-answer': { keys: 'enter', label: 'عرض السؤال / الجواب', category: 'section' },
+  'section-next-question': { keys: 'n', label: 'السؤال التالي', category: 'section' },
+  'section-prev-question': { keys: 'b', label: 'السؤال السابق', category: 'section' },
+  // Section — Speed Question
+  'section-right-answered': { keys: 'z', label: 'أجاب الأيمن', category: 'section', description: 'سؤال السرعة' },
+  'section-left-answered': { keys: 'c', label: 'أجاب الأيسر', category: 'section', description: 'سؤال السرعة' },
+  // Section — Rapid Questions
+  'section-switch-team': { keys: 's', label: 'تبديل الفريق', category: 'section', description: 'الرشق السريع' },
+  // Section — Debate
+  'section-debate-reveal': { keys: 'enter', label: 'كشف التالي', category: 'section', description: 'النقاش' },
+  // Section — Ask Intelligently
+  'section-end-ask': { keys: 'e', label: 'إنهاء اسأل بذكاء', category: 'section' },
 }
 
 /**
@@ -98,4 +112,5 @@ export const CATEGORY_LABELS: Record<ShortcutCategory, string> = {
   'chess-clock': 'ساعة الشطرنج',
   navigation: 'التنقل',
   general: 'عام',
+  section: 'أقسام البرنامج',
 }
