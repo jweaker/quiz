@@ -12,6 +12,7 @@ import { PuzzlePanel } from '@/components/operator/sections/PuzzlePanel'
 import { DebatePanel } from '@/components/operator/sections/DebatePanel'
 import { RapidQuestionsPanel } from '@/components/operator/sections/RapidQuestionsPanel'
 import { PoeticChasePanel } from '@/components/operator/sections/PoeticChasePanel'
+import { AudioMixer } from '@/components/operator/AudioMixer'
 import { useScoreControls } from '@/hooks/useScoreControls'
 import { useCountdown } from '@/hooks/useCountdown'
 import { useTimerAudio } from '@/hooks/useTimerAudio'
@@ -34,7 +35,7 @@ import { Button } from '@/components/ui/button'
 import { AnimatePresence, motion } from 'motion/react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-type AdaptiveMode = 'scoring' | 'countdown' | 'chess-clock' | 'section'
+type AdaptiveMode = 'scoring' | 'countdown' | 'chess-clock' | 'section' | 'audio'
 
 /**
  * Redesigned operator controls with persistent + adaptive zones.
@@ -76,7 +77,7 @@ export default function OperatorControls() {
     }
   }, [currentSection])
 
-  // Tab cycling: backtick cycles through scoring -> countdown -> chess-clock -> scoring
+  // Tab cycling: backtick cycles through scoring -> countdown -> chess-clock -> audio -> scoring
   // (section mode activates automatically, not via backtick)
   useHotkeys(
     'Backquote',
@@ -84,7 +85,8 @@ export default function OperatorControls() {
       setAdaptiveMode((current) => {
         if (current === 'scoring') return 'countdown'
         if (current === 'countdown') return 'chess-clock'
-        return 'scoring' // chess-clock or section returns to scoring
+        if (current === 'chess-clock') return 'audio'
+        return 'scoring' // audio or section returns to scoring
       })
     },
     { enableOnFormTags: false },
@@ -389,6 +391,14 @@ export default function OperatorControls() {
               القسم
             </Button>
           )}
+          <Button
+            variant={adaptiveMode === 'audio' ? 'default' : 'ghost'}
+            size="sm"
+            className="h-6 px-2 text-[11px]"
+            onClick={() => setAdaptiveMode('audio')}
+          >
+            الصوت
+          </Button>
         </div>
 
         {/* Adaptive content with animated transitions */}
@@ -443,6 +453,17 @@ export default function OperatorControls() {
                 {currentSection === 'debate' && <DebatePanel />}
                 {currentSection === 'rapid-questions' && <RapidQuestionsPanel />}
                 {currentSection === 'poetic-chase' && <PoeticChasePanel />}
+              </motion.div>
+            )}
+            {adaptiveMode === 'audio' && (
+              <motion.div
+                key="audio"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <AudioMixer />
               </motion.div>
             )}
           </AnimatePresence>
