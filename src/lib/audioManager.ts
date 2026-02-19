@@ -43,6 +43,16 @@ const SOUND_EXTENSIONS: Record<string, string> = {
   tick: 'wav',
 }
 
+/**
+ * Sound file name overrides for backward compatibility.
+ * Existing timer sounds use 'beep-*' file names; new sound IDs are 'timer-*'.
+ */
+const SOUND_FILE_NAMES: Record<string, string> = {
+  'timer-warning': 'beep-warning',
+  'timer-urgent': 'beep-urgent',
+  'timer-expire': 'beep-final',
+}
+
 class AudioManager {
   private ctx: AudioContext | null = null
   private masterGain: GainNode | null = null
@@ -103,10 +113,11 @@ class AudioManager {
 
     const results = await Promise.allSettled(
       soundIds.map(async (id) => {
+        const fileName = SOUND_FILE_NAMES[id] || id
         const ext = SOUND_EXTENSIONS[id] || 'mp3'
-        const response = await fetch(`/sounds/${id}.${ext}`)
+        const response = await fetch(`/sounds/${fileName}.${ext}`)
         if (!response.ok) {
-          throw new Error(`HTTP ${response.status} for /sounds/${id}.${ext}`)
+          throw new Error(`HTTP ${response.status} for /sounds/${fileName}.${ext}`)
         }
         const arrayBuffer = await response.arrayBuffer()
         const audioBuffer = await ctx.decodeAudioData(arrayBuffer)
