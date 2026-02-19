@@ -131,11 +131,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 06-01: Speed Question and Windows of Knowledge sections
-- [ ] 06-02: Minefield special treatment and Puzzle section
-- [ ] 06-03: Debate section with judge scoring UI
-- [ ] 06-04: Ask Intelligently with 72-photo interactive grid
-- [ ] 06-05: Rapid Questions and Audience Questions sections
+- [ ] 06-01-PLAN.md — Section infrastructure (sectionState slice, section routing) + Speed Question (SECT-01) + Audience Questions (SECT-11)
+- [ ] 06-02-PLAN.md — Windows of Knowledge category picker and question flow (SECT-02) + Minefield visual treatment (SECT-03)
+- [ ] 06-03-PLAN.md — Puzzle with configurable timer and dual-solve (SECT-04) + Rapid Questions with team switching (SECT-10)
+- [ ] 06-04-PLAN.md — Debate vote entry with sequential dramatic reveal on audience display (SECT-05)
+- [ ] 06-05-PLAN.md — Ask Intelligently with composite animal grid and point deduction mechanics (SECT-09)
 
 ### Phase 7: Audio & Episode Management
 **Goal**: Audio feedback system and episode editor for production workflow
