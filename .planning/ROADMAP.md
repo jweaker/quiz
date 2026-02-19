@@ -128,7 +128,7 @@ Plans:
   6. Ask Intelligently displays 72 animal photos in dynamic grid with reveal animations
   7. Rapid Questions shows same 20 questions for both teams with operator-controlled switching
   8. Audience Questions section triggers flexibly between main sections
-**Plans**: 5 plans
+**Plans**: 6 plans
 
 Plans:
 - [x] 06-01-PLAN.md — Section infrastructure (sectionState slice, section routing) + Speed Question (SECT-01) + Audience Questions (SECT-11)
@@ -136,6 +136,7 @@ Plans:
 - [x] 06-03-PLAN.md — Puzzle with configurable timer and dual-solve (SECT-04) + Rapid Questions with team switching (SECT-10)
 - [x] 06-04-PLAN.md — Debate vote entry with sequential dramatic reveal on audience display (SECT-05)
 - [x] 06-05-PLAN.md — Ask Intelligently with composite animal grid and point deduction mechanics (SECT-09)
+- [ ] 06-06-PLAN.md — Gap closure: Ask Intelligently dynamic 72-animal grid with per-cell reveal interactions (SECT-09)
 
 ### Phase 7: Audio & Episode Management
 **Goal**: Audio feedback system and episode editor for production workflow
@@ -170,7 +171,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
 | 5. Visual System | 7/7 | ✓ Complete | 2026-02-19 |
-| 6. Quiz Sections | 5/5 | ✓ Complete | 2026-02-19 |
+| 6. Quiz Sections | 5/6 | Gap closure | 2026-02-19 |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 25/29 plans complete (86%)
+**Total:** 25/30 plans complete (83%)
