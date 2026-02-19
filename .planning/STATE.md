@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 7 (Audio & Episode Management) — In Progress. Plan 03 complete.
+**Current focus:** Phase 7 (Audio & Episode Management) — In Progress. Plan 04 complete.
 
 ## Current Position
 
 Phase: 7 of 7 (Audio & Episode Management) — IN PROGRESS
-Plan: 3 of 6 complete
-Status: Plan 07-03 complete — Zod episode schema with validation and type migration
-Last activity: 2026-02-19 — Completed 07-03 (Episode Schema & Validation)
+Plan: 4 of 6 complete
+Status: Plan 07-04 complete — Editor route, EpisodeEditor shell, header, metadata, validation summary
+Last activity: 2026-02-19 — Completed 07-04 (Editor Route & Shell)
 
-Progress: [████████████████████████████] 29/32 (91%)
+Progress: [█████████████████████████████] 30/32 (94%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 29
+- Total plans completed: 30
 - Average duration: 3.9 min
-- Total execution time: 2.5 hours
+- Total execution time: 2.6 hours
 
 **By Phase:**
 
@@ -33,10 +33,10 @@ Progress: [███████████████████████
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
 | 6 - Quiz Sections | 6/6 ✅ | 26 min | 4.3 min |
-| 7 - Audio & Episode Mgmt | 3/6 | 19 min | 6.3 min |
+| 7 - Audio & Episode Mgmt | 4/6 | 23 min | 5.75 min |
 
 **Recent Trend:**
-- Last 5 plans: 07-03 (7 min), 07-01 (5 min), 06-06 (3 min), 06-01 (7 min), 06-02 (4 min)
+- Last 5 plans: 07-04 (4 min), 07-03 (7 min), 07-01 (5 min), 06-06 (3 min), 06-01 (7 min)
 - Trend: Consistent 3-7 min range
 
 *Updated after each plan completion*
@@ -55,6 +55,7 @@ Progress: [███████████████████████
 | Phase 06-quiz-sections P06 | 3 | 2 tasks | 3 files |
 | Phase 07-audio-episode-management P01 | 5 | 2 tasks | 5 files |
 | Phase 07-audio-episode-management P03 | 7 | 2 tasks | 8 files |
+| Phase 07-audio-episode-management P04 | 4 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -130,6 +131,9 @@ Recent decisions affecting current work:
 - [Phase 07-audio-episode-management]: Zod schema as single source of truth — z.infer<typeof EpisodeSchema> replaces all manual interfaces (07-03)
 - [Phase 07-audio-episode-management]: done? field in QuestionSchema for runtime completion tracking (backward compat with legacy screens) (07-03)
 - [Phase 07-audio-episode-management]: EpisodeData type alias with @deprecated tag preserves imports from @/state (07-03)
+- [Phase 07-audio-episode-management]: Debounced validation at 300ms via setTimeout ref — no external debounce library (07-04)
+- [Phase 07-audio-episode-management]: Editor form pattern — single episode state at EpisodeEditor level, section slices + updater callbacks passed down (07-04)
+- [Phase 07-audio-episode-management]: Section placeholder cards with IDs for scroll-to targeting from ValidationSummary (07-04)
 
 ### Pending Todos
 
@@ -176,12 +180,13 @@ None.
 **Phase 7 (Audio & Episode Management):** 🔄 IN PROGRESS
 - Plan 07-01 complete — AudioManager singleton with GainNode routing, useTimerAudio migrated
 - Plan 07-03 complete — Zod episode schema with validation, inferred types replace manual interfaces, factory functions
+- Plan 07-04 complete — Editor route, shell, header, metadata form, validation summary
 - AudioManager foundation ready for sound effects (07-02)
-- Episode schema ready for editor UI (07-04, 07-05, 07-06)
+- Editor shell ready for section form components (07-05, 07-06)
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 07-03-PLAN.md (Episode Schema & Validation)
+Stopped at: Completed 07-04-PLAN.md (Editor Route & Shell)
 Resume file: None
-Next step: Execute Phase 7 Plan 04 (Editor Route & Shell) — 07-02 (Sound Effects) can run independently
+Next step: Execute Phase 7 Plan 05 (Section Forms) — 07-02 (Sound Effects) can run independently
