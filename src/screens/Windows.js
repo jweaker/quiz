@@ -46,7 +46,7 @@ export default function Windows() {
     <div className="Windows">
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
-      <h1 className="Windows-title">النوافذ</h1>
+      <h1 className="Windows-title">نوافذ المعرفة</h1>
       <div className="Windows-container">
         <IconButton
           title="الدين و السيرة"
@@ -86,7 +86,7 @@ export default function Windows() {
           active={active === 4}
         />
         <IconButton
-          title="اسئلة عامة"
+          title="حقل الالغام"
           Icon={FaShapes}
           done={
             DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done

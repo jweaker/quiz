@@ -145,3 +145,63 @@
     filter: blur(0);
   }
 }
+
+/* Chess clock for Poetic Chase */
+.Question-timer-container-chess {
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 3rem 5rem;
+  border-radius: 3rem;
+}
+
+.chess-clock-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.chess-clock-clocks {
+  display: flex;
+  flex-direction: row;
+  gap: 5rem;
+  align-items: center;
+}
+
+.chess-clock-team {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 8px solid rgba(255, 255, 255, 0.25);
+  opacity: 0.45;
+  transition: all 0.3s ease-in-out;
+}
+
+.chess-clock-team.chess-clock-active {
+  border-color: #00ff00;
+  opacity: 1;
+  box-shadow: 0 0 40px rgba(0, 255, 0, 0.55);
+  background: rgba(0, 255, 0, 0.08);
+}
+
+.chess-clock-time {
+  font-size: 7rem;
+  color: white;
+  font-weight: bold;
+  text-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
+}
+
+.pass-indicator {
+  color: #ffd700;
+  font-size: 1.8rem;
+  direction: rtl;
+  text-align: center;
+  padding: 0.5rem 1.5rem;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 1rem;
+  border: 2px solid #ffd700;
+}

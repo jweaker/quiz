@@ -41,7 +41,7 @@ export default function QuestionPicker() {
   const windows = {
     naturalSciences: "العلوم الطبيعية",
     humanSciences: "العلوم الانسانية",
-    misc: "اسئلة عامة",
+    misc: "حقل الالغام",
     arts: "الادب والفنون",
     religion: "الدين والسيرة",
   };

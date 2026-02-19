@@ -48,7 +48,7 @@ export default function Home() {
       4: () => navigate(`/question/debate`),
       5: () => navigate(`/question/poeticChase`),
       6: () => navigate(`/question/askSmartly`),
-      7: () => navigate(`/questionpicker/quickQuestions`),
+      7: () => navigate(`/question/quickQuestions/0`),
       8: () => {
         if (audienceQuestion < DATA.parts.audienceQuestions?.length) {
           navigate(`/question/audienceQuestions/${audienceQuestion}`);

@@ -6,10 +6,13 @@ import sourceAudioCorrect from "../assets/correct.mp3";
 import sourceAudioWrong from "../assets/wrong.mp3";
 import sourceAudioWhoosh from "../assets/whoosh.mp3";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
 import { GiInfinity } from "react-icons/gi";
+
+// Debate turn durations: [team A turn 1, team B turn 1, team A turn 2, team B turn 2]
+const DEBATE_DURATIONS = [60, 60, 40, 40];
 
 export default function Question() {
   const {
@@ -33,10 +36,25 @@ export default function Question() {
   const [index, setIndex] = useState(parseInt(params.index ?? 0));
   const [zdone, setZdone] = useState(false);
   const [file, setFile] = useState(null);
-  const [leftWrong, setLeftWrong] = useState(0);
-  const [rightWrong, setRightWrong] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
+
+  // --- Poetic Chase: chess clock state ---
+  const [leftMs, setLeftMs] = useState(100000);
+  const [rightMs, setRightMs] = useState(100000);
+  const [chessActive, setChessActive] = useState(null); // 'right' | 'left' | null
+  // passActive: true means receiving team just got a pass and has two scoring options
+  const [passActive, setPassActive] = useState(false);
+  const leftMsRef = useRef(100000);
+  const rightMsRef = useRef(100000);
+  const chessActiveRef = useRef(null);
+  const chessIntervalRef = useRef(null);
+
+  // --- Debate: track which round we're on (0-3) ---
+  const [debateRound, setDebateRound] = useState(0);
+
+  // --- Quick Questions: phase A = first team, phase B = same questions for second team ---
+  const [quickPhase, setQuickPhase] = useState("A");
 
   // Get current question data from DATA
   const currentWindow = DATA.parts[type]?.[id];
@@ -48,7 +66,7 @@ export default function Question() {
         : currentWindow
     : (DATA.parts[type] ??
       (type === "poeticChase"
-        ? { text: "المطاردة الشعرية", duration: 15 }
+        ? { text: "المطاردة الشعرية", duration: 100 }
         : type === "askSmartly"
           ? {
             text: "اسأل بذكاء",
@@ -65,10 +83,11 @@ export default function Question() {
     answer,
   } = question;
 
-  // Set initial duration from the question data
+  // Set initial duration
   useEffect(() => {
-    setDuration(hduration);
-  }, [hduration]);
+    // Quick questions always use 60s regardless of data value
+    setDuration(type === "quickQuestions" ? 60 : hduration);
+  }, [hduration, type]);
 
   useEffect(() => {
     try {
@@ -96,13 +115,11 @@ export default function Question() {
   const [audioWrong] = useState(new Audio(sourceAudioWrong));
   const [audioWhoosh] = useState(new Audio(sourceAudioWhoosh));
 
-  // Helper to pause audio and update playing state
   const pauseAudio = useCallback(() => {
     audio.pause();
     setIsPlaying(false);
   }, [audio]);
 
-  // Helper to trigger "complete" state and reset audio properties
   const triggerComplete = useCallback(() => {
     setIsComplete(true);
     audio.volume = 1;
@@ -111,14 +128,98 @@ export default function Question() {
     setTimeout(() => setIsComplete(false), 0);
   }, [audio]);
 
+  // --- Chess clock helpers ---
+  const clearChessTimer = useCallback(() => {
+    if (chessIntervalRef.current) {
+      clearInterval(chessIntervalRef.current);
+      chessIntervalRef.current = null;
+    }
+  }, []);
+
+  const startChessInterval = useCallback(
+    (team) => {
+      clearChessTimer();
+      chessActiveRef.current = team;
+      setChessActive(team);
+
+      chessIntervalRef.current = setInterval(() => {
+        const active = chessActiveRef.current;
+        if (!active) return;
+
+        if (active === "right") {
+          rightMsRef.current = Math.max(0, rightMsRef.current - 100);
+          setRightMs(rightMsRef.current);
+          if (rightMsRef.current <= 0) {
+            clearInterval(chessIntervalRef.current);
+            chessIntervalRef.current = null;
+            chessActiveRef.current = null;
+            setChessActive(null);
+            setIsPlaying(false);
+            // Left team wins: convert their remaining time to points (5s = 1 pt)
+            const bonus = Math.floor(leftMsRef.current / 5000);
+            if (bonus > 0) setLeftScore((prev) => prev + bonus);
+            setTurned(true);
+          }
+        } else {
+          leftMsRef.current = Math.max(0, leftMsRef.current - 100);
+          setLeftMs(leftMsRef.current);
+          if (leftMsRef.current <= 0) {
+            clearInterval(chessIntervalRef.current);
+            chessIntervalRef.current = null;
+            chessActiveRef.current = null;
+            setChessActive(null);
+            setIsPlaying(false);
+            // Right team wins: convert their remaining time to points
+            const bonus = Math.floor(rightMsRef.current / 5000);
+            if (bonus > 0) setRightScore((prev) => prev + bonus);
+            setTurned(true);
+          }
+        }
+      }, 100);
+    },
+    [clearChessTimer, setLeftScore, setRightScore, setTurned],
+  );
+
+  const switchChessClock = useCallback(() => {
+    const next = chessActiveRef.current === "right" ? "left" : "right";
+    startChessInterval(next);
+  }, [startChessInterval]);
+
+  // Cleanup chess timer on unmount
+  useEffect(() => {
+    return () => clearChessTimer();
+  }, [clearChessTimer]);
+
   const handleKeyDown = useCallback(
     (e) => {
       const key = e.key;
       switch (key) {
         case "Escape":
+          if (type === "poeticChase") {
+            clearChessTimer();
+            chessActiveRef.current = null;
+            setChessActive(null);
+            setPassActive(false);
+          }
           pauseAudio();
           break;
+
         case "Enter":
+          if (type === "poeticChase") {
+            if (!isPlaying) {
+              // Start chess clock on the current team's side
+              const startTeam = rightsTurn ? "right" : "left";
+              startChessInterval(startTeam);
+              setIsPlaying(true);
+            } else {
+              // Pause
+              clearChessTimer();
+              chessActiveRef.current = null;
+              setChessActive(null);
+              setIsPlaying(false);
+            }
+            break;
+          }
           if (isPlaying) {
             pauseAudio();
           } else {
@@ -127,6 +228,7 @@ export default function Question() {
             setIsPlaying(true);
           }
           break;
+
         case "z":
         case "Z":
           if (type === "windows") {
@@ -140,13 +242,26 @@ export default function Question() {
             setIsComplete(true);
             setIsPlaying(false);
           } else if (type === "poeticChase") {
-            setDuration(15);
-            setRightsTurn((prev) => !prev);
+            // Correct verse — active team gets +1
+            if (chessActiveRef.current === "right") {
+              setRightScore((prev) => prev + 1);
+            } else {
+              setLeftScore((prev) => prev + 1);
+            }
+            // In pass state, answering with the required letter earns +1 extra
+            if (passActive) {
+              if (chessActiveRef.current === "right") {
+                setRightScore((prev) => prev + 1);
+              } else {
+                setLeftScore((prev) => prev + 1);
+              }
+            }
+            setPassActive(false);
             audioCorrect.play();
-            triggerComplete();
+            switchChessClock();
           } else if (type === "quickQuestions") {
             const totalSubQuestions =
-              DATA.parts.quickQuestions[id].questions.length;
+              DATA.parts.quickQuestions[0].questions.length;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
               if (rightsTurn) setRightScore((prev) => prev + 1);
@@ -166,6 +281,7 @@ export default function Question() {
             if (type === "speedQuestions") setRightsTurn(false);
           }
           break;
+
         case "x":
         case "X":
           setTurned(true);
@@ -176,20 +292,13 @@ export default function Question() {
             if (rightsTurn) setRightScore((prev) => prev - 1);
             else setLeftScore((prev) => prev - 1);
           } else if (type === "poeticChase") {
-            if (rightsTurn) {
-              setRightWrong((prev) => prev + 1);
-              setRightScore((prev) => prev - 5);
-            } else {
-              setLeftWrong((prev) => prev + 1);
-              setLeftScore((prev) => prev - 5);
-            }
-            setRightsTurn((prev) => !prev);
-            setDuration(15);
-            triggerComplete();
+            // Miss — no point, clock switches
+            setPassActive(false);
             audioWrong.play();
+            switchChessClock();
           } else if (type === "quickQuestions") {
             const totalSubQuestions =
-              DATA.parts.quickQuestions[id].questions.length;
+              DATA.parts.quickQuestions[0].questions.length;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
             } else {
@@ -202,36 +311,83 @@ export default function Question() {
             if (type === "speedQuestions") setRightsTurn(true);
           }
           break;
+
+        // Pass: clock switches to other team, receiving team gets +1
+        case "p":
+        case "P":
+          if (type === "poeticChase") {
+            setTurned(true);
+            const receivingTeam =
+              chessActiveRef.current === "right" ? "left" : "right";
+            if (receivingTeam === "right") {
+              setRightScore((prev) => prev + 1);
+            } else {
+              setLeftScore((prev) => prev + 1);
+            }
+            setPassActive(true);
+            switchChessClock();
+          }
+          break;
+
+        // New letter answer after a pass — no extra point (correct verse, different letter)
+        case "a":
+        case "A":
+          if (type === "poeticChase" && passActive) {
+            setPassActive(false);
+            audioCorrect.play();
+            switchChessClock();
+          }
+          break;
+
         case "1":
           if (type === "quickQuestions") {
-            const totalSets = DATA.parts.quickQuestions.questions.length;
-            if (id < totalSets) {
-              setId((prev) => prev + 1);
+            if (quickPhase === "A") {
+              // Switch to Team B with the same questions
+              setQuickPhase("B");
+              setIndex(0);
+              setZdone(false);
               setRightsTurn((prev) => !prev);
+              triggerComplete();
+              setIsPlaying(false);
+              setDuration(60);
+            } else {
+              // Team B done — go back
+              pauseAudio();
+              navigate(-1);
             }
-            setIndex(0);
-            setZdone(false);
+          } else if (type === "debate") {
+            // Cycle debate rounds: 60s → 60s → 40s → 40s
+            const nextRound = Math.min(debateRound + 1, 3);
+            setDebateRound(nextRound);
+            setDuration(DEBATE_DURATIONS[nextRound]);
             triggerComplete();
             setIsPlaying(false);
           } else {
-            setDuration(type === "debate" ? 60 : hduration);
+            setDuration(hduration);
             triggerComplete();
             setIsPlaying(false);
           }
           break;
+
         case "e":
           if (["debate", "puzzles", "windows"].includes(type)) {
             navigate(`/rate/${type}`);
           }
           if (type === "poeticChase") {
-            setRightScore((prev) => prev + 15);
-            setLeftScore((prev) => prev + 15);
+            // Manual end — stop clocks (no time bonus for early end)
+            clearChessTimer();
+            chessActiveRef.current = null;
+            setChessActive(null);
+            setPassActive(false);
+            setIsPlaying(false);
+            setTurned(true);
           }
           if (type === "askSmartly") {
             if (rightsTurn) setRightScore((prev) => prev + 20);
             else setLeftScore((prev) => prev + 20);
           }
           break;
+
         case "m":
           if (type === "puzzles") {
             setDATA((prevState) => {
@@ -247,9 +403,11 @@ export default function Question() {
             });
           }
           break;
+
         case "f":
           setShowOverlay((prev) => !prev);
           break;
+
         default:
           break;
       }
@@ -261,8 +419,6 @@ export default function Question() {
       index,
       id,
       zdone,
-      leftWrong,
-      rightWrong,
       DATA,
       question,
       navigate,
@@ -273,11 +429,20 @@ export default function Question() {
       setRightScore,
       setLeftScore,
       setDATA,
+      passActive,
+      debateRound,
+      quickPhase,
+      hduration,
+      clearChessTimer,
+      startChessInterval,
+      switchChessClock,
+      audio,
+      audioCorrect,
+      audioWrong,
     ],
   );
 
   useEffect(() => {
-    // Configure audio defaults
     audio.loop = true;
     audio.volume = 0.7;
     audio2.volume = 1;
@@ -299,6 +464,8 @@ export default function Question() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [audio, audio2, audioCorrect, audioWrong, fileLoc, handleKeyDown]);
+
+  const formatChessTime = (ms) => Math.ceil(ms / 1000);
 
   return (
     <div className="Question">
@@ -337,7 +504,7 @@ export default function Question() {
       >
         {!isPlaying
           ? type === "quickQuestions"
-            ? DATA.parts.quickQuestions[id].title
+            ? DATA.parts.quickQuestions[0].title
             : type === "speedQuestions"
               ? "سؤال السرعة"
               : text
@@ -349,7 +516,8 @@ export default function Question() {
           (isComplete && type !== "debate"
             ? " Question-timer-container-complete"
             : "") +
-          (showOverlay && file ? " Question-timer-container-overlay" : "")
+          (showOverlay && file ? " Question-timer-container-overlay" : "") +
+          (type === "poeticChase" ? " Question-timer-container-chess" : "")
         }
       >
         {isComplete ? (
@@ -358,6 +526,36 @@ export default function Question() {
           type !== "askSmartly" && <h1 className="Question-answer">{answer}</h1>
         ) : type === "speedQuestions" || type === "audienceQuestions" ? (
           <GiInfinity size={500} color="white" className="infinity" />
+        ) : type === "poeticChase" ? (
+          <div className="chess-clock-display">
+            <div className="chess-clock-clocks">
+              <div
+                className={
+                  "chess-clock-team" +
+                  (chessActive === "right" ? " chess-clock-active" : "")
+                }
+              >
+                <span className="chess-clock-time">
+                  {formatChessTime(rightMs)}
+                </span>
+              </div>
+              <div
+                className={
+                  "chess-clock-team" +
+                  (chessActive === "left" ? " chess-clock-active" : "")
+                }
+              >
+                <span className="chess-clock-time">
+                  {formatChessTime(leftMs)}
+                </span>
+              </div>
+            </div>
+            {passActive && (
+              <span className="pass-indicator">
+                Z: نفس الحرف (+1) &nbsp;|&nbsp; A: حرف جديد &nbsp;|&nbsp; X: خطأ
+              </span>
+            )}
+          </div>
         ) : (
           <CountdownCircleTimer
             isPlaying={isPlaying}
