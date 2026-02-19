@@ -154,10 +154,10 @@ Plans:
 **Plans**: 4 plans
 
 Plans:
-- [ ] 07-01: Audio Manager singleton with Web Audio API
-- [ ] 07-02: Sound effect integration and operator mute control
-- [ ] 07-03: Episode data structure with Zod validation
-- [ ] 07-04: Episode editor UI with import/export
+- [ ] 07-01-PLAN.md — AudioManager singleton with GainNode routing, useAudio hook, volume state, mute shortcut
+- [ ] 07-02-PLAN.md — Sound files, audio event integration, mute wiring, and full AudioMixer panel
+- [ ] 07-03-PLAN.md — Zod episode schema, validation utilities, factory functions, showStore type migration
+- [ ] 07-04-PLAN.md — Episode editor UI at /editor with all section forms, paste parser, import/export, operator file picker
 
 ## Progress
 
