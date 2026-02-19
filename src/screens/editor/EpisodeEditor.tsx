@@ -8,6 +8,9 @@ import {
 import EditorHeader from './components/EditorHeader'
 import MetadataSection from './components/MetadataSection'
 import ValidationSummary from './components/ValidationSummary'
+import SpeedQuestionsForm from './components/SpeedQuestionsForm'
+import WindowsForm from './components/WindowsForm'
+import PuzzleForm from './components/PuzzleForm'
 
 type EditorErrors = Record<string, string[]>
 
@@ -51,8 +54,8 @@ export default function EpisodeEditor() {
     [runValidation]
   )
 
-  // Helper to update a single parts key (used by section forms in 07-05/07-06)
-  const _updateParts = useCallback(
+  // Helper to update a single parts key (used by section forms)
+  const updateParts = useCallback(
     <K extends keyof EpisodeParts>(key: K, value: EpisodeParts[K]) => {
       updateEpisode((prev) => ({
         ...prev,
@@ -61,8 +64,6 @@ export default function EpisodeEditor() {
     },
     [updateEpisode]
   )
-  // Exported for future section form components
-  void _updateParts
 
   // ─── Import / Export / New handlers ─────────────────────────────
 
@@ -124,12 +125,9 @@ export default function EpisodeEditor() {
     [handleImport, runValidation]
   )
 
-  // ─── Section placeholders ───────────────────────────────────────
+  // ─── Remaining section placeholders (replaced in 07-06) ─────────
 
-  const sectionPlaceholders: { id: string; name: string }[] = [
-    { id: 'section-speed-questions', name: 'سؤال السرعة' },
-    { id: 'section-windows', name: 'نوافذ المعرفة' },
-    { id: 'section-puzzle', name: 'الألغاز' },
+  const remainingPlaceholders: { id: string; name: string }[] = [
     { id: 'section-debate', name: 'النقاش' },
     { id: 'section-rapid-questions', name: 'الرشق السريع' },
     { id: 'section-audience-questions', name: 'أسئلة الجمهور' },
@@ -175,8 +173,34 @@ export default function EpisodeEditor() {
           errors={errors}
         />
 
-        {/* Section form placeholders — replaced by real components in 07-05/07-06 */}
-        {sectionPlaceholders.map((section) => (
+        {/* Section forms — Speed, Windows, Puzzle */}
+        <SpeedQuestionsForm
+          questions={episode.parts.speedQuestions}
+          onChange={(q) => updateParts('speedQuestions', q)}
+          errors={errors}
+        />
+
+        <WindowsForm
+          windows={episode.parts.windows}
+          onChange={(w) => updateParts('windows', w)}
+          errors={errors}
+        />
+
+        <PuzzleForm
+          puzzles={episode.parts.puzzles}
+          onChange={(p) => updateParts('puzzles', p)}
+          puzzleDuration={episode.settings?.puzzleDuration ?? 90}
+          onDurationChange={(d) =>
+            updateEpisode((prev) => ({
+              ...prev,
+              settings: { ...prev.settings!, puzzleDuration: d },
+            }))
+          }
+          errors={errors}
+        />
+
+        {/* Remaining section placeholders — replaced in 07-06 */}
+        {remainingPlaceholders.map((section) => (
           <div
             key={section.id}
             id={section.id}
