@@ -96,6 +96,7 @@ export interface ShowState {
     questionIndex: number         // 0-based, current question shown on audience
     answerRevealed: boolean       // whether answer is visible on audience display
     isMinefieldQuestion: boolean  // true when operator activates minefield visual treatment
+    windowsActiveCategory: string | null  // null = show category picker on audience
     debateVotes: {
       right: { judges: number; audience: number; guest: number }
       left:  { judges: number; audience: number; guest: number }
@@ -131,6 +132,7 @@ const defaultSectionState: ShowState['sectionState'] = {
   questionIndex: 0,
   answerRevealed: false,
   isMinefieldQuestion: false,
+  windowsActiveCategory: null,
   debateVotes: null,
   debateRevealedCount: 0,
   askedQuestions: 0,

@@ -7,7 +7,10 @@ import { RundownRail } from '@/components/operator/RundownRail'
 import { SpeedQuestionPanel } from '@/components/operator/sections/SpeedQuestionPanel'
 import { AudienceQuestionsPanel } from '@/components/operator/sections/AudienceQuestionsPanel'
 import { AskIntelligentlyPanel } from '@/components/operator/sections/AskIntelligentlyPanel'
-// Plans 06-02 through 06-04 add remaining imports
+import { WindowsPanel } from '@/components/operator/sections/WindowsPanel'
+import { PuzzlePanel } from '@/components/operator/sections/PuzzlePanel'
+import { DebatePanel } from '@/components/operator/sections/DebatePanel'
+// Plan 06-05 adds remaining imports
 import { useScoreControls } from '@/hooks/useScoreControls'
 import {
   Settings,
@@ -396,7 +399,9 @@ export default function OperatorControls() {
                 {currentSection === 'speed-question' && <SpeedQuestionPanel />}
                 {currentSection === 'audience-questions' && <AudienceQuestionsPanel />}
                 {currentSection === 'ask-intelligently' && <AskIntelligentlyPanel />}
-                {/* Plans 06-02 through 06-04 add remaining section panels */}
+                {currentSection === 'windows' && <WindowsPanel />}
+                {currentSection === 'puzzle' && <PuzzlePanel />}
+                {/* Plan 06-04 adds remaining section panels */}
               </motion.div>
             )}
           </AnimatePresence>
