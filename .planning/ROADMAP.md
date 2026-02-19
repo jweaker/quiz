@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
 - [x] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (UAT gap closure)
 - [x] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features (incl. gap closure)
-- [ ] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
+- [x] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
 
 ## Phase Details
 
@@ -158,8 +158,8 @@ Plans:
 - [x] 07-02-PLAN.md — Synthesized sound files, audio event integration, mute wiring, and full AudioMixer panel
 - [x] 07-03-PLAN.md — Zod episode schema, validation utilities, factory functions, showStore type migration
 - [x] 07-04-PLAN.md — Editor route, shell, header, metadata form, and validation summary
-- [ ] 07-05-PLAN.md — Paste parser, QuestionListEditor, SpeedQuestions/Windows/Puzzle forms
-- [ ] 07-06-PLAN.md — Debate/Rapid/Audience forms and operator panel file picker
+- [x] 07-05-PLAN.md — Paste parser, QuestionListEditor, SpeedQuestions/Windows/Puzzle forms
+- [x] 07-06-PLAN.md — Debate/Rapid/Audience forms and operator panel file picker
 
 ## Progress
 
@@ -174,6 +174,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
 | 5. Visual System | 7/7 | ✓ Complete | 2026-02-19 |
 | 6. Quiz Sections | 6/6 | ✓ Complete | 2026-02-19 |
-| 7. Audio & Episode Management | 4/6 | In progress | - |
+| 7. Audio & Episode Management | 6/6 | ✓ Complete | 2026-02-19 |
 
-**Total:** 30/32 plans complete (94%)
+**Total:** 32/32 plans complete (100%)

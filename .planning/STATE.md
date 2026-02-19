@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 7 (Audio & Episode Management) — In Progress. Plan 05 complete (5 of 6).
+**Current focus:** Phase 7 (Audio & Episode Management) — Complete. All 6 plans done.
 
 ## Current Position
 
-Phase: 7 of 7 (Audio & Episode Management) — IN PROGRESS
-Plan: 5 of 6 complete
-Status: Plan 07-05 complete — Section forms (paste parser, speed/windows/puzzle)
-Last activity: 2026-02-19 — Completed 07-05 (Section Forms)
+Phase: 7 of 7 (Audio & Episode Management) — COMPLETE
+Plan: 6 of 6 complete
+Status: Plan 07-06 complete — Remaining forms & file picker (all editor sections done)
+Last activity: 2026-02-19 — Completed 07-06 (Remaining Forms & File Picker)
 
-Progress: [██████████████████████████████] 31/32 (97%)
+Progress: [████████████████████████████████] 32/32 (100%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 31
-- Average duration: 4.8 min
+- Total plans completed: 32
+- Average duration: 4.7 min
 - Total execution time: 2.5 hours
 
 **By Phase:**
@@ -33,10 +33,10 @@ Progress: [███████████████████████
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
 | 6 - Quiz Sections | 6/6 ✅ | 26 min | 4.3 min |
-| 7 - Audio & Episode Mgmt | 5/6 | 37 min | 6.2 min |
+| 7 - Audio & Episode Mgmt | 6/6 ✅ | 40 min | 6.7 min |
 
 **Recent Trend:**
-- Last 5 plans: 07-05 (5 min), 07-02 (9 min), 07-04 (4 min), 07-03 (7 min), 07-01 (5 min)
+- Last 5 plans: 07-06 (3 min), 07-05 (5 min), 07-02 (9 min), 07-04 (4 min), 07-03 (7 min)
 - Trend: Consistent 3-9 min range
 
 *Updated after each plan completion*
@@ -58,6 +58,7 @@ Progress: [███████████████████████
 | Phase 07-audio-episode-management P04 | 4 | 2 tasks | 5 files |
 | Phase 07-audio-episode-management P02 | 9 | 2 tasks | 9 files |
 | Phase 07-audio-episode-management P05 | 5 | 2 tasks | 7 files |
+| Phase 07-audio-episode-management P06 | 3 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -142,6 +143,9 @@ Recent decisions affecting current work:
 - [Phase 07-audio-episode-management]: QuestionListEditor as shared component with configurable showMarks/showDuration props (07-05)
 - [Phase 07-audio-episode-management]: WindowsForm enforces max 2 questions per category via onChange guard (07-05)
 - [Phase 07-audio-episode-management]: BulkPasteDialog uses radix-ui Dialog primitive directly — no shadcn/ui dialog wrapper needed (07-05)
+- [Phase 07-audio-episode-management]: DebateForm as single-question form (not list) matching schema's debate: Question type (07-06)
+- [Phase 07-audio-episode-management]: RapidQuestionsForm edits quickQuestions[0] with create-set flow for empty state (07-06)
+- [Phase 07-audio-episode-management]: Operator file picker uses window.alert for validation errors — simple and sufficient (07-06)
 
 ### Pending Todos
 
@@ -185,17 +189,18 @@ None.
 - All 8 quiz sections implemented: Speed Question, Audience Questions, Windows of Knowledge, Minefield, Puzzle, Debate, Ask Intelligently, Rapid Questions
 - SECT-09 gap closed: 72-cell interactive grid with per-animal reveal state and BroadcastChannel sync
 
-**Phase 7 (Audio & Episode Management):** 🔄 IN PROGRESS
+**Phase 7 (Audio & Episode Management):** ✅ COMPLETE
 - Plan 07-01 complete — AudioManager singleton with GainNode routing, useTimerAudio migrated
 - Plan 07-02 complete — 14 synthesized sound effects, useAudioIntegration hook, AudioMixer panel with volume controls
 - Plan 07-03 complete — Zod episode schema with validation, inferred types replace manual interfaces, factory functions
 - Plan 07-04 complete — Editor route, shell, header, metadata form, validation summary
 - Plan 07-05 complete — Paste parser, QuestionListEditor, BulkPasteDialog, Speed/Windows/Puzzle section forms
-- Editor section forms ready, remaining: debate/rapid/audience forms + file picker (07-06)
+- Plan 07-06 complete — DebateForm, RapidQuestionsForm, AudienceQuestionsForm, operator file picker
+- All 6 editor section forms complete, operator can load episodes during live show
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 07-05-PLAN.md (Section Forms)
+Stopped at: Completed 07-06-PLAN.md (Remaining Forms & File Picker)
 Resume file: None
-Next step: Execute Phase 7 Plan 06 (Remaining Forms & File Picker)
+Next step: All phases complete — milestone v1.0 finished (32/32 plans)
