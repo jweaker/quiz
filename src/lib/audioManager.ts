@@ -38,9 +38,23 @@ const SOUND_CATEGORIES: Record<string, AudioCategory> = {
   'pass-verse': 'section',
 }
 
-/** Sound file extensions (most are .mp3 except tick.wav) */
+/** Sound file extensions — generated sounds use .wav, legacy timer sounds use .mp3 */
 const SOUND_EXTENSIONS: Record<string, string> = {
   tick: 'wav',
+  correct: 'wav',
+  wrong: 'wav',
+  'score-milestone': 'wav',
+  'section-enter': 'wav',
+  'section-exit': 'wav',
+  'show-intro': 'wav',
+  'show-outro': 'wav',
+  'minefield-danger': 'wav',
+  'minefield-correct': 'wav',
+  'minefield-wrong': 'wav',
+  'debate-reveal': 'wav',
+  'puzzle-solve': 'wav',
+  'thinking-loop': 'wav',
+  'pass-verse': 'wav',
 }
 
 /**

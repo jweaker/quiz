@@ -11,8 +11,13 @@ import { WindowsPanel } from '@/components/operator/sections/WindowsPanel'
 import { PuzzlePanel } from '@/components/operator/sections/PuzzlePanel'
 import { DebatePanel } from '@/components/operator/sections/DebatePanel'
 import { RapidQuestionsPanel } from '@/components/operator/sections/RapidQuestionsPanel'
-// Plan 06-05 adds remaining imports
+import { PoeticChasePanel } from '@/components/operator/sections/PoeticChasePanel'
 import { useScoreControls } from '@/hooks/useScoreControls'
+import { useCountdown } from '@/hooks/useCountdown'
+import { useTimerAudio } from '@/hooks/useTimerAudio'
+import { useLetterDisplay } from '@/hooks/useLetterDisplay'
+import { useAudioIntegration } from '@/hooks/useAudioIntegration'
+import { useAudio } from '@/hooks/useAudio'
 import {
   Settings,
   RefreshCcw,
@@ -21,6 +26,8 @@ import {
   Redo,
   Play,
   Pause,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -40,10 +47,27 @@ export default function OperatorControls() {
   // Register global keyboard shortcuts
   useScoreControls()
 
-  const [adaptiveMode, setAdaptiveMode] = useState<AdaptiveMode>('scoring')
+  // ── Audio integration ──
+  // Wire game events (scoring, sections) to sound effects
+  useAudioIntegration()
+  const { toggleMute, isMuted } = useAudio()
 
-  // Subscribe to current section
+  // M key mute toggle
+  useHotkeys('m', () => toggleMute(), { enableOnFormTags: false }, [toggleMute])
+
+  // ── Lifted timer engine ──
+  // These hooks MUST live here (always mounted) so timer intervals
+  // keep ticking even when the adaptive zone switches away from timer UI.
+  const { playBeep } = useTimerAudio()
+  useCountdown({ onThreshold: (seconds) => playBeep(seconds as 10 | 5 | 0) })
+
+  // Subscribe to current section to conditionally enable letter display
   const currentSection = useShowStore((s) => s.currentSection)
+
+  // Letter display (a-z hotkeys) only active during poetic-chase
+  useLetterDisplay(currentSection === 'poetic-chase')
+
+  const [adaptiveMode, setAdaptiveMode] = useState<AdaptiveMode>('scoring')
 
   // Auto-switch to section mode when a section becomes active
   useEffect(() => {
@@ -143,6 +167,20 @@ export default function OperatorControls() {
           </span>
         </div>
         <div className="flex items-center gap-1.5">
+          {/* Mute indicator */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-7 px-2"
+            onClick={() => toggleMute()}
+            title={isMuted ? 'تشغيل الصوت (M)' : 'كتم الصوت (M)'}
+          >
+            {isMuted ? (
+              <VolumeX className="size-3.5 text-destructive" />
+            ) : (
+              <Volume2 className="size-3.5" />
+            )}
+          </Button>
           <Button
             variant="ghost"
             size="sm"
@@ -404,7 +442,7 @@ export default function OperatorControls() {
                 {currentSection === 'puzzle' && <PuzzlePanel />}
                 {currentSection === 'debate' && <DebatePanel />}
                 {currentSection === 'rapid-questions' && <RapidQuestionsPanel />}
-                {/* Plan 06-05 adds remaining section panels */}
+                {currentSection === 'poetic-chase' && <PoeticChasePanel />}
               </motion.div>
             )}
           </AnimatePresence>
