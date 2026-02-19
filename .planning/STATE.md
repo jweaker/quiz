@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 7 (Audio & Episode Management) — In Progress. Plan 04 complete.
+**Current focus:** Phase 7 (Audio & Episode Management) — In Progress. Plan 02 complete (5 of 6).
 
 ## Current Position
 
 Phase: 7 of 7 (Audio & Episode Management) — IN PROGRESS
-Plan: 4 of 6 complete
-Status: Plan 07-04 complete — Editor route, EpisodeEditor shell, header, metadata, validation summary
-Last activity: 2026-02-19 — Completed 07-04 (Editor Route & Shell)
+Plan: 5 of 6 complete
+Status: Plan 07-02 complete — Sound effects, audio integration, AudioMixer panel
+Last activity: 2026-02-19 — Completed 07-02 (Sound Effects & Audio Mixer)
 
-Progress: [█████████████████████████████] 30/32 (94%)
+Progress: [██████████████████████████████] 31/32 (97%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 30
-- Average duration: 3.9 min
-- Total execution time: 2.6 hours
+- Total plans completed: 31
+- Average duration: 4.8 min
+- Total execution time: 2.5 hours
 
 **By Phase:**
 
@@ -33,11 +33,11 @@ Progress: [███████████████████████
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
 | 6 - Quiz Sections | 6/6 ✅ | 26 min | 4.3 min |
-| 7 - Audio & Episode Mgmt | 4/6 | 23 min | 5.75 min |
+| 7 - Audio & Episode Mgmt | 5/6 | 32 min | 6.4 min |
 
 **Recent Trend:**
-- Last 5 plans: 07-04 (4 min), 07-03 (7 min), 07-01 (5 min), 06-06 (3 min), 06-01 (7 min)
-- Trend: Consistent 3-7 min range
+- Last 5 plans: 07-02 (9 min), 07-04 (4 min), 07-03 (7 min), 07-01 (5 min), 06-06 (3 min)
+- Trend: Consistent 3-9 min range
 
 *Updated after each plan completion*
 | Phase 04 P03 | 2 | 2 tasks | 6 files |
@@ -56,6 +56,7 @@ Progress: [███████████████████████
 | Phase 07-audio-episode-management P01 | 5 | 2 tasks | 5 files |
 | Phase 07-audio-episode-management P03 | 7 | 2 tasks | 8 files |
 | Phase 07-audio-episode-management P04 | 4 | 2 tasks | 5 files |
+| Phase 07-audio-episode-management P02 | 9 | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -134,6 +135,9 @@ Recent decisions affecting current work:
 - [Phase 07-audio-episode-management]: Debounced validation at 300ms via setTimeout ref — no external debounce library (07-04)
 - [Phase 07-audio-episode-management]: Editor form pattern — single episode state at EpisodeEditor level, section slices + updater callbacks passed down (07-04)
 - [Phase 07-audio-episode-management]: Section placeholder cards with IDs for scroll-to targeting from ValidationSummary (07-04)
+- [Phase 07-audio-episode-management]: WAV PCM generation with raw byte writing — no external audio dependencies for sound file creation (07-02)
+- [Phase 07-audio-episode-management]: useShowStore.subscribe (Zustand non-React subscription) for side-effect audio — avoids re-renders (07-02)
+- [Phase 07-audio-episode-management]: Audio tab in backtick cycle (scoring → countdown → chess-clock → audio) — no dedicated hotkey (07-02)
 
 ### Pending Todos
 
@@ -179,14 +183,14 @@ None.
 
 **Phase 7 (Audio & Episode Management):** 🔄 IN PROGRESS
 - Plan 07-01 complete — AudioManager singleton with GainNode routing, useTimerAudio migrated
+- Plan 07-02 complete — 14 synthesized sound effects, useAudioIntegration hook, AudioMixer panel with volume controls
 - Plan 07-03 complete — Zod episode schema with validation, inferred types replace manual interfaces, factory functions
 - Plan 07-04 complete — Editor route, shell, header, metadata form, validation summary
-- AudioManager foundation ready for sound effects (07-02)
 - Editor shell ready for section form components (07-05, 07-06)
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 07-04-PLAN.md (Editor Route & Shell)
+Stopped at: Completed 07-02-PLAN.md (Sound Effects & Audio Mixer)
 Resume file: None
-Next step: Execute Phase 7 Plan 05 (Section Forms) — 07-02 (Sound Effects) can run independently
+Next step: Execute Phase 7 Plan 05 (Section Forms) or Plan 06 (Remaining Forms & File Picker)

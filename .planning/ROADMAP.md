@@ -155,9 +155,9 @@ Plans:
 
 Plans:
 - [x] 07-01-PLAN.md — AudioManager singleton with GainNode routing, useAudio hook, volume state, mute shortcut
-- [ ] 07-02-PLAN.md — Synthesized sound files, audio event integration, mute wiring, and full AudioMixer panel
+- [x] 07-02-PLAN.md — Synthesized sound files, audio event integration, mute wiring, and full AudioMixer panel
 - [x] 07-03-PLAN.md — Zod episode schema, validation utilities, factory functions, showStore type migration
-- [ ] 07-04-PLAN.md — Editor route, shell, header, metadata form, and validation summary
+- [x] 07-04-PLAN.md — Editor route, shell, header, metadata form, and validation summary
 - [ ] 07-05-PLAN.md — Paste parser, QuestionListEditor, SpeedQuestions/Windows/Puzzle forms
 - [ ] 07-06-PLAN.md — Debate/Rapid/Audience forms and operator panel file picker
 
@@ -174,6 +174,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
 | 5. Visual System | 7/7 | ✓ Complete | 2026-02-19 |
 | 6. Quiz Sections | 6/6 | ✓ Complete | 2026-02-19 |
-| 7. Audio & Episode Management | 2/6 | In progress | - |
+| 7. Audio & Episode Management | 4/6 | In progress | - |
 
-**Total:** 28/32 plans complete (88%)
+**Total:** 30/32 plans complete (94%)
