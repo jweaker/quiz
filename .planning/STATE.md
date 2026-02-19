@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** The operator must be able to run every section of a live TV episode smoothly, with zero dead air — the audience display must always look polished and broadcast-ready while the operator has full control behind the scenes.
-**Current focus:** Phase 6 (Quiz Sections) — In Progress
+**Current focus:** Phase 6 (Quiz Sections) — Complete. Phase 7 (Audio & Episode Management) next.
 
 ## Current Position
 
-Phase: 6 of 7 (Quiz Sections) — IN PROGRESS
-Plan: 4 of 5 complete
-Status: Plan 06-04 complete — Debate section with vote entry and dramatic reveal
-Last activity: 2026-02-19 — Completed 06-04 (Debate Section)
+Phase: 6 of 7 (Quiz Sections) — COMPLETE
+Plan: 5 of 5 complete
+Status: Phase 6 complete — All 8 quiz sections implemented
+Last activity: 2026-02-19 — Completed 06-03 (Puzzle & Rapid Questions)
 
-Progress: [████████████████████████] 24/26 (92%)
+Progress: [██████████████████████████] 26/26 (100%)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 24
+- Total plans completed: 26
 - Average duration: 4.0 min
-- Total execution time: 2.1 hours
+- Total execution time: 2.2 hours
 
 **By Phase:**
 
@@ -32,10 +32,10 @@ Progress: [███████████████████████
 | 3 - Game State & Scoring | 2/2 ✅ | 6 min | 3 min |
 | 4 - Timer System | 4/4 ✅ | 9 min | 2.25 min |
 | 5 - Visual System | 7/7 ✅ | 27 min | 3.9 min |
-| 6 - Quiz Sections | 4/5 | 18 min | 4.5 min |
+| 6 - Quiz Sections | 5/5 ✅ | 23 min | 4.6 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-07 (4 min), 05-05 (4 min), 06-01 (7 min), 06-05 (2 min), 06-04 (5 min)
+- Last 5 plans: 06-01 (7 min), 06-02 (4 min), 06-05 (2 min), 06-04 (5 min), 06-03 (5 min)
 - Trend: Consistent 2-7 min range
 
 *Updated after each plan completion*
@@ -49,6 +49,8 @@ Progress: [███████████████████████
 | Phase 06-quiz-sections P01 | 7 | 2 tasks | 8 files |
 | Phase 06-quiz-sections P05 | 2 | 2 tasks | 4 files |
 | Phase 06-quiz-sections P04 | 5 | 2 tasks | 4 files |
+| Phase 06-quiz-sections P03 | 5 | 2 tasks | 6 files |
+| Phase 06-quiz-sections P02 | 4 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -103,11 +105,18 @@ Recent decisions affecting current work:
 - [Phase 06-quiz-sections]: sectionState reset on every section jump prevents question state bleed between sections (06-01)
 - [Phase 06-quiz-sections]: MinefieldLayout activation switched to sectionState.isMinefieldQuestion for granular per-question control (06-01)
 - [Phase 06-quiz-sections]: Section adaptive mode auto-activates via useEffect, excluded from backtick tab cycling (06-01)
+- [Phase 06-quiz-sections]: windowsActiveCategory added to sectionState for clean operator-audience sync — null = picker, string = active category (06-02)
+- [Phase 06-quiz-sections]: Minefield treated as special category entry in Windows picker, not separate section — uses isMinefieldQuestion flag (06-02)
+- [Phase 06-quiz-sections]: Local state (selectedCategory) in operator for UI, global state (windowsActiveCategory) for audience sync (06-02)
 - [Phase 06-quiz-sections]: Ask Intelligently uses local started state for operator-only pre-start/active phase tracking (06-05)
 - [Phase 06-quiz-sections]: Composite animals.png as single image placeholder until individual images collected (06-05)
 - [Phase 06-quiz-sections]: Enter key gated with enableOnFormTags: false and debateVotes !== null for form-coexisting hotkeys (06-04)
 - [Phase 06-quiz-sections]: Sequential reveal pattern: revealedCount threshold controls progressive slot visibility with AnimatePresence (06-04)
 - [Phase 06-quiz-sections]: revealedCount === 4 signals scores-applied state beyond 3 vote slots (06-04)
+- [Phase 06-quiz-sections]: sectionState.questionIndex as single source of truth for puzzle/question navigation — no local state duplication (06-03)
+- [Phase 06-quiz-sections]: Dual-solve uses existing scoring hotkeys (0/5) for split scoring rather than new mechanic (06-03)
+- [Phase 06-quiz-sections]: No team indicator on audience display for Rapid Questions — headphones isolation per SECT-10 (06-03)
+- [Phase 06-quiz-sections]: Team switching with timer isolation: pause → reset to 60s → switch → wait for manual start (06-03)
 
 ### Pending Todos
 
@@ -141,15 +150,18 @@ None.
 - CRITICAL USER FEEDBACK addressed: operator panel redesigned from broken vertical scroll to compact mission-control density
 - All 9 UAT gaps closed, visual system production-ready
 
-**Phase 6 (Quiz Sections):**
+**Phase 6 (Quiz Sections):** ✅ COMPLETE
 - Plan 06-01 complete — section infrastructure, Speed Question, Audience Questions
-- Plan 06-05 complete — Ask Intelligently with composite animal grid and point deduction
+- Plan 06-02 complete — Windows of Knowledge with category picker and Minefield
+- Plan 06-03 complete — Puzzle with configurable timer and dual-solve, Rapid Questions with team switching
 - Plan 06-04 complete — Debate section with vote entry form and dramatic sequential reveal
+- Plan 06-05 complete — Ask Intelligently with composite animal grid and point deduction
+- All 8 quiz sections implemented: Speed Question, Audience Questions, Windows of Knowledge, Minefield, Puzzle, Debate, Ask Intelligently, Rapid Questions
 - 72 animal photos need collection/licensing for Ask Intelligently grid upgrade
 
 ## Session Continuity
 
 Last session: 2026-02-19
-Stopped at: Completed 06-04-PLAN.md (Debate Section)
+Stopped at: Completed 06-03-PLAN.md (Puzzle & Rapid Questions) — Phase 6 fully complete
 Resume file: None
-Next step: Execute Phase 6 Plan 03
+Next step: Execute Phase 7 Plan 01 (Audio Manager)

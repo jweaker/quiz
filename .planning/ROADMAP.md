@@ -16,8 +16,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Dual-Screen Architecture** - Operator panel + audience display with state synchronization
 - [x] **Phase 3: Game State & Scoring** - Score tracking, turn management, team controls
 - [x] **Phase 4: Timer System** - Accurate timers with Web Workers, chess clock, countdown
-- [ ] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (UAT gap closure)
-- [ ] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
+- [x] **Phase 5: Visual System** - Broadcast-quality animations, operator UI, rundown view (UAT gap closure)
+- [x] **Phase 6: Quiz Sections** - Implement all 8 section types with specialized features
 - [ ] **Phase 7: Audio & Episode Management** - Audio feedback system and episode editor
 
 ## Phase Details
@@ -111,9 +111,9 @@ Plans:
 - [x] 05-02-PLAN.md — Score celebration effects (confetti/flash) and Minefield visual treatment (screen shake, red flash, stakes flash, pulsing glow)
 - [x] 05-03-PLAN.md — Operator panel redesign: context-adaptive layout, mission-control density, keyboard shortcut overlay
 - [x] 05-04-PLAN.md — Episode section state, horizontal rundown rail with click-to-jump, audience display section wiring
-- [ ] 05-05-PLAN.md — UAT gap closure: Arabic typewriter fix, score celebration positioning/parallel animations, ScreenShake wiring
-- [ ] 05-06-PLAN.md — UAT gap closure: editable operator scores, tab cycling shortcut, ? key fix, RTL navigation swap
-- [ ] 05-07-PLAN.md — UAT gap closure: Web Audio API for smooth timer tick playback (Phase 4 carryover)
+- [x] 05-05-PLAN.md — UAT gap closure: Arabic typewriter fix, score celebration positioning/parallel animations, ScreenShake wiring
+- [x] 05-06-PLAN.md — UAT gap closure: editable operator scores, tab cycling shortcut, ? key fix, RTL navigation swap
+- [x] 05-07-PLAN.md — UAT gap closure: Web Audio API for smooth timer tick playback (Phase 4 carryover)
 
 ### Phase 6: Quiz Sections
 **Goal**: All 8 section types implemented with specialized UI and interactions
@@ -131,11 +131,11 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 06-01-PLAN.md — Section infrastructure (sectionState slice, section routing) + Speed Question (SECT-01) + Audience Questions (SECT-11)
-- [ ] 06-02-PLAN.md — Windows of Knowledge category picker and question flow (SECT-02) + Minefield visual treatment (SECT-03)
-- [ ] 06-03-PLAN.md — Puzzle with configurable timer and dual-solve (SECT-04) + Rapid Questions with team switching (SECT-10)
-- [ ] 06-04-PLAN.md — Debate vote entry with sequential dramatic reveal on audience display (SECT-05)
-- [ ] 06-05-PLAN.md — Ask Intelligently with composite animal grid and point deduction mechanics (SECT-09)
+- [x] 06-01-PLAN.md — Section infrastructure (sectionState slice, section routing) + Speed Question (SECT-01) + Audience Questions (SECT-11)
+- [x] 06-02-PLAN.md — Windows of Knowledge category picker and question flow (SECT-02) + Minefield visual treatment (SECT-03)
+- [x] 06-03-PLAN.md — Puzzle with configurable timer and dual-solve (SECT-04) + Rapid Questions with team switching (SECT-10)
+- [x] 06-04-PLAN.md — Debate vote entry with sequential dramatic reveal on audience display (SECT-05)
+- [x] 06-05-PLAN.md — Ask Intelligently with composite animal grid and point deduction mechanics (SECT-09)
 
 ### Phase 7: Audio & Episode Management
 **Goal**: Audio feedback system and episode editor for production workflow
@@ -169,8 +169,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7
 | 2. Dual-Screen Architecture | 3/3 | ✓ Complete | 2026-02-12 |
 | 3. Game State & Scoring | 2/2 | ✓ Complete | 2026-02-14 |
 | 4. Timer System | 4/4 | ✓ Complete | 2026-02-15 |
-| 5. Visual System | 4/7 | UAT Gap Closure | - |
-| 6. Quiz Sections | 0/5 | Not started | - |
+| 5. Visual System | 7/7 | ✓ Complete | 2026-02-19 |
+| 6. Quiz Sections | 5/5 | ✓ Complete | 2026-02-19 |
 | 7. Audio & Episode Management | 0/4 | Not started | - |
 
-**Total:** 18/29 plans complete (62%)
+**Total:** 25/29 plans complete (86%)
