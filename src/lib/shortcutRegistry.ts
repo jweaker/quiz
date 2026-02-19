@@ -50,6 +50,7 @@ export const SHORTCUTS: Record<string, ShortcutDef> = {
   // General
   'open-audience': { keys: 'mod+shift+a', label: 'فتح العرض', category: 'general', description: 'فتح شاشة الجمهور' },
   'shortcuts-overlay': { keys: 'shift+/', label: '?', category: 'general', description: 'مرجع الاختصارات' },
+  'audio-mute': { keys: 'm', label: 'كتم الصوت', category: 'general', description: 'كتم/تشغيل الصوت' },
   'escape': { keys: 'escape', label: 'رجوع', category: 'general' },
 
   // Navigation
