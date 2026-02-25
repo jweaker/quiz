@@ -23,15 +23,38 @@
     0 0 40px rgba(212, 168, 83, 0.5),
     0 0 80px rgba(212, 168, 83, 0.25),
     0 4px 15px rgba(0, 0, 0, 0.5);
-  -webkit-text-stroke: 1px rgba(212, 168, 83, 0.25);
+  -webkit-text-stroke: 0 transparent;
 }
 
 .QuestionPicker-title-danger {
+  position: relative;
+  display: inline-block;
+  padding-inline: 8rem;
   text-shadow:
-    0 0 34px rgba(214, 90, 80, 0.35),
-    0 0 72px rgba(214, 90, 80, 0.2),
+    0 0 28px rgba(214, 90, 80, 0.3),
+    0 0 56px rgba(214, 90, 80, 0.16),
     0 4px 15px rgba(0, 0, 0, 0.55);
-  -webkit-text-stroke: 1px rgba(214, 90, 80, 0.32);
+  -webkit-text-stroke: 0 transparent;
+}
+
+.QuestionPicker-title-bomb {
+  position: absolute;
+  top: 50%;
+  width: 5.2rem;
+  height: 5.2rem;
+  color: rgba(245, 161, 110, 0.85);
+  transform: translateY(-50%);
+  filter: drop-shadow(0 0 14px rgba(214, 90, 80, 0.45));
+  animation: minefield-title-bomb-pulse 2.1s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.QuestionPicker-title-bomb-right {
+  right: 0;
+}
+
+.QuestionPicker-title-bomb-left {
+  left: 0;
 }
 
 .QuestionPicker-container {
@@ -46,4 +69,15 @@
 
 .QuestionPicker-danger .QuestionPicker-container {
   filter: drop-shadow(0 0 24px rgba(214, 90, 80, 0.12));
+}
+
+@keyframes minefield-title-bomb-pulse {
+  0%, 100% {
+    opacity: 0.7;
+    transform: translateY(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.08);
+  }
 }

@@ -1,4 +1,5 @@
 import "./IconButton.css";
+import { FaBomb } from "react-icons/fa6";
 
 export default function IconButton({
   title = "",
@@ -10,6 +11,7 @@ export default function IconButton({
   done = false,
   active = false,
   danger = false,
+  showDangerBadge = true,
   index = 0,
 }) {
   return (
@@ -28,6 +30,15 @@ export default function IconButton({
     >
       {Icon && (
         <Icon className="IconButton-icon" color={done ? "white" : color} />
+      )}
+      {danger && showDangerBadge && (
+        <FaBomb
+          className={
+            "IconButton-danger-badge" +
+            (done ? " IconButton-danger-badge-done" : "")
+          }
+          aria-hidden="true"
+        />
       )}
       <span
         className={

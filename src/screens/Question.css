@@ -189,6 +189,7 @@
 }
 
 .Question-timer-container-danger {
+  position: relative;
   background: radial-gradient(
     circle,
     rgba(214, 90, 80, 0.22) 0%,

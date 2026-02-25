@@ -3,7 +3,7 @@ import IconButton from "../components/IconButton";
 import "./Windows.css";
 import { MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
-import { FaShapes } from "react-icons/fa6";
+import { FaBomb } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Score from "../components/Score";
@@ -105,9 +105,10 @@ export default function Windows() {
         />
         <IconButton
           title="حقل الالغام"
-          Icon={FaShapes}
+          Icon={FaBomb}
           color="#D66754"
           danger
+          showDangerBadge={false}
           done={
             DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done
           }

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import "./QuestionPicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
+import { FaBomb } from "react-icons/fa6";
 import IconButton from "../components/IconButton";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
@@ -68,7 +69,19 @@ export default function QuestionPicker() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
+        {isMinefieldSection && (
+          <FaBomb
+            className="QuestionPicker-title-bomb QuestionPicker-title-bomb-right"
+            aria-hidden="true"
+          />
+        )}
         {windows[id]}
+        {isMinefieldSection && (
+          <FaBomb
+            className="QuestionPicker-title-bomb QuestionPicker-title-bomb-left"
+            aria-hidden="true"
+          />
+        )}
       </motion.h1>
       <div className="QuestionPicker-container">
         {section.map((question, i) => (
