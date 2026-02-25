@@ -106,6 +106,8 @@ export default function Windows() {
         <IconButton
           title="حقل الالغام"
           Icon={FaShapes}
+          color="#D66754"
+          danger
           done={
             DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done
           }

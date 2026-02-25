@@ -34,6 +34,7 @@ export default function Question() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const id = params.id;
+  const isMinefieldQuestion = type === "windows" && id === "misc";
   const [index, setIndex] = useState(parseInt(params.index ?? 0));
   const [zdone, setZdone] = useState(false);
   const [file, setFile] = useState(null);
@@ -432,10 +433,16 @@ export default function Question() {
   }, [audio, audio2, audioCorrect, audioWrong, fileLoc, handleKeyDown]);
 
   const formatChessTime = (ms) => Math.ceil(ms / 1000);
+  const timerColors = isMinefieldQuestion
+    ? ["#F2A572", "#E77B5D", "#D65A50", "#B53F45"]
+    : ["#F0C75E", "#D4A853", "#E74C3C", "#C0392B"];
+  const timerTrailColor = isMinefieldQuestion
+    ? "rgba(214, 90, 80, 0.24)"
+    : "rgba(255, 248, 231, 0.2)";
 
   return (
     <motion.div
-      className="Question"
+      className={"Question" + (isMinefieldQuestion ? " Question-danger" : "")}
       initial={{ opacity: 0, scale: 0.92 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 1.05 }}
@@ -467,6 +474,7 @@ export default function Question() {
       <h1
         className={
           "Question-title" +
+          (isMinefieldQuestion ? " Question-title-danger" : "") +
           (["poeticChase", "debate", "askSmartly"].includes(type) ||
             (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
             ? " Question-title-6"
@@ -485,6 +493,7 @@ export default function Question() {
       <div
         className={
           "Question-timer-container" +
+          (isMinefieldQuestion ? " Question-timer-container-danger" : "") +
           (isComplete && type !== "debate"
             ? " Question-timer-container-complete"
             : "") +
@@ -537,9 +546,9 @@ export default function Question() {
           <CountdownCircleTimer
             isPlaying={isPlaying}
             duration={duration}
-            colors={["#F0C75E", "#D4A853", "#E74C3C", "#C0392B"]}
+            colors={timerColors}
             colorsTime={[duration, duration / 2, 5, 0]}
-            trailColor="rgba(255, 248, 231, 0.2)"
+            trailColor={timerTrailColor}
             strokeWidth={20}
             trailStrokeWidth={25}
             size={600}

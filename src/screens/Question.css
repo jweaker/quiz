@@ -3,10 +3,29 @@
   height: 100%;
   margin: 0;
   padding: 0;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.Question-danger::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgba(214, 90, 80, 0.13) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgba(214, 90, 80, 0.08) 0%,
+      transparent 45%
+    );
 }
 
 .Question-title {
@@ -36,6 +55,22 @@
 
   /* entrance animation */
   animation: question-title-enter 0.35s ease-out both;
+}
+
+.Question-title-danger {
+  border-color: rgba(214, 90, 80, 0.75);
+  background: rgba(35, 16, 20, 0.5);
+  box-shadow:
+    0 0 32px rgba(214, 90, 80, 0.24),
+    inset 0 0 30px rgba(214, 90, 80, 0.08);
+  text-shadow:
+    0 0 24px rgba(214, 90, 80, 0.35),
+    0 3px 10px rgba(0, 0, 0, 0.5);
+}
+
+.Question-title-danger::before,
+.Question-title-danger::after {
+  color: #F19B76;
 }
 
 @keyframes question-title-enter {
@@ -153,6 +188,20 @@
   animation: question-timer-enter 0.4s 0.12s ease-out both;
 }
 
+.Question-timer-container-danger {
+  background: radial-gradient(
+    circle,
+    rgba(214, 90, 80, 0.22) 0%,
+    rgba(72, 28, 35, 0.62) 44%,
+    rgba(20, 11, 20, 0.85) 84%
+  );
+  border-color: rgba(214, 90, 80, 0.45);
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.35),
+    0 0 50px rgba(214, 90, 80, 0.2),
+    inset 0 0 30px rgba(214, 90, 80, 0.08);
+}
+
 @keyframes question-timer-enter {
   from {
     opacity: 0;
@@ -180,6 +229,20 @@
     0 10px 40px rgba(212, 168, 83, 0.2),
     0 0 60px rgba(212, 168, 83, 0.1),
     inset 0 0 30px rgba(212, 168, 83, 0.05);
+}
+
+.Question-timer-container-danger.Question-timer-container-complete {
+  border-color: rgba(214, 90, 80, 0.75);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(214, 90, 80, 0.28) 0%,
+    rgba(52, 20, 27, 0.62) 48%,
+    rgba(20, 11, 20, 0.86) 100%
+  );
+  box-shadow:
+    0 10px 40px rgba(214, 90, 80, 0.28),
+    0 0 60px rgba(214, 90, 80, 0.16),
+    inset 0 0 30px rgba(214, 90, 80, 0.08);
 }
 
 .Question-overlay {

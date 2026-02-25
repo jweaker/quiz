@@ -9,6 +9,10 @@
   justify-self: center;
 }
 
+.QuestionPicker-danger {
+  position: relative;
+}
+
 .QuestionPicker-title {
   color: white;
   font-size: 12rem;
@@ -22,6 +26,14 @@
   -webkit-text-stroke: 1px rgba(212, 168, 83, 0.25);
 }
 
+.QuestionPicker-title-danger {
+  text-shadow:
+    0 0 34px rgba(214, 90, 80, 0.35),
+    0 0 72px rgba(214, 90, 80, 0.2),
+    0 4px 15px rgba(0, 0, 0, 0.55);
+  -webkit-text-stroke: 1px rgba(214, 90, 80, 0.32);
+}
+
 .QuestionPicker-container {
   width: 100%;
   margin: 0;
@@ -30,4 +42,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: row-reverse;
+}
+
+.QuestionPicker-danger .QuestionPicker-container {
+  filter: drop-shadow(0 0 24px rgba(214, 90, 80, 0.12));
 }

@@ -9,12 +9,14 @@ export default function IconButton({
   fontSize,
   done = false,
   active = false,
+  danger = false,
   index = 0,
 }) {
   return (
     <div
       className={
         "IconButton" +
+        (danger ? " IconButton-danger" : "") +
         (active ? " IconButton-active" : "") +
         (done ? " IconButton-done" : "")
       }

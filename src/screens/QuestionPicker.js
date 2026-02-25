@@ -13,6 +13,7 @@ export default function QuestionPicker() {
   const [active, setActive] = useState(0);
   const { DATA, rightsTurn, turned } = useGlobalContext();
   const isntWindows = id === "puzzles" || id === "quickQuestions";
+  const isMinefieldSection = !isntWindows && id === "misc";
   const section = isntWindows ? DATA.parts[id] : DATA.parts.windows[id];
   const sectionLength = section.length;
   const handleKeyDown = useCallback(
@@ -48,7 +49,9 @@ export default function QuestionPicker() {
   };
   return (
     <motion.div
-      className="QuestionPicker"
+      className={
+        "QuestionPicker" + (isMinefieldSection ? " QuestionPicker-danger" : "")
+      }
       initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
       animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
       exit={{ opacity: 0, scale: 1.05 }}
@@ -57,7 +60,10 @@ export default function QuestionPicker() {
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
       <motion.h1
-        className="QuestionPicker-title"
+        className={
+          "QuestionPicker-title" +
+          (isMinefieldSection ? " QuestionPicker-title-danger" : "")
+        }
         initial={{ opacity: 0, y: -25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.1 }}
@@ -72,6 +78,7 @@ export default function QuestionPicker() {
             active={active === i + 1}
             title={i + 1}
             index={i}
+            danger={isMinefieldSection}
           />
         ))}
       </div>
