@@ -14,6 +14,9 @@ import { GiInfinity } from "react-icons/gi";
 
 // Debate turn durations: [team A turn 1, team B turn 1, team A turn 2, team B turn 2]
 const DEBATE_DURATIONS = [60, 60, 40, 40];
+const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac"];
+const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp"];
+const VIDEO_EXTENSIONS = ["mp4", "webm", "mov", "m4v", "ogv"];
 
 export default function Question() {
   const {
@@ -69,11 +72,12 @@ export default function Question() {
         : (DATA.parts[type] ??
           (type === "poeticChase"
             ? { text: "المطاردة الشعرية", duration: 100 }
-            : type === "askSmartly"
+          : type === "askSmartly"
               ? {
                 text: "اسأل بذكاء",
                 duration: 120,
                 file: "animals.png",
+                mediaType: "image",
                 isImage: true,
               }
               : {})),
@@ -83,9 +87,26 @@ export default function Question() {
     text,
     duration: hduration,
     file: fileLoc,
+    mediaType: rawMediaType,
     isImage,
     answer,
   } = question;
+  const fileExtension = fileLoc?.split(".").pop()?.toLowerCase();
+  const mediaType =
+    rawMediaType ??
+    (fileLoc
+      ? AUDIO_EXTENSIONS.includes(fileExtension)
+        ? "audio"
+        : IMAGE_EXTENSIONS.includes(fileExtension)
+          ? "image"
+          : VIDEO_EXTENSIONS.includes(fileExtension)
+            ? "video"
+            : isImage
+              ? "image"
+              : "video"
+      : null);
+  const hasVisualMedia = Boolean(file) && mediaType !== "audio";
+  const isAudioMedia = Boolean(file) && mediaType === "audio";
 
   // Set initial duration
   useEffect(() => {
@@ -416,15 +437,19 @@ export default function Question() {
     audioCorrect.volume = 1;
     audioWrong.volume = 1;
 
-    if (fileLoc)
+    if (fileLoc) {
       (async () => {
         try {
           const importedFile = await import(`../assets/${fileLoc}`);
           setFile(importedFile.default);
         } catch (err) {
+          setFile(null);
           console.log(err);
         }
       })();
+    } else {
+      setFile(null);
+    }
 
     document.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -456,7 +481,7 @@ export default function Question() {
               type === "askSmartly" ||
               type === "quickQuestions"
             }
-            overlay={showOverlay && file}
+            overlay={showOverlay && hasVisualMedia}
             right
             turn={rightsTurn && turned}
           />
@@ -466,7 +491,7 @@ export default function Question() {
               type === "askSmartly" ||
               type === "quickQuestions"
             }
-            overlay={showOverlay && file}
+            overlay={showOverlay && hasVisualMedia}
             turn={!rightsTurn && turned}
           />
         </>
@@ -479,7 +504,7 @@ export default function Question() {
             (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
             ? " Question-title-6"
             : "") +
-          (showOverlay && file ? " Question-title-overlay" : "")
+          (showOverlay && hasVisualMedia ? " Question-title-overlay" : "")
         }
       >
         {!isPlaying
@@ -490,6 +515,14 @@ export default function Question() {
               : text
           : text}
       </h1>
+      {isAudioMedia && (
+        <audio
+          className="Question-audio-player"
+          controls
+          src={file}
+          preload="metadata"
+        />
+      )}
       <div
         className={
           "Question-timer-container" +
@@ -497,7 +530,7 @@ export default function Question() {
           (isComplete && type !== "debate"
             ? " Question-timer-container-complete"
             : "") +
-          (showOverlay && file ? " Question-timer-container-overlay" : "") +
+          (showOverlay && hasVisualMedia ? " Question-timer-container-overlay" : "") +
           (type === "poeticChase" ? " Question-timer-container-chess" : "")
         }
       >
@@ -576,21 +609,19 @@ export default function Question() {
       <div
         className={
           "Question-overlay" +
-          (showOverlay && file ? " Question-overlay-visible" : "")
+          (showOverlay && hasVisualMedia ? " Question-overlay-visible" : "")
         }
       >
-        {isImage ? (
+        {mediaType === "image" && file && (
           <img className="Question-overlay-image" src={file} alt="question" />
-        ) : (
-          file &&
-          showOverlay && (
-            <video
-              src={file}
-              className="Question-overlay-image"
-              autoPlay
-              loop
-            />
-          )
+        )}
+        {mediaType === "video" && file && showOverlay && (
+          <video
+            src={file}
+            className="Question-overlay-image"
+            autoPlay
+            loop
+          />
         )}
       </div>
     </motion.div>
