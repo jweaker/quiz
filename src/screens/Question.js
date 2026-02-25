@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import "./Question.css";
 import { useNavigate, useParams } from "react-router-dom";
 import sourceAudio from "../assets/tick.wav";
@@ -83,7 +84,6 @@ export default function Question() {
 
   // Set initial duration
   useEffect(() => {
-    // Quick questions always use 60s regardless of data value
     setDuration(type === "quickQuestions" ? 60 : hduration);
   }, [hduration, type]);
 
@@ -153,7 +153,6 @@ export default function Question() {
             chessActiveRef.current = null;
             setChessActive(null);
             setIsPlaying(false);
-            // Left team wins: convert their remaining time to points (5s = 1 pt)
             const bonus = Math.floor(leftMsRef.current / 5000);
             if (bonus > 0) setLeftScore((prev) => prev + bonus);
             setTurned(true);
@@ -167,7 +166,6 @@ export default function Question() {
             chessActiveRef.current = null;
             setChessActive(null);
             setIsPlaying(false);
-            // Right team wins: convert their remaining time to points
             const bonus = Math.floor(rightMsRef.current / 5000);
             if (bonus > 0) setRightScore((prev) => prev + bonus);
             setTurned(true);
@@ -204,12 +202,10 @@ export default function Question() {
         case "Enter":
           if (type === "poeticChase") {
             if (!isPlaying) {
-              // Start chess clock on the current team's side
               const startTeam = rightsTurn ? "right" : "left";
               startChessInterval(startTeam);
               setIsPlaying(true);
             } else {
-              // Pause
               clearChessTimer();
               chessActiveRef.current = null;
               setChessActive(null);
@@ -239,7 +235,6 @@ export default function Question() {
             setIsComplete(true);
             setIsPlaying(false);
           } else if (type === "poeticChase") {
-            // Correct verse — active team gets +1
             if (chessActiveRef.current === "right") {
               setRightScore((prev) => prev + 1);
             } else {
@@ -280,7 +275,6 @@ export default function Question() {
             if (rightsTurn) setRightScore((prev) => prev - 1);
             else setLeftScore((prev) => prev - 1);
           } else if (type === "poeticChase") {
-            // Miss — no point, clock switches
             audioWrong.play();
             switchChessClock();
           } else if (type === "quickQuestions") {
@@ -309,7 +303,6 @@ export default function Question() {
         case "1":
           if (type === "quickQuestions") {
             if (quickPhase === "A") {
-              // Switch to Team B with the same questions
               setQuickPhase("B");
               setIndex(0);
               setZdone(false);
@@ -318,12 +311,10 @@ export default function Question() {
               setIsPlaying(false);
               setDuration(60);
             } else {
-              // Team B done — go back
               pauseAudio();
               navigate(-1);
             }
           } else if (type === "debate") {
-            // Cycle debate rounds: 60s → 60s → 40s → 40s
             const nextRound = Math.min(debateRound + 1, 3);
             setDebateRound(nextRound);
             setDuration(DEBATE_DURATIONS[nextRound]);
@@ -341,7 +332,6 @@ export default function Question() {
             navigate(`/rate/${type}`);
           }
           if (type === "poeticChase") {
-            // Manual end — stop clocks and award time bonuses (5s = 1 pt)
             clearChessTimer();
             chessActiveRef.current = null;
             setChessActive(null);
@@ -437,7 +427,13 @@ export default function Question() {
   const formatChessTime = (ms) => Math.ceil(ms / 1000);
 
   return (
-    <div className="Question">
+    <motion.div
+      className="Question"
+      initial={{ opacity: 0, scale: 0.92 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.45, ease: "easeOut" }}
+    >
       {type !== "audienceQuestions" && (
         <>
           <Score
@@ -492,9 +488,19 @@ export default function Question() {
         {isComplete ? (
           type !== "debate" &&
           type !== "poeticChase" &&
-          type !== "askSmartly" && <h1 className="Question-answer">{answer}</h1>
+          type !== "askSmartly" && (
+            <motion.h1
+              className="Question-answer"
+              key={"answer-" + answer}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              {answer}
+            </motion.h1>
+          )
         ) : type === "speedQuestions" || type === "audienceQuestions" ? (
-          <GiInfinity size={500} color="white" className="infinity" />
+          <GiInfinity size={500} className="infinity" />
         ) : type === "poeticChase" ? (
           <div className="chess-clock-display">
             <div className="chess-clock-clocks">
@@ -524,9 +530,9 @@ export default function Question() {
           <CountdownCircleTimer
             isPlaying={isPlaying}
             duration={duration}
-            colors={["#00ff00", "#ffff01", "#A30000", "#A30000"]}
+            colors={["#F0C75E", "#D4A853", "#E74C3C", "#C0392B"]}
             colorsTime={[duration, duration / 2, 5, 0]}
-            trailColor="white"
+            trailColor="rgba(255, 248, 231, 0.2)"
             strokeWidth={20}
             trailStrokeWidth={25}
             size={600}
@@ -571,6 +577,6 @@ export default function Question() {
           )
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

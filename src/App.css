@@ -6,12 +6,19 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: rgb(89, 133, 227);
-  background: radial-gradient(
-    circle,
-    rgba(89, 133, 227, 1) 0%,
-    rgba(20, 37, 74, 1) 100%
-  );
+  background: var(--ramadan-bg-gradient);
+}
+
+.App::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(212, 168, 83, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(26, 90, 126, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(240, 199, 94, 0.03) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .App-viewport {
@@ -22,6 +29,7 @@
   left: var(--app-dead-left);
   overflow: hidden;
   transform: translateZ(0);
+  z-index: 1;
 }
 
 .hideCursor {
@@ -36,17 +44,19 @@
   width: 32rem;
   padding: 1rem;
   border-radius: 0.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(8, 16, 33, 0.88);
-  color: white;
+  border: 1px solid var(--ramadan-card-border);
+  background: rgba(8, 16, 33, 0.92);
+  color: var(--ramadan-cream);
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  backdrop-filter: blur(12px);
 }
 
 .ViewportControls-title {
   margin: 0;
   font-size: 2rem;
+  color: var(--ramadan-gold-light);
 }
 
 .ViewportControls-hint {
@@ -72,6 +82,7 @@
 .ViewportControls-field input[type="range"] {
   width: 100%;
   box-sizing: border-box;
+  accent-color: var(--ramadan-gold);
 }
 
 .ViewportControls-actions {
@@ -81,10 +92,16 @@
 }
 
 .ViewportControls-actions button {
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.08);
-  color: white;
+  border: 1px solid var(--ramadan-card-border);
+  background: rgba(212, 168, 83, 0.12);
+  color: var(--ramadan-gold-light);
   border-radius: 0.4rem;
   padding: 0.5rem 0.9rem;
   font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ViewportControls-actions button:hover {
+  background: rgba(212, 168, 83, 0.25);
 }

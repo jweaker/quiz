@@ -1,6 +1,7 @@
+import { motion } from "framer-motion";
 import IconButton from "../components/IconButton";
 import "./Windows.css";
-import { MdMiscSoccer, MdBrush, MdPerson } from "react-icons/md";
+import { MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
 import { FaShapes } from "react-icons/fa6";
 import { useCallback, useEffect, useState } from "react";
@@ -43,10 +44,23 @@ export default function Windows() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
   return (
-    <div className="Windows">
+    <motion.div
+      className="Windows"
+      initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
-      <h1 className="Windows-title">نوافذ المعرفة</h1>
+      <motion.h1
+        className="Windows-title"
+        initial={{ opacity: 0, y: -25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        نوافذ المعرفة
+      </motion.h1>
       <div className="Windows-container">
         <IconButton
           title="الدين و السيرة"
@@ -56,6 +70,7 @@ export default function Windows() {
             DATA.parts.windows.religion[1]?.done
           }
           active={active === 1}
+          index={0}
         />
         <IconButton
           title="العلوم الانسانية"
@@ -65,6 +80,7 @@ export default function Windows() {
             DATA.parts.windows.humanSciences[1]?.done
           }
           active={active === 2}
+          index={1}
         />
         <IconButton
           title="العلوم الطبيعية"
@@ -74,6 +90,7 @@ export default function Windows() {
             DATA.parts.windows.naturalSciences[1]?.done
           }
           active={active === 3}
+          index={2}
         />
       </div>
       <div className="Windows-container">
@@ -84,6 +101,7 @@ export default function Windows() {
             DATA.parts.windows.arts[0]?.done && DATA.parts.windows.arts[1]?.done
           }
           active={active === 4}
+          index={3}
         />
         <IconButton
           title="حقل الالغام"
@@ -92,8 +110,9 @@ export default function Windows() {
             DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done
           }
           active={active === 5}
+          index={4}
         />
       </div>
-    </div>
+    </motion.div>
   );
 }

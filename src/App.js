@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import "./App.css";
 import { useGlobalContext } from "./contexts/Global";
 import Home from "./screens/Home";
@@ -7,6 +8,7 @@ import Question from "./screens/Question";
 import QuestionPicker from "./screens/QuestionPicker";
 import Rate from "./screens/Rate";
 import Windows from "./screens/Windows";
+import RamadanBackground from "./components/RamadanBackground";
 
 const VIEWPORT_STORAGE_KEY = "quiz.viewport.settings";
 
@@ -78,6 +80,7 @@ export default function App() {
   );
   const { setRightsTurn, setTurned } = useGlobalContext();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const updateViewportSetting = useCallback((key, value) => {
     setViewportSettings((previous) =>
@@ -133,6 +136,7 @@ export default function App() {
   }, [handleKeyDown]);
   return (
     <div className={"App" + (hideCursor ? " hideCursor" : "")}>
+      <RamadanBackground />
       {showViewportControls ? (
         <div
           className="ViewportControls"
@@ -220,15 +224,17 @@ export default function App() {
         </div>
       ) : null}
       <div className="App-viewport">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="windows" element={<Windows />} />
-          <Route path="questionpicker/:id" element={<QuestionPicker />} />
-          <Route path="question/:type/:id/:index" element={<Question />} />
-          <Route path="question/:type/:id" element={<Question />} />
-          <Route path="question/:type" element={<Question />} />
-          <Route path="rate/:type" element={<Rate />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<Home />} />
+            <Route path="windows" element={<Windows />} />
+            <Route path="questionpicker/:id" element={<QuestionPicker />} />
+            <Route path="question/:type/:id/:index" element={<Question />} />
+            <Route path="question/:type/:id" element={<Question />} />
+            <Route path="question/:type" element={<Question />} />
+            <Route path="rate/:type" element={<Rate />} />
+          </Routes>
+        </AnimatePresence>
       </div>
     </div>
   );

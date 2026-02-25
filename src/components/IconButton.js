@@ -1,13 +1,15 @@
 import "./IconButton.css";
+
 export default function IconButton({
   title = "",
   Icon,
-  color = "dodgerblue",
+  color = "#D4A853",
   width,
   height,
   fontSize,
   done = false,
-  active = false, // if true, will be highlighted
+  active = false,
+  index = 0,
 }) {
   return (
     <div
@@ -16,7 +18,11 @@ export default function IconButton({
         (active ? " IconButton-active" : "") +
         (done ? " IconButton-done" : "")
       }
-      style={{ width, height }}
+      style={{
+        width,
+        height,
+        animationDelay: `${index * 0.06}s`,
+      }}
     >
       {Icon && (
         <Icon className="IconButton-icon" color={done ? "white" : color} />

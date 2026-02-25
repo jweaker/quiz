@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useGlobalContext } from "../contexts/Global";
 import "./Rate.css";
 
@@ -70,11 +71,22 @@ export default function Rate() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
   return (
-    <div className="Rate">
+    <motion.div
+      className="Rate"
+      initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       <div className="Rate-ultra-container">
         <div className="Rate-container">
           {!singleRate && (
-            <div className="Rate-vcontainer">
+            <motion.div
+              className="Rate-vcontainer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+            >
               <span className="Rate-title">المجموع</span>
               <span className="Rate-input">
                 {parseInt(rjudge ?? 0) +
@@ -86,10 +98,15 @@ export default function Rate() {
                   parseInt(rguest ?? 0) +
                   parseInt(raudience ?? 0)}
               </span>
-            </div>
+            </motion.div>
           )}
 
-          <div className="Rate-vcontainer">
+          <motion.div
+            className="Rate-vcontainer"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
             <span
               className={"Rate-title" + (singleRate ? " Rate-title-2" : "")}
             >
@@ -101,9 +118,14 @@ export default function Rate() {
               value={rjudge}
               onChange={(e) => setRjudge(e.target.value)}
             />
-          </div>
+          </motion.div>
           {!singleRate && (
-            <div className="Rate-vcontainer">
+            <motion.div
+              className="Rate-vcontainer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
               <span
                 className={"Rate-title" + (singleRate ? " Rate-title-2" : "")}
               >
@@ -115,26 +137,34 @@ export default function Rate() {
                 value={rguest}
                 onChange={(e) => setRguest(e.target.value)}
               />
-            </div>
+            </motion.div>
           )}
           {!singleRate && (
-            <>
-              <div className="Rate-vcontainer">
-                <span className="Rate-title">الجمهور</span>
-                <input
-                  className="Rate-input"
-                  type="number"
-                  value={raudience}
-                  onChange={(e) => setRaudience(e.target.value)}
-                />
-              </div>
-            </>
+            <motion.div
+              className="Rate-vcontainer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25 }}
+            >
+              <span className="Rate-title">الجمهور</span>
+              <input
+                className="Rate-input"
+                type="number"
+                value={raudience}
+                onChange={(e) => setRaudience(e.target.value)}
+              />
+            </motion.div>
           )}
         </div>
         {doubleTeam && (
           <div className="Rate-container">
             {!singleRate && (
-              <div className="Rate-vcontainer">
+              <motion.div
+                className="Rate-vcontainer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
                 <span className="Rate-input">
                   {parseInt(ljudge ?? 0) +
                     parseInt(lguest ?? 0) +
@@ -145,38 +175,51 @@ export default function Rate() {
                     parseInt(lguest ?? 0) +
                     parseInt(laudience ?? 0)}
                 </span>
-              </div>
+              </motion.div>
             )}
 
-            <div className="Rate-vcontainer">
+            <motion.div
+              className="Rate-vcontainer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.35 }}
+            >
               <input
                 className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                 type="number"
                 value={ljudge}
                 onChange={(e) => setLjudge(e.target.value)}
               />
-            </div>
+            </motion.div>
             {!singleRate && (
-              <div className="Rate-vcontainer">
+              <motion.div
+                className="Rate-vcontainer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+              >
                 <input
                   className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                   type="number"
                   value={lguest}
                   onChange={(e) => setLguest(e.target.value)}
                 />
-              </div>
+              </motion.div>
             )}
             {!singleRate && (
-              <>
-                <div className="Rate-vcontainer">
-                  <input
-                    className="Rate-input"
-                    type="number"
-                    value={laudience}
-                    onChange={(e) => setLaudience(e.target.value)}
-                  />
-                </div>
-              </>
+              <motion.div
+                className="Rate-vcontainer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.45 }}
+              >
+                <input
+                  className="Rate-input"
+                  type="number"
+                  value={laudience}
+                  onChange={(e) => setLaudience(e.target.value)}
+                />
+              </motion.div>
             )}
           </div>
         )}
@@ -191,6 +234,6 @@ export default function Rate() {
           </span>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

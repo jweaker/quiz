@@ -1,9 +1,11 @@
+import { motion } from "framer-motion";
 import "./QuestionPicker.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import IconButton from "../components/IconButton";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
+
 export default function QuestionPicker() {
   const params = useParams();
   const id = params.id;
@@ -46,10 +48,23 @@ export default function QuestionPicker() {
     religion: "الدين والسيرة",
   };
   return (
-    <div className="QuestionPicker">
+    <motion.div
+      className="QuestionPicker"
+      initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+      animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
-      <h1 className="QuestionPicker-title">{windows[id]}</h1>
+      <motion.h1
+        className="QuestionPicker-title"
+        initial={{ opacity: 0, y: -25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        {windows[id]}
+      </motion.h1>
       <div className="QuestionPicker-container">
         {section.map((question, i) => (
           <IconButton
@@ -57,9 +72,10 @@ export default function QuestionPicker() {
             done={question.done}
             active={active === i + 1}
             title={i + 1}
+            index={i}
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 }

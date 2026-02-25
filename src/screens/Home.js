@@ -1,5 +1,6 @@
 import { useCallback, useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import IconButton from "../components/IconButton";
 import {
   MdWindow,
@@ -21,7 +22,7 @@ export default function Home() {
   const {
     quickQuestion,
     setQuickQuestion,
-    audienceQuestion, // corrected variable name
+    audienceQuestion,
     rightsTurn,
     turned,
     DATA,
@@ -31,7 +32,6 @@ export default function Home() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
 
-  // Define actions for each key using useMemo for performance.
   const actions = useMemo(
     () => ({
       1: () => {
@@ -70,8 +70,6 @@ export default function Home() {
     ],
   );
 
-  // Keydown handler: If the pressed key is the same as the active one (and not 0),
-  // execute its associated action; otherwise, update the active state.
   const handleKeyDown = useCallback(
     (e) => {
       const keyNum = Number(e.key);
@@ -94,9 +92,8 @@ export default function Home() {
     };
   }, [handleKeyDown]);
 
-  // Configuration for icon buttons to avoid repetitive code.
   const iconButtons = [
-    { key: 1, title: "سؤال السرعة", Icon: MdSports, color: "tomato" },
+    { key: 1, title: "سؤال السرعة", Icon: MdSports },
     { key: 2, title: "النوافذ", Icon: MdWindow },
     { key: 3, title: "اللغز", Icon: IoExtensionPuzzle },
     { key: 4, title: "المناظرة", Icon: MdQuestionAnswer },
@@ -110,15 +107,26 @@ export default function Home() {
   ];
 
   return (
-    <div className="Home">
+    <motion.div
+      className="Home"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.05 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       <Score top right turn={rightsTurn && turned} />
       <Score top turn={!rightsTurn && turned} />
-      <span className="Question-title Question-title-6 Home-title">
+      <motion.span
+        className="Question-title Question-title-6 Home-title"
+        initial={{ opacity: 0, y: -30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+      >
         بشائر المعرفة
-      </span>
+      </motion.span>
       <div className="Home-container">
         {iconButtons.map(
-          ({ key, title, Icon, color, fontSize: btnFontSize }) => (
+          ({ key, title, Icon, color, fontSize: btnFontSize }, i) => (
             <IconButton
               key={key}
               title={title}
@@ -128,10 +136,11 @@ export default function Home() {
               color={color}
               fontSize={btnFontSize || FONT_SIZE}
               active={active === key}
+              index={i}
             />
           ),
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

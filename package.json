@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fontsource/amiri": "^5.2.8",
     "@fontsource/cairo": "^5.2.7",
+    "framer-motion": "^12.34.3",
     "react": "^18.0.0",
     "react-countdown": "^2.3.2",
     "react-countdown-circle-timer": "^3.0.9",

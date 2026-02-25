@@ -1,0 +1,273 @@
+.ramadan-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Islamic geometric pattern overlay — SVG-based 8-pointed star tessellation */
+.ramadan-bg-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23D4A853' stroke-width='1.2'%3E%3C!-- 8-pointed star --%3E%3Cpolygon points='100,15 113,65 163,65 123,95 137,145 100,118 63,145 77,95 37,65 87,65'/%3E%3C!-- inner octagon --%3E%3Cpolygon points='100,40 120,70 120,130 100,160 80,130 80,70'/%3E%3C!-- connecting lines to edges --%3E%3Cline x1='100' y1='0' x2='100' y2='15'/%3E%3Cline x1='100' y1='160' x2='100' y2='200'/%3E%3Cline x1='0' y1='100' x2='37' y2='65'/%3E%3Cline x1='163' y1='65' x2='200' y2='100'/%3E%3Cline x1='63' y1='145' x2='15' y2='185'/%3E%3Cline x1='137' y1='145' x2='185' y2='185'/%3E%3Cline x1='37' y1='65' x2='15' y2='15'/%3E%3Cline x1='163' y1='65' x2='185' y2='15'/%3E%3C!-- diamond accents at corners --%3E%3Cpolygon points='100,0 106,8 100,15 94,8' fill='%23D4A853' fill-opacity='0.15'/%3E%3Cpolygon points='100,185 106,192 100,200 94,192' fill='%23D4A853' fill-opacity='0.15'/%3E%3Cpolygon points='0,100 8,94 15,100 8,106' fill='%23D4A853' fill-opacity='0.15'/%3E%3Cpolygon points='185,100 192,94 200,100 192,106' fill='%23D4A853' fill-opacity='0.15'/%3E%3C!-- center circle --%3E%3Ccircle cx='100' cy='100' r='18' stroke-width='0.8'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* Second geometric layer — rotated for depth */
+.ramadan-bg-pattern::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='%23F0C75E' stroke-width='0.6'%3E%3Ccircle cx='70' cy='70' r='35'/%3E%3Ccircle cx='70' cy='70' r='20'/%3E%3Cline x1='70' y1='0' x2='70' y2='140'/%3E%3Cline x1='0' y1='70' x2='140' y2='70'/%3E%3Cline x1='0' y1='0' x2='140' y2='140'/%3E%3Cline x1='140' y1='0' x2='0' y2='140'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 140px 140px;
+}
+
+/* Corner arabesque decorations */
+.ramadan-bg-corner-tl,
+.ramadan-bg-corner-tr,
+.ramadan-bg-corner-bl,
+.ramadan-bg-corner-br {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200'%3E%3Cg fill='none' stroke='%23D4A853' stroke-width='1.5'%3E%3Cpath d='M0,0 Q100,20 200,0'/%3E%3Cpath d='M0,0 Q20,100 0,200'/%3E%3Cpath d='M0,0 Q80,80 0,160'/%3E%3Cpath d='M0,0 Q160,0 160,80'/%3E%3Ccircle cx='30' cy='30' r='15'/%3E%3Ccircle cx='30' cy='30' r='8'/%3E%3Cpolygon points='30,15 35,25 30,35 25,25' fill='%23D4A853' fill-opacity='0.3'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+
+.ramadan-bg-corner-tl { top: 0; left: 0; }
+.ramadan-bg-corner-tr { top: 0; right: 0; transform: scaleX(-1); }
+.ramadan-bg-corner-bl { bottom: 0; left: 0; transform: scaleY(-1); }
+.ramadan-bg-corner-br { bottom: 0; right: 0; transform: scale(-1); }
+
+/* Top decorative border — arch scallop pattern */
+.ramadan-bg-border-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ramadan-gold) 15%,
+    var(--ramadan-gold-light) 50%,
+    var(--ramadan-gold) 85%,
+    transparent 100%
+  );
+  opacity: 0.7;
+  box-shadow: 0 0 20px rgba(212, 168, 83, 0.4), 0 0 40px rgba(212, 168, 83, 0.2);
+}
+
+.ramadan-bg-border-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ramadan-gold) 20%,
+    var(--ramadan-gold-light) 50%,
+    var(--ramadan-gold) 80%,
+    transparent 100%
+  );
+  opacity: 0.5;
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.3);
+}
+
+/* Floating lanterns */
+.ramadan-lantern {
+  position: absolute;
+  top: -120px;
+  animation: lantern-float linear infinite;
+  z-index: 1;
+  filter: drop-shadow(0 0 8px rgba(212, 168, 83, 0.3));
+}
+
+.ramadan-lantern-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.ramadan-lantern-cap {
+  width: 18px;
+  height: 6px;
+  background: var(--ramadan-gold);
+  border-radius: 3px 3px 0 0;
+  position: relative;
+}
+
+.ramadan-lantern-cap::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 8px;
+  background: var(--ramadan-gold);
+}
+
+.ramadan-lantern-cap::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--ramadan-gold);
+  border-radius: 50%;
+  border-bottom: none;
+}
+
+.ramadan-lantern-glass {
+  width: 22px;
+  height: 32px;
+  background: linear-gradient(
+    180deg,
+    rgba(240, 199, 94, 0.6) 0%,
+    rgba(212, 168, 83, 0.8) 50%,
+    rgba(180, 130, 50, 0.6) 100%
+  );
+  border-radius: 4px;
+  position: relative;
+  box-shadow: inset 0 0 10px rgba(255, 220, 120, 0.5);
+}
+
+.ramadan-lantern-glass::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  right: 3px;
+  bottom: 4px;
+  border: 1px solid rgba(212, 168, 83, 0.6);
+  border-radius: 2px;
+}
+
+.ramadan-lantern-base {
+  width: 14px;
+  height: 4px;
+  background: var(--ramadan-gold);
+  border-radius: 0 0 2px 2px;
+}
+
+.ramadan-lantern-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(240, 199, 94, 0.25) 0%,
+    transparent 70%
+  );
+  animation: lantern-glow-pulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes lantern-float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(calc(50vh + 60px)) translateX(var(--swing, 15px));
+  }
+  95% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(calc(100vh + 120px)) translateX(calc(var(--swing, 15px) * -1));
+    opacity: 0;
+  }
+}
+
+@keyframes lantern-glow-pulse {
+  0% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.2);
+  }
+}
+
+/* Twinkling stars */
+.ramadan-star {
+  position: absolute;
+  background: var(--ramadan-gold-light);
+  border-radius: 50%;
+  animation: star-twinkle ease-in-out infinite alternate;
+  box-shadow: 0 0 4px rgba(240, 199, 94, 0.6);
+}
+
+@keyframes star-twinkle {
+  0% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scale(1.3);
+  }
+}
+
+/* Crescent moon */
+.ramadan-moon {
+  position: absolute;
+  top: 5%;
+  left: 8%;
+  width: 80px;
+  height: 80px;
+  z-index: 1;
+}
+
+.ramadan-moon-crescent {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: transparent;
+  box-shadow: 18px -8px 0 0 var(--ramadan-gold-light);
+  opacity: 0.5;
+  animation: moon-glow 4s ease-in-out infinite alternate;
+}
+
+.ramadan-moon-glow {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(240, 199, 94, 0.1) 0%,
+    transparent 60%
+  );
+}
+
+@keyframes moon-glow {
+  0% {
+    opacity: 0.4;
+    filter: drop-shadow(0 0 10px rgba(240, 199, 94, 0.2));
+  }
+  100% {
+    opacity: 0.65;
+    filter: drop-shadow(0 0 25px rgba(240, 199, 94, 0.4));
+  }
+}

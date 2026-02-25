@@ -12,21 +12,17 @@
 }
 
 .Home-container {
-  margin-top: 5rem;
+  margin-top: 4rem;
   direction: rtl;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* centers each row’s items */
   gap: 1rem;
-  /* optional: adjust spacing between items */
-  /* Remove any width:100% if you want the container to shrink-wrap */
   padding: 0;
 }
 
 .Home-container>* {
   flex: 0 0 calc(20% - 1rem);
-  /* Four items per row, adjust gap accordingly */
   max-width: calc(20% - 1rem);
 }
 
@@ -49,7 +45,6 @@
   left: 1rem;
   opacity: 0;
   animation: startb 0.5s ease-in-out forwards 1;
-
   top: 1rem;
 }
 
@@ -57,9 +52,43 @@
   font-size: 12rem !important;
   margin-top: 2rem !important;
   margin-bottom: 0 !important;
-  opacity: 0;
-  animation: startb 0.5s ease-in-out forwards 1;
-  text-shadow: 0px 5px 10px rgba(0, 0, 0, 0.6);
+  border: none !important;
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+  background: none !important;
+  background-clip: unset !important;
+  -webkit-background-clip: unset !important;
+  text-shadow:
+    0 0 40px rgba(212, 168, 83, 0.6),
+    0 0 80px rgba(212, 168, 83, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.5) !important;
+  position: relative;
+  filter: none;
+  -webkit-text-stroke: 1px rgba(212, 168, 83, 0.3);
+}
+
+/* Subtle shimmer effect on the title */
+.Home-title::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(240, 199, 94, 0.12) 50%,
+    transparent 100%
+  );
+  animation: title-shimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes title-shimmer {
+  0% { left: -60%; }
+  50% { left: 100%; }
+  100% { left: 100%; }
 }
 
 @keyframes starta {
