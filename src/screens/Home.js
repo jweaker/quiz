@@ -1,6 +1,7 @@
 import { useCallback, useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import "@fontsource/aref-ruqaa/arabic-700.css";
 import IconButton from "../components/IconButton";
 import {
   MdWindow,
@@ -41,12 +42,12 @@ export default function Home() {
         else setQuickQuestion((p) => p + 1);
       },
       2: () => navigate(`/windows`),
-      3: () => {
+      3: () => navigate(`/question/poeticChase`),
+      4: () => {
         if (DATA.parts.puzzles.length > 1) navigate(`/questionpicker/puzzles`);
         else navigate(`/question/puzzles/0`);
       },
-      4: () => navigate(`/question/debate`),
-      5: () => navigate(`/question/poeticChase`),
+      5: () => navigate(`/question/debate`),
       6: () => navigate(`/question/askSmartly`),
       7: () => navigate(`/question/quickQuestions/0`),
       8: () => {
@@ -95,13 +96,13 @@ export default function Home() {
   const iconButtons = [
     { key: 1, title: "سؤال السرعة", Icon: MdSports },
     { key: 2, title: "النوافذ", Icon: MdWindow },
-    { key: 3, title: "اللغز", Icon: IoExtensionPuzzle },
-    { key: 4, title: "المناظرة", Icon: MdQuestionAnswer },
     {
-      key: 5,
+      key: 3,
       title: "المطاردة الشعرية",
       Icon: MdOutlineDirectionsRun,
     },
+    { key: 4, title: "اللغز", Icon: IoExtensionPuzzle },
+    { key: 5, title: "المناظرة", Icon: MdQuestionAnswer },
     { key: 6, title: "اسأل بذكاء", Icon: TbUserQuestion },
     { key: 7, title: "الرشق السريع", Icon: RiTimerFill },
   ];
@@ -122,7 +123,8 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
       >
-        بشائر المعرفة
+        <span className="Home-title-text">بشائر المعرفة</span>
+        <span className="Home-title-lantern" aria-hidden="true" />
       </motion.span>
       <div className="Home-container">
         {iconButtons.map(

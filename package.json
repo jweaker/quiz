@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fontsource/amiri": "^5.2.8",
+    "@fontsource/aref-ruqaa": "^5.2.8",
     "@fontsource/cairo": "^5.2.7",
     "framer-motion": "^12.34.3",
     "react": "^18.0.0",

@@ -46,12 +46,18 @@ export default function Score({
         (overlay ? " Score-overlay" : "")
       }
     >
-      <input type="text" className="Score-name" defaultValue={teamName} />
+      <input
+        type="text"
+        className="Score-name"
+        defaultValue={teamName}
+        tabIndex={-1}
+      />
       <div className={"Score-score" + (turn ? " Score-score-turn" : "")}>
         <input
           type="number"
           className="Score-score-score"
           inputMode="numeric"
+          tabIndex={-1}
           value={displayScore}
           onChange={handleScoreChange}
         />

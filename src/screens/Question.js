@@ -183,8 +183,10 @@ export default function Question() {
 
   const switchChessClock = useCallback(() => {
     const next = chessActiveRef.current === "right" ? "left" : "right";
+    setRightsTurn(next === "right");
+    setTurned(true);
     startChessInterval(next);
-  }, [startChessInterval]);
+  }, [setRightsTurn, setTurned, startChessInterval]);
 
   // Cleanup chess timer on unmount
   useEffect(() => {
