@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fontsource/cairo": "^5.2.7",
     "react": "^18.0.0",
     "react-countdown": "^2.3.2",
     "react-countdown-circle-timer": "^3.0.9",

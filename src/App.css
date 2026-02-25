@@ -1,8 +1,11 @@
 .App {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
   background: rgb(89, 133, 227);
   background: radial-gradient(
     circle,
@@ -10,6 +13,78 @@
     rgba(20, 37, 74, 1) 100%
   );
 }
+
+.App-viewport {
+  position: absolute;
+  top: var(--app-dead-top);
+  right: var(--app-dead-right);
+  bottom: var(--app-dead-bottom);
+  left: var(--app-dead-left);
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
 .hideCursor {
   cursor: none;
+}
+
+.ViewportControls {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+  width: 32rem;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(8, 16, 33, 0.88);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.ViewportControls-title {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.ViewportControls-hint {
+  margin: 0;
+  font-size: 1.2rem;
+  opacity: 0.75;
+}
+
+.ViewportControls-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 1.4rem;
+}
+
+.ViewportControls-fieldHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+}
+
+.ViewportControls-field input[type="range"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ViewportControls-actions {
+  margin-top: 0.3rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ViewportControls-actions button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border-radius: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 1.3rem;
 }

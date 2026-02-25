@@ -43,8 +43,6 @@ export default function Question() {
   const [leftMs, setLeftMs] = useState(100000);
   const [rightMs, setRightMs] = useState(100000);
   const [chessActive, setChessActive] = useState(null); // 'right' | 'left' | null
-  // passActive: true means receiving team just got a pass and has two scoring options
-  const [passActive, setPassActive] = useState(false);
   const leftMsRef = useRef(100000);
   const rightMsRef = useRef(100000);
   const chessActiveRef = useRef(null);
@@ -199,7 +197,6 @@ export default function Question() {
             clearChessTimer();
             chessActiveRef.current = null;
             setChessActive(null);
-            setPassActive(false);
           }
           pauseAudio();
           break;
@@ -248,15 +245,6 @@ export default function Question() {
             } else {
               setLeftScore((prev) => prev + 1);
             }
-            // In pass state, answering with the required letter earns +1 extra
-            if (passActive) {
-              if (chessActiveRef.current === "right") {
-                setRightScore((prev) => prev + 1);
-              } else {
-                setLeftScore((prev) => prev + 1);
-              }
-            }
-            setPassActive(false);
             audioCorrect.play();
             switchChessClock();
           } else if (type === "quickQuestions") {
@@ -293,7 +281,6 @@ export default function Question() {
             else setLeftScore((prev) => prev - 1);
           } else if (type === "poeticChase") {
             // Miss — no point, clock switches
-            setPassActive(false);
             audioWrong.play();
             switchChessClock();
           } else if (type === "quickQuestions") {
@@ -312,29 +299,9 @@ export default function Question() {
           }
           break;
 
-        // Pass: clock switches to other team, receiving team gets +1
-        case "p":
-        case "P":
+        case "c":
+        case "C":
           if (type === "poeticChase") {
-            setTurned(true);
-            const receivingTeam =
-              chessActiveRef.current === "right" ? "left" : "right";
-            if (receivingTeam === "right") {
-              setRightScore((prev) => prev + 1);
-            } else {
-              setLeftScore((prev) => prev + 1);
-            }
-            setPassActive(true);
-            switchChessClock();
-          }
-          break;
-
-        // New letter answer after a pass — no extra point (correct verse, different letter)
-        case "a":
-        case "A":
-          if (type === "poeticChase" && passActive) {
-            setPassActive(false);
-            audioCorrect.play();
             switchChessClock();
           }
           break;
@@ -374,13 +341,16 @@ export default function Question() {
             navigate(`/rate/${type}`);
           }
           if (type === "poeticChase") {
-            // Manual end — stop clocks (no time bonus for early end)
+            // Manual end — stop clocks and award time bonuses (5s = 1 pt)
             clearChessTimer();
             chessActiveRef.current = null;
             setChessActive(null);
-            setPassActive(false);
             setIsPlaying(false);
             setTurned(true);
+            const rightBonus = Math.floor(rightMsRef.current / 5000);
+            const leftBonus = Math.floor(leftMsRef.current / 5000);
+            if (rightBonus > 0) setRightScore((prev) => prev + rightBonus);
+            if (leftBonus > 0) setLeftScore((prev) => prev + leftBonus);
           }
           if (type === "askSmartly") {
             if (rightsTurn) setRightScore((prev) => prev + 20);
@@ -429,7 +399,6 @@ export default function Question() {
       setRightScore,
       setLeftScore,
       setDATA,
-      passActive,
       debateRound,
       quickPhase,
       hduration,
@@ -550,11 +519,6 @@ export default function Question() {
                 </span>
               </div>
             </div>
-            {passActive && (
-              <span className="pass-indicator">
-                Z: نفس الحرف (+1) &nbsp;|&nbsp; A: حرف جديد &nbsp;|&nbsp; X: خطأ
-              </span>
-            )}
           </div>
         ) : (
           <CountdownCircleTimer
