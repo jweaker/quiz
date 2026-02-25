@@ -105,3 +105,55 @@
 .ViewportControls-actions button:hover {
   background: rgba(212, 168, 83, 0.25);
 }
+
+.ShortcutHelp {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  width: 34rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid var(--ramadan-card-border);
+  background: rgba(8, 16, 33, 0.92);
+  color: var(--ramadan-cream);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  backdrop-filter: blur(12px);
+}
+
+.ShortcutHelp-title {
+  margin: 0;
+  font-size: 2rem;
+  color: var(--ramadan-gold-light);
+}
+
+.ShortcutHelp-hint {
+  margin: 0;
+  font-size: 1.2rem;
+  opacity: 0.75;
+}
+
+.ShortcutHelp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ShortcutHelp-section h3 {
+  margin: 0.4rem 0 0;
+  font-size: 1.4rem;
+  color: var(--ramadan-gold-light);
+}
+
+.ShortcutHelp-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.3rem;
+}

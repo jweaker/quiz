@@ -3,11 +3,14 @@
   height: 100%;
   padding: 0;
   margin: 0;
-  position: fixed;
+  position: absolute;
+  inset: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow-y: scroll;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: contain;
   flex-direction: column;
 }
 

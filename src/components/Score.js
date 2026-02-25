@@ -13,11 +13,25 @@ export default function Score({
     useGlobalContext();
   const mscore = right ? rightScore : leftScore;
   const mset = right ? setRightScore : setLeftScore;
-  const [init, setInit] = useState(0);
+  const normalizedScore = Number.isFinite(Number(mscore)) ? Number(mscore) : 0;
+  const [init, setInit] = useState(null);
   useEffect(() => {
-    if (zero && !init) setInit(mscore);
-  });
-  console.log(mscore);
+    if (zero && init === null) setInit(normalizedScore);
+  }, [zero, init, normalizedScore]);
+
+  const baseScore = zero ? (init ?? 0) : 0;
+  const displayScore = normalizedScore - (init ?? 0);
+  const handleScoreChange = (event) => {
+    const raw = event.target.value;
+    if (raw === "") {
+      mset(baseScore);
+      return;
+    }
+    const parsed = Number.parseInt(raw, 10);
+    if (!Number.isFinite(parsed)) return;
+    mset(baseScore + parsed);
+  };
+
   const rightTeamName = DATA.rightTeamName;
   const leftTeamName = DATA.leftTeamName;
   const teamName = right ? rightTeamName : leftTeamName;
@@ -37,8 +51,9 @@ export default function Score({
         <input
           type="number"
           className="Score-score-score"
-          value={mscore - init}
-          onChange={(e) => mset(parseInt(e.target.value))}
+          inputMode="numeric"
+          value={displayScore}
+          onChange={handleScoreChange}
         />
       </div>
     </div>

@@ -9,24 +9,25 @@ import { useNavigate } from "react-router-dom";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
 
+const WINDOW_KEYS = [
+  "religion",
+  "humanSciences",
+  "naturalSciences",
+  "arts",
+  "misc",
+];
+
 export default function Windows() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const { DATA, rightsTurn, turned } = useGlobalContext();
-  const windows = [
-    "religion",
-    "humanSciences",
-    "naturalSciences",
-    "arts",
-    "misc",
-  ];
   const handleKeyDown = useCallback(
     (e) => {
       console.log(e.key);
       const nkey = parseInt(e.key);
       if (nkey >= 0 && nkey <= 5) {
         if (nkey === active && nkey !== 0) {
-          navigate("/questionpicker/" + windows[nkey - 1]);
+          navigate("/questionpicker/" + WINDOW_KEYS[nkey - 1]);
         } else setActive(nkey);
       } else
         switch (e.key) {
@@ -41,7 +42,6 @@ export default function Windows() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
   return (
     <motion.div

@@ -4,17 +4,27 @@ import { motion } from "framer-motion";
 import { useGlobalContext } from "../contexts/Global";
 import "./Rate.css";
 
+const toScore = (value) => {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const handleScoreInput = (setter) => (event) => {
+  const value = event.target.value;
+  if (/^-?\d*$/.test(value)) setter(value);
+};
+
 export default function Rate() {
   const navigate = useNavigate();
   const params = useParams();
   const { setLeftScore, setRightScore, setRightsTurn, rightsTurn, DATA } =
     useGlobalContext();
-  const [rjudge, setRjudge] = useState();
-  const [rguest, setRguest] = useState();
-  const [raudience, setRaudience] = useState();
-  const [ljudge, setLjudge] = useState();
-  const [lguest, setLguest] = useState();
-  const [laudience, setLaudience] = useState();
+  const [rjudge, setRjudge] = useState("");
+  const [rguest, setRguest] = useState("");
+  const [raudience, setRaudience] = useState("");
+  const [ljudge, setLjudge] = useState("");
+  const [lguest, setLguest] = useState("");
+  const [laudience, setLaudience] = useState("");
   const type = params.type;
   const singlePuzzle = DATA.parts.puzzles.length <= 1;
   const singleRate = type === "puzzles" || type === "windows";
@@ -23,14 +33,8 @@ export default function Rate() {
     (e) => {
       switch (e.key) {
         case "Enter":
-          const rsum =
-            parseInt(rjudge ?? 0) +
-            parseInt(rguest ?? 0) +
-            parseInt(raudience ?? 0);
-          const lsum =
-            parseInt(ljudge ?? 0) +
-            parseInt(lguest ?? 0) +
-            parseInt(laudience ?? 0);
+          const rsum = toScore(rjudge) + toScore(rguest) + toScore(raudience);
+          const lsum = toScore(ljudge) + toScore(lguest) + toScore(laudience);
 
           if (doubleTeam) {
             setRightScore((e) => e + rsum);
@@ -61,6 +65,7 @@ export default function Rate() {
       laudience,
       ljudge,
       lguest,
+      doubleTeam,
     ],
   );
   useEffect(() => {
@@ -68,7 +73,6 @@ export default function Rate() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
   return (
     <motion.div
@@ -89,14 +93,9 @@ export default function Rate() {
             >
               <span className="Rate-title">المجموع</span>
               <span className="Rate-input">
-                {parseInt(rjudge ?? 0) +
-                  parseInt(rguest ?? 0) +
-                  parseInt(raudience ?? 0) ===
-                  0
+                {toScore(rjudge) + toScore(rguest) + toScore(raudience) === 0
                   ? ""
-                  : parseInt(rjudge ?? 0) +
-                  parseInt(rguest ?? 0) +
-                  parseInt(raudience ?? 0)}
+                  : toScore(rjudge) + toScore(rguest) + toScore(raudience)}
               </span>
             </motion.div>
           )}
@@ -115,8 +114,10 @@ export default function Rate() {
             <input
               className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
               type="number"
+              inputMode="numeric"
               value={rjudge}
-              onChange={(e) => setRjudge(e.target.value)}
+              autoFocus
+              onChange={handleScoreInput(setRjudge)}
             />
           </motion.div>
           {!singleRate && (
@@ -134,8 +135,9 @@ export default function Rate() {
               <input
                 className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                 type="number"
+                inputMode="numeric"
                 value={rguest}
-                onChange={(e) => setRguest(e.target.value)}
+                onChange={handleScoreInput(setRguest)}
               />
             </motion.div>
           )}
@@ -150,8 +152,9 @@ export default function Rate() {
               <input
                 className="Rate-input"
                 type="number"
+                inputMode="numeric"
                 value={raudience}
-                onChange={(e) => setRaudience(e.target.value)}
+                onChange={handleScoreInput(setRaudience)}
               />
             </motion.div>
           )}
@@ -166,14 +169,9 @@ export default function Rate() {
                 transition={{ delay: 0.3 }}
               >
                 <span className="Rate-input">
-                  {parseInt(ljudge ?? 0) +
-                    parseInt(lguest ?? 0) +
-                    parseInt(laudience ?? 0) ===
-                    0
+                  {toScore(ljudge) + toScore(lguest) + toScore(laudience) === 0
                     ? ""
-                    : parseInt(ljudge ?? 0) +
-                    parseInt(lguest ?? 0) +
-                    parseInt(laudience ?? 0)}
+                    : toScore(ljudge) + toScore(lguest) + toScore(laudience)}
                 </span>
               </motion.div>
             )}
@@ -187,8 +185,9 @@ export default function Rate() {
               <input
                 className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                 type="number"
+                inputMode="numeric"
                 value={ljudge}
-                onChange={(e) => setLjudge(e.target.value)}
+                onChange={handleScoreInput(setLjudge)}
               />
             </motion.div>
             {!singleRate && (
@@ -201,8 +200,9 @@ export default function Rate() {
                 <input
                   className={"Rate-input" + (singleRate ? " Rate-input-2" : "")}
                   type="number"
+                  inputMode="numeric"
                   value={lguest}
-                  onChange={(e) => setLguest(e.target.value)}
+                  onChange={handleScoreInput(setLguest)}
                 />
               </motion.div>
             )}
@@ -216,8 +216,9 @@ export default function Rate() {
                 <input
                   className="Rate-input"
                   type="number"
+                  inputMode="numeric"
                   value={laudience}
-                  onChange={(e) => setLaudience(e.target.value)}
+                  onChange={handleScoreInput(setLaudience)}
                 />
               </motion.div>
             )}

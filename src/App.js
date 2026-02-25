@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import "./App.css";
@@ -72,15 +72,29 @@ const getStoredViewportSettings = () => {
   }
 };
 
+const isEditableElement = (target) =>
+  target instanceof HTMLElement &&
+  (target.tagName === "INPUT" ||
+    target.tagName === "TEXTAREA" ||
+    target.tagName === "SELECT" ||
+    target.isContentEditable);
+
 export default function App() {
   const [hideCursor, setHideCursor] = useState(false);
   const [showViewportControls, setShowViewportControls] = useState(false);
+  const [showShortcutHelp, setShowShortcutHelp] = useState(false);
   const [viewportSettings, setViewportSettings] = useState(
     getStoredViewportSettings,
   );
   const { setRightsTurn, setTurned } = useGlobalContext();
   const navigate = useNavigate();
   const location = useLocation();
+  const routeParts = useMemo(
+    () => location.pathname.split("/").filter(Boolean),
+    [location.pathname],
+  );
+  const currentRoute = routeParts[0] ?? "home";
+  const questionType = currentRoute === "question" ? routeParts[1] : null;
 
   const updateViewportSetting = useCallback((key, value) => {
     setViewportSettings((previous) =>
@@ -107,20 +121,32 @@ export default function App() {
 
   const handleKeyDown = useCallback(
     (e) => {
+      const editable = isEditableElement(e.target);
       switch (e.key) {
         case "Escape":
           if (window.location.pathname !== "/") navigate(-1);
           break;
-        case "c":
+        case "u":
+        case "U":
+          if (editable) break;
           setHideCursor((e) => !e);
           break;
         case "s":
+        case "S":
+          if (editable) break;
           setRightsTurn((e) => !e);
           setTurned(true);
           break;
-        case "F10":
+        case "v":
+        case "V":
+          if (editable) break;
           e.preventDefault();
           setShowViewportControls((current) => !current);
+          break;
+        case "h":
+        case "H":
+          if (editable) break;
+          setShowShortcutHelp((current) => !current);
           break;
         default:
           break;
@@ -128,6 +154,74 @@ export default function App() {
     },
     [navigate, setRightsTurn, setTurned],
   );
+
+  const shortcutSections = useMemo(() => {
+    const sections = [
+      {
+        title: "Global",
+        rows: [
+          { keys: "Esc", action: "Back" },
+          { keys: "S", action: "Switch team turn" },
+          { keys: "H", action: "Show/hide cheat sheet" },
+          { keys: "V", action: "Show/hide viewport settings" },
+          { keys: "U", action: "Show/hide cursor" },
+        ],
+      },
+    ];
+
+    if (currentRoute === "home") {
+      sections.push({
+        title: "Home",
+        rows: [
+          { keys: "1..8", action: "Select mode" },
+          { keys: "Same number again", action: "Open selected mode" },
+        ],
+      });
+    } else if (currentRoute === "windows") {
+      sections.push({
+        title: "Windows",
+        rows: [
+          { keys: "1..5", action: "Select category" },
+          { keys: "Same number again", action: "Open category" },
+        ],
+      });
+    } else if (currentRoute === "questionpicker") {
+      sections.push({
+        title: "Question Picker",
+        rows: [
+          { keys: "1..N", action: "Select question" },
+          { keys: "Same number again", action: "Open question" },
+        ],
+      });
+    } else if (currentRoute === "question") {
+      const rows = [
+        { keys: "Enter", action: "Start/pause timer" },
+        { keys: "Z", action: "Correct / advance" },
+        { keys: "X", action: "Wrong / advance" },
+        { keys: "1", action: "Next round / reset / phase change" },
+        { keys: "E", action: "Rating/finalize action" },
+        { keys: "F", action: "Show/hide media overlay" },
+      ];
+      if (questionType === "poeticChase") {
+        rows.push({ keys: "C", action: "Switch active clock/team" });
+      }
+      if (questionType === "puzzles" || questionType === "windows") {
+        rows.push({ keys: "M", action: "Toggle done state" });
+      }
+      sections.push({ title: "Question", rows });
+    } else if (currentRoute === "rate") {
+      sections.push({
+        title: "Rate",
+        rows: [
+          { keys: "Enter", action: "Apply score and continue" },
+          { keys: "Tab", action: "Move between inputs" },
+        ],
+      });
+    }
+
+    return sections;
+  }, [currentRoute, questionType]);
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -143,7 +237,7 @@ export default function App() {
           onKeyDown={(event) => event.stopPropagation()}
         >
           <h2 className="ViewportControls-title">Viewport Settings</h2>
-          <p className="ViewportControls-hint">Toggle panel with F10</p>
+          <p className="ViewportControls-hint">Toggle panel with V</p>
 
           <label className="ViewportControls-field">
             <div className="ViewportControls-fieldHeader">
@@ -221,6 +315,23 @@ export default function App() {
               Close
             </button>
           </div>
+        </div>
+      ) : null}
+      {showShortcutHelp ? (
+        <div className="ShortcutHelp" onKeyDown={(event) => event.stopPropagation()}>
+          <h2 className="ShortcutHelp-title">Cheat Sheet</h2>
+          <p className="ShortcutHelp-hint">Toggle with H</p>
+          {shortcutSections.map((section) => (
+            <div className="ShortcutHelp-section" key={section.title}>
+              <h3>{section.title}</h3>
+              {section.rows.map((row) => (
+                <div className="ShortcutHelp-row" key={row.keys + row.action}>
+                  <span>{row.keys}</span>
+                  <span>{row.action}</span>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       ) : null}
       <div className="App-viewport">

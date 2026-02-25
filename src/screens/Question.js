@@ -7,7 +7,7 @@ import sourceAudioCorrect from "../assets/correct.mp3";
 import sourceAudioWrong from "../assets/wrong.mp3";
 import sourceAudioWhoosh from "../assets/whoosh.mp3";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
 import { GiInfinity } from "react-icons/gi";
@@ -33,7 +33,7 @@ export default function Question() {
   // Local states
   const [isPlaying, setIsPlaying] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const [id, setId] = useState(params.id);
+  const id = params.id;
   const [index, setIndex] = useState(parseInt(params.index ?? 0));
   const [zdone, setZdone] = useState(false);
   const [file, setFile] = useState(null);
@@ -57,23 +57,27 @@ export default function Question() {
 
   // Get current question data from DATA
   const currentWindow = DATA.parts[type]?.[id];
-  const question = currentWindow
-    ? Array.isArray(currentWindow)
-      ? currentWindow[index]
-      : type === "quickQuestions"
-        ? currentWindow.questions[index]
-        : currentWindow
-    : (DATA.parts[type] ??
-      (type === "poeticChase"
-        ? { text: "المطاردة الشعرية", duration: 100 }
-        : type === "askSmartly"
-          ? {
-            text: "اسأل بذكاء",
-            duration: 120,
-            file: "animals.png",
-            isImage: true,
-          }
-          : {}));
+  const question = useMemo(
+    () =>
+      currentWindow
+        ? Array.isArray(currentWindow)
+          ? currentWindow[index]
+          : type === "quickQuestions"
+            ? currentWindow.questions[index]
+            : currentWindow
+        : (DATA.parts[type] ??
+          (type === "poeticChase"
+            ? { text: "المطاردة الشعرية", duration: 100 }
+            : type === "askSmartly"
+              ? {
+                text: "اسأل بذكاء",
+                duration: 120,
+                file: "animals.png",
+                isImage: true,
+              }
+              : {})),
+    [currentWindow, DATA.parts, type, index],
+  );
   const {
     text,
     duration: hduration,
@@ -87,31 +91,32 @@ export default function Question() {
     setDuration(type === "quickQuestions" ? 60 : hduration);
   }, [hduration, type]);
 
-  useEffect(() => {
-    try {
-      if (type === "puzzles") {
-        setDATA((prevState) => {
-          const newData = { ...prevState };
-          newData.parts[type][id].done = !question.done;
-          return newData;
-        });
-      } else if (type === "windows") {
-        setDATA((prevState) => {
-          const newData = { ...prevState };
-          newData.parts[type][id][index].done = !question.done;
-          return newData;
-        });
-      }
-      audioWhoosh.play();
-    } catch { }
-  }, []);
-
   // Initialize audio elements
   const [audio] = useState(new Audio(sourceAudio));
   const [audio2] = useState(new Audio(sourceAudio2));
   const [audioCorrect] = useState(new Audio(sourceAudioCorrect));
   const [audioWrong] = useState(new Audio(sourceAudioWrong));
   const [audioWhoosh] = useState(new Audio(sourceAudioWhoosh));
+
+  useEffect(() => {
+    if (type === "puzzles") {
+      setDATA((prevState) => {
+        const newData = { ...prevState };
+        newData.parts[type][id].done = !newData.parts[type][id].done;
+        return newData;
+      });
+    } else if (type === "windows") {
+      setDATA((prevState) => {
+        const newData = { ...prevState };
+        newData.parts[type][id][index].done = !newData.parts[type][id][index].done;
+        return newData;
+      });
+    }
+  }, [id, index, setDATA, type]);
+
+  useEffect(() => {
+    audioWhoosh.play().catch(() => { });
+  }, [audioWhoosh]);
 
   const pauseAudio = useCallback(() => {
     audio.pause();

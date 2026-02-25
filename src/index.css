@@ -37,6 +37,8 @@ body,
 #root {
   width: 100%;
   height: 100%;
+  background: var(--ramadan-bg-gradient);
+  overscroll-behavior: none;
 }
 
 body {

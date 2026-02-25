@@ -14,13 +14,13 @@ export default function QuestionPicker() {
   const { DATA, rightsTurn, turned } = useGlobalContext();
   const isntWindows = id === "puzzles" || id === "quickQuestions";
   const section = isntWindows ? DATA.parts[id] : DATA.parts.windows[id];
+  const sectionLength = section.length;
   const handleKeyDown = useCallback(
     (e) => {
       console.log(e.key);
       const nkey = parseInt(e.key);
 
-      const length = section.length;
-      if (nkey >= 0 && nkey <= length) {
+      if (nkey >= 0 && nkey <= sectionLength) {
         if (nkey === active && nkey !== 0) {
           if (isntWindows) navigate("/question/" + id + "/" + (nkey - 1));
           else navigate("/question/windows/" + id + "/" + (nkey - 1));
@@ -31,14 +31,13 @@ export default function QuestionPicker() {
             break;
         }
     },
-    [DATA.parts, id, active, navigate],
+    [active, id, isntWindows, navigate, sectionLength],
   );
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handleKeyDown]);
   const windows = {
     naturalSciences: "العلوم الطبيعية",
