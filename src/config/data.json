@@ -5,6 +5,8 @@
     "speedQuestions": [
       {
         "text": "مثلث قائم الزاوية طول احد اضلاعه ٤ والثاني ٣ ما طول الوتر؟",
+        "file": "boom.mp3",
+        "mediaType": "audio",
         "answer": "خمسة",
         "duration": 30,
         "marks": 0

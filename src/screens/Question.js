@@ -43,6 +43,7 @@ export default function Question() {
   const [file, setFile] = useState(null);
   const [duration, setDuration] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
+  const mediaRef = useRef(null);
 
   // --- Poetic Chase: chess clock state ---
   const [leftMs, setLeftMs] = useState(100000);
@@ -166,6 +167,8 @@ export default function Question() {
       clearChessTimer();
       chessActiveRef.current = team;
       setChessActive(team);
+      setRightsTurn(team === "right");
+      setTurned(true);
 
       chessIntervalRef.current = setInterval(() => {
         const active = chessActiveRef.current;
@@ -200,15 +203,20 @@ export default function Question() {
         }
       }, 100);
     },
-    [clearChessTimer, setLeftScore, setRightScore, setTurned],
+    [
+      clearChessTimer,
+      setLeftScore,
+      setRightScore,
+      setRightsTurn,
+      setTurned,
+    ],
   );
 
   const switchChessClock = useCallback(() => {
-    const next = chessActiveRef.current === "right" ? "left" : "right";
-    setRightsTurn(next === "right");
-    setTurned(true);
+    const current = chessActiveRef.current ?? (rightsTurn ? "right" : "left");
+    const next = current === "right" ? "left" : "right";
     startChessInterval(next);
-  }, [setRightsTurn, setTurned, startChessInterval]);
+  }, [rightsTurn, startChessInterval]);
 
   // Cleanup chess timer on unmount
   useEffect(() => {
@@ -264,7 +272,7 @@ export default function Question() {
             setIsComplete(true);
             setIsPlaying(false);
           } else if (type === "poeticChase") {
-            if (chessActiveRef.current === "right") {
+            if (rightsTurn) {
               setRightScore((prev) => prev + 1);
             } else {
               setLeftScore((prev) => prev + 1);
@@ -397,6 +405,27 @@ export default function Question() {
           setShowOverlay((prev) => !prev);
           break;
 
+        case "p":
+        case "P": {
+          const media = mediaRef.current;
+          if (!media) break;
+          if (media.paused) {
+            media.play().catch(() => { });
+          } else {
+            media.pause();
+          }
+          break;
+        }
+
+        case "r":
+        case "R": {
+          const media = mediaRef.current;
+          if (!media) break;
+          media.currentTime = 0;
+          media.play().catch(() => { });
+          break;
+        }
+
         default:
           break;
       }
@@ -515,12 +544,12 @@ export default function Question() {
               : text
           : text}
       </h1>
-      {isAudioMedia && (
+      {isAudioMedia && file && (
         <audio
-          className="Question-audio-player"
-          controls
+          ref={mediaRef}
+          className="Question-audio-hidden"
           src={file}
-          preload="metadata"
+          preload="auto"
         />
       )}
       <div
@@ -556,21 +585,21 @@ export default function Question() {
               <div
                 className={
                   "chess-clock-team" +
-                  (chessActive === "right" ? " chess-clock-active" : "")
-                }
-              >
-                <span className="chess-clock-time">
-                  {formatChessTime(rightMs)}
-                </span>
-              </div>
-              <div
-                className={
-                  "chess-clock-team" +
                   (chessActive === "left" ? " chess-clock-active" : "")
                 }
               >
                 <span className="chess-clock-time">
                   {formatChessTime(leftMs)}
+                </span>
+              </div>
+              <div
+                className={
+                  "chess-clock-team" +
+                  (chessActive === "right" ? " chess-clock-active" : "")
+                }
+              >
+                <span className="chess-clock-time">
+                  {formatChessTime(rightMs)}
                 </span>
               </div>
             </div>
@@ -617,10 +646,12 @@ export default function Question() {
         )}
         {mediaType === "video" && file && showOverlay && (
           <video
+            ref={mediaRef}
             src={file}
             className="Question-overlay-image"
             autoPlay
             loop
+            playsInline
           />
         )}
       </div>

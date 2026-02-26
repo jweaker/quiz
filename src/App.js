@@ -201,6 +201,8 @@ export default function App() {
         { keys: "1", action: "Next round / reset / phase change" },
         { keys: "E", action: "Rating/finalize action" },
         { keys: "F", action: "Show/hide media overlay" },
+        { keys: "P", action: "Play/pause media (audio/video)" },
+        { keys: "R", action: "Restart media (audio/video)" },
       ];
       if (questionType === "poeticChase") {
         rows.push({ keys: "C", action: "Switch active clock/team" });

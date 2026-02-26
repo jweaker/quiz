@@ -136,10 +136,8 @@
   display: none;
 }
 
-.Question-audio-player {
-  width: min(56rem, 92vw);
-  margin: -1.8rem 0 2.2rem;
-  filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.35));
+.Question-audio-hidden {
+  display: none;
 }
 
 .Question-answer {

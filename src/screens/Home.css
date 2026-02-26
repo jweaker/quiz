@@ -85,7 +85,8 @@
   direction: rtl;
   display: inline-block;
   position: relative;
-  font-family: "Aref Ruqaa", "Amiri", "Scheherazade New", "Noto Naskh Arabic", serif;
+  font-family: "Aref Ruqaa", "Amiri", "Scheherazade New", "Noto Naskh Arabic",
+    serif;
   font-weight: 700;
   white-space: nowrap;
   letter-spacing: 0;
@@ -94,15 +95,16 @@
   padding-bottom: 0.12em;
   overflow: visible;
   text-rendering: geometricPrecision;
-  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  font-feature-settings:
+    "kern" 1,
+    "liga" 1,
+    "calt" 1;
   color: #f9e3a4;
-  background-image: linear-gradient(
-    180deg,
-    #fff5d0 0%,
-    #f6dc9a 40%,
-    #dfb45e 72%,
-    #fff0bd 100%
-  );
+  background-image: linear-gradient(180deg,
+      #fff5d0 0%,
+      #f6dc9a 40%,
+      #dfb45e 72%,
+      #fff0bd 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -116,28 +118,23 @@
 .Home-title-lantern {
   position: absolute;
   top: 1.53em;
-  right: 43.7%;
+  right: 43.2%;
   width: clamp(18px, 0.18em, 27px);
   height: clamp(38px, 0.4em, 60px);
   border: 1px solid rgba(255, 227, 164, 0.68);
   border-radius: 0.08em;
-  background:
-    linear-gradient(
-      180deg,
+  background: linear-gradient(180deg,
       rgba(140, 89, 24, 0.86) 0 11%,
       transparent 11% 16%,
       rgba(140, 89, 24, 0.86) 16% 19%,
       transparent 19% 81%,
       rgba(140, 89, 24, 0.86) 81% 84%,
       transparent 84% 89%,
-      rgba(120, 72, 21, 0.88) 89% 100%
-    ),
-    linear-gradient(
-      90deg,
+      rgba(120, 72, 21, 0.88) 89% 100%),
+    linear-gradient(90deg,
       rgba(133, 88, 22, 0.78) 0 17%,
       transparent 17% 83%,
-      rgba(133, 88, 22, 0.78) 83% 100%
-    ),
+      rgba(133, 88, 22, 0.78) 83% 100%),
     linear-gradient(180deg, #ffe3a0 0%, #efc068 52%, #c88d36 100%);
   box-shadow:
     0 0 6px rgba(255, 221, 146, 0.52),
@@ -145,7 +142,7 @@
   transform-origin: 50% 0;
   animation: home-lantern-sway 4.2s ease-in-out infinite;
   pointer-events: none;
-  z-index: 3;
+  z-index: -1;
 }
 
 .Home-title-lantern::before {
@@ -156,11 +153,9 @@
   width: 2px;
   height: 0.18em;
   transform: translateX(-50%);
-  background: linear-gradient(
-    180deg,
-    rgba(255, 225, 154, 0.85) 0%,
-    rgba(191, 136, 49, 0.65) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 225, 154, 0.85) 0%,
+      rgba(191, 136, 49, 0.65) 100%);
   box-shadow: 0 0 8px rgba(240, 199, 94, 0.4);
 }
 
@@ -169,31 +164,33 @@
   position: absolute;
   inset: 0.17em 0.06em 0.16em;
   border-radius: 0.08em;
-  background: radial-gradient(
-    circle at 50% 35%,
-    rgba(255, 245, 194, 0.9) 0%,
-    rgba(240, 191, 88, 0.58) 60%,
-    rgba(240, 191, 88, 0) 100%
-  );
+  background: radial-gradient(circle at 50% 35%,
+      rgba(255, 245, 194, 0.9) 0%,
+      rgba(240, 191, 88, 0.58) 60%,
+      rgba(240, 191, 88, 0) 100%);
 }
 
 @keyframes home-lantern-sway {
   0% {
     transform: rotate(3deg) translateY(0);
   }
+
   50% {
     transform: rotate(-3deg) translateY(0.01em);
   }
+
   100% {
     transform: rotate(3deg) translateY(0);
   }
 }
 
 @keyframes home-title-breathe {
+
   0%,
   100% {
     transform: translateY(0) scale(1);
   }
+
   50% {
     transform: translateY(-2px) scale(1.01);
   }
