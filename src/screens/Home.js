@@ -6,7 +6,7 @@ import IconButton from "../components/IconButton";
 import {
   MdWindow,
   MdSports,
-  MdQuestionAnswer,
+  MdHelpOutline,
   MdOutlineDirectionsRun,
 } from "react-icons/md";
 import { TbUserQuestion } from "react-icons/tb";
@@ -16,7 +16,7 @@ import "./Home.css";
 import { useGlobalContext } from "../contexts/Global";
 import Score from "../components/Score";
 
-const ICON_SIZE = "35rem";
+const ICON_SIZE = "32rem";
 const FONT_SIZE = "5rem";
 
 export default function Home() {
@@ -73,9 +73,13 @@ export default function Home() {
 
   const handleKeyDown = useCallback(
     (e) => {
+      if (e.key === "0" || e.key === "f" || e.key === "F") {
+        navigate("/finale");
+        return;
+      }
       const keyNum = Number(e.key);
-      if (Number.isInteger(keyNum) && keyNum >= 0 && keyNum <= 8) {
-        if (keyNum === active && keyNum !== 0) {
+      if (Number.isInteger(keyNum) && keyNum >= 1 && keyNum <= 8) {
+        if (keyNum === active) {
           const action = actions[keyNum];
           if (action) action();
         } else {
@@ -83,7 +87,7 @@ export default function Home() {
         }
       }
     },
-    [active, actions],
+    [active, actions, navigate],
   );
 
   useEffect(() => {
@@ -102,7 +106,7 @@ export default function Home() {
       Icon: MdOutlineDirectionsRun,
     },
     { key: 4, title: "اللغز", Icon: IoExtensionPuzzle },
-    { key: 5, title: "المناظرة", Icon: MdQuestionAnswer },
+    { key: 5, title: "ماذا لو", Icon: MdHelpOutline },
     { key: 6, title: "اسأل بذكاء", Icon: TbUserQuestion },
     { key: 7, title: "الرشق السريع", Icon: RiTimerFill },
   ];

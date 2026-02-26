@@ -8,6 +8,7 @@ import Question from "./screens/Question";
 import QuestionPicker from "./screens/QuestionPicker";
 import Rate from "./screens/Rate";
 import Windows from "./screens/Windows";
+import Finale from "./screens/Finale";
 import RamadanBackground from "./components/RamadanBackground";
 
 const VIEWPORT_STORAGE_KEY = "quiz.viewport.settings";
@@ -175,6 +176,7 @@ export default function App() {
         rows: [
           { keys: "1..8", action: "Select mode" },
           { keys: "Same number again", action: "Open selected mode" },
+          { keys: "0 / F", action: "Open finale page" },
         ],
       });
     } else if (currentRoute === "windows") {
@@ -346,6 +348,7 @@ export default function App() {
             <Route path="question/:type/:id" element={<Question />} />
             <Route path="question/:type" element={<Question />} />
             <Route path="rate/:type" element={<Rate />} />
+            <Route path="finale" element={<Finale />} />
           </Routes>
         </AnimatePresence>
       </div>

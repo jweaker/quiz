@@ -12,11 +12,32 @@ import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
 import { GiInfinity } from "react-icons/gi";
 
-// Debate turn durations: [team A turn 1, team B turn 1, team A turn 2, team B turn 2]
-const DEBATE_DURATIONS = [60, 60, 40, 40];
+const DEBATE_TURN_DURATION = 100;
+const DEBATE_TURN_COUNT = 2;
 const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac"];
 const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp"];
 const VIDEO_EXTENSIONS = ["mp4", "webm", "mov", "m4v", "ogv"];
+const createPreloadedAudio = (source, options = {}) => {
+  const sound = new Audio(source);
+  sound.preload = "auto";
+  sound.loop = options.loop ?? false;
+  sound.volume = options.volume ?? 1;
+  sound.playbackRate = options.playbackRate ?? 1;
+  sound.load();
+  return sound;
+};
+
+const TICK_AUDIO = createPreloadedAudio(sourceAudio, { loop: true, volume: 0.7 });
+const BOOM_AUDIO = createPreloadedAudio(sourceAudio2, { volume: 1 });
+const CORRECT_AUDIO = createPreloadedAudio(sourceAudioCorrect, { volume: 1 });
+const WRONG_AUDIO = createPreloadedAudio(sourceAudioWrong, { volume: 1 });
+const WHOOSH_AUDIO = createPreloadedAudio(sourceAudioWhoosh, { volume: 1 });
+
+const stopAndResetSound = (sound) => {
+  sound.pause();
+  sound.currentTime = 0;
+  sound.playbackRate = 1;
+};
 
 export default function Question() {
   const {
@@ -54,8 +75,8 @@ export default function Question() {
   const chessActiveRef = useRef(null);
   const chessIntervalRef = useRef(null);
 
-  // --- Debate: track which round we're on (0-3) ---
-  const [debateRound, setDebateRound] = useState(0);
+  // --- Debate ("What if"): two sequential turns (one per team) ---
+  const [debateTurn, setDebateTurn] = useState(0);
 
   // --- Quick Questions: phase A = first team, phase B = same questions for second team ---
   const [quickPhase, setQuickPhase] = useState("A");
@@ -111,15 +132,25 @@ export default function Question() {
 
   // Set initial duration
   useEffect(() => {
-    setDuration(type === "quickQuestions" ? 60 : hduration);
+    setDuration(
+      type === "quickQuestions"
+        ? 60
+        : type === "debate"
+          ? DEBATE_TURN_DURATION
+          : hduration,
+    );
   }, [hduration, type]);
 
-  // Initialize audio elements
-  const [audio] = useState(new Audio(sourceAudio));
-  const [audio2] = useState(new Audio(sourceAudio2));
-  const [audioCorrect] = useState(new Audio(sourceAudioCorrect));
-  const [audioWrong] = useState(new Audio(sourceAudioWrong));
-  const [audioWhoosh] = useState(new Audio(sourceAudioWhoosh));
+  // Shared preloaded audio objects avoid re-init delays on each question route
+  const audio = TICK_AUDIO;
+  const audio2 = BOOM_AUDIO;
+  const audioCorrect = CORRECT_AUDIO;
+  const audioWrong = WRONG_AUDIO;
+
+  const playSfx = useCallback((sound) => {
+    sound.currentTime = 0;
+    sound.play().catch(() => { });
+  }, []);
 
   useEffect(() => {
     if (type === "puzzles") {
@@ -138,13 +169,25 @@ export default function Question() {
   }, [id, index, setDATA, type]);
 
   useEffect(() => {
-    audioWhoosh.play().catch(() => { });
-  }, [audioWhoosh]);
+    playSfx(WHOOSH_AUDIO);
+  }, [playSfx]);
 
   const pauseAudio = useCallback(() => {
     audio.pause();
     setIsPlaying(false);
   }, [audio]);
+
+  const stopAllSounds = useCallback(() => {
+    [audio, audio2, audioCorrect, audioWrong, WHOOSH_AUDIO].forEach(
+      stopAndResetSound,
+    );
+
+    const media = mediaRef.current;
+    if (media) {
+      media.pause();
+      media.currentTime = 0;
+    }
+  }, [audio, audio2, audioCorrect, audioWrong]);
 
   const triggerComplete = useCallback(() => {
     setIsComplete(true);
@@ -182,8 +225,8 @@ export default function Question() {
             chessIntervalRef.current = null;
             chessActiveRef.current = null;
             setChessActive(null);
-            setIsPlaying(false);
-            const bonus = Math.floor(leftMsRef.current / 5000);
+            pauseAudio();
+            const bonus = Math.round(leftMsRef.current / 5000);
             if (bonus > 0) setLeftScore((prev) => prev + bonus);
             setTurned(true);
           }
@@ -195,8 +238,8 @@ export default function Question() {
             chessIntervalRef.current = null;
             chessActiveRef.current = null;
             setChessActive(null);
-            setIsPlaying(false);
-            const bonus = Math.floor(rightMsRef.current / 5000);
+            pauseAudio();
+            const bonus = Math.round(rightMsRef.current / 5000);
             if (bonus > 0) setRightScore((prev) => prev + bonus);
             setTurned(true);
           }
@@ -205,6 +248,7 @@ export default function Question() {
     },
     [
       clearChessTimer,
+      pauseAudio,
       setLeftScore,
       setRightScore,
       setRightsTurn,
@@ -222,6 +266,10 @@ export default function Question() {
   useEffect(() => {
     return () => clearChessTimer();
   }, [clearChessTimer]);
+
+  useEffect(() => {
+    return () => stopAllSounds();
+  }, [stopAllSounds]);
 
   const handleKeyDown = useCallback(
     (e) => {
@@ -241,12 +289,14 @@ export default function Question() {
             if (!isPlaying) {
               const startTeam = rightsTurn ? "right" : "left";
               startChessInterval(startTeam);
+              audio.currentTime = 0;
+              audio.play().catch(() => { });
               setIsPlaying(true);
             } else {
               clearChessTimer();
               chessActiveRef.current = null;
               setChessActive(null);
-              setIsPlaying(false);
+              pauseAudio();
             }
             break;
           }
@@ -254,7 +304,7 @@ export default function Question() {
             pauseAudio();
           } else {
             if (type !== "speedQuestions" && type !== "audienceQuestions")
-              audio.play();
+              audio.play().catch(() => { });
             setIsPlaying(true);
           }
           break;
@@ -262,7 +312,7 @@ export default function Question() {
         case "z":
         case "Z":
           if (type === "windows") {
-            audioCorrect.play();
+            playSfx(audioCorrect);
           }
           setTurned(true);
           if (type === "askSmartly") {
@@ -277,7 +327,7 @@ export default function Question() {
             } else {
               setLeftScore((prev) => prev + 1);
             }
-            audioCorrect.play();
+            playSfx(audioCorrect);
             switchChessClock();
           } else if (type === "quickQuestions") {
             const totalSubQuestions =
@@ -289,7 +339,7 @@ export default function Question() {
             } else {
               pauseAudio();
             }
-            audioCorrect.play();
+            playSfx(audioCorrect);
             if (!zdone && index + 1 === totalSubQuestions) {
               if (rightsTurn) setRightScore((prev) => prev + 1);
               else setLeftScore((prev) => prev + 1);
@@ -306,13 +356,15 @@ export default function Question() {
         case "X":
           setTurned(true);
           if (type === "windows") {
-            audioWrong.play();
+            playSfx(audioWrong);
           }
           if (type === "askSmartly") {
             if (rightsTurn) setRightScore((prev) => prev - 1);
             else setLeftScore((prev) => prev - 1);
           } else if (type === "poeticChase") {
-            audioWrong.play();
+            if (rightsTurn) setLeftScore((prev) => prev + 1);
+            else setRightScore((prev) => prev + 1);
+            playSfx(audioWrong);
             switchChessClock();
           } else if (type === "quickQuestions") {
             const totalSubQuestions =
@@ -322,7 +374,7 @@ export default function Question() {
             } else {
               pauseAudio();
             }
-            audioWrong.play();
+            playSfx(audioWrong);
           } else {
             pauseAudio();
             setIsComplete((prev) => !prev);
@@ -352,9 +404,12 @@ export default function Question() {
               navigate(-1);
             }
           } else if (type === "debate") {
-            const nextRound = Math.min(debateRound + 1, 3);
-            setDebateRound(nextRound);
-            setDuration(DEBATE_DURATIONS[nextRound]);
+            if (debateTurn < DEBATE_TURN_COUNT - 1) {
+              setDebateTurn((prev) => prev + 1);
+              setRightsTurn((prev) => !prev);
+              setTurned(true);
+            }
+            setDuration(DEBATE_TURN_DURATION);
             triggerComplete();
             setIsPlaying(false);
           } else {
@@ -366,16 +421,17 @@ export default function Question() {
 
         case "e":
           if (["debate", "puzzles", "windows"].includes(type)) {
+            stopAllSounds();
             navigate(`/rate/${type}`);
           }
           if (type === "poeticChase") {
             clearChessTimer();
             chessActiveRef.current = null;
             setChessActive(null);
-            setIsPlaying(false);
+            pauseAudio();
             setTurned(true);
-            const rightBonus = Math.floor(rightMsRef.current / 5000);
-            const leftBonus = Math.floor(leftMsRef.current / 5000);
+            const rightBonus = Math.round(rightMsRef.current / 5000);
+            const leftBonus = Math.round(leftMsRef.current / 5000);
             if (rightBonus > 0) setRightScore((prev) => prev + rightBonus);
             if (leftBonus > 0) setLeftScore((prev) => prev + leftBonus);
           }
@@ -447,15 +503,17 @@ export default function Question() {
       setRightScore,
       setLeftScore,
       setDATA,
-      debateRound,
+      debateTurn,
       quickPhase,
       hduration,
       clearChessTimer,
       startChessInterval,
       switchChessClock,
+      stopAllSounds,
       audio,
       audioCorrect,
       audioWrong,
+      playSfx,
     ],
   );
 
@@ -484,7 +542,14 @@ export default function Question() {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [audio, audio2, audioCorrect, audioWrong, fileLoc, handleKeyDown]);
+  }, [
+    audio,
+    audio2,
+    audioCorrect,
+    audioWrong,
+    fileLoc,
+    handleKeyDown,
+  ]);
 
   const formatChessTime = (ms) => Math.ceil(ms / 1000);
   const timerColors = isMinefieldQuestion
@@ -626,7 +691,7 @@ export default function Question() {
             }}
             onComplete={() => {
               pauseAudio();
-              audio2.play();
+              playSfx(audio2);
             }}
           >
             {({ remainingTime }) => (

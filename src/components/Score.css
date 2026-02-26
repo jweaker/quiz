@@ -50,12 +50,10 @@
   outline: none;
   border: none;
   text-align: center;
-  background: linear-gradient(
-    180deg,
-    var(--ramadan-gold-light) 0%,
-    var(--ramadan-gold) 40%,
-    #A07830 100%
-  );
+  background: linear-gradient(180deg,
+      var(--ramadan-gold-light) 0%,
+      var(--ramadan-gold) 40%,
+      #a07830 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -76,15 +74,15 @@
 }
 
 .Score-right {
-  right: -12rem;
+  right: -4rem;
 }
 
 .Score-left {
-  left: -12rem;
+  left: -4rem;
 }
 
 .Score-top {
-  top: 0rem;
+  top: 4rem;
 }
 
 .Score-bottom {
