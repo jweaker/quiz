@@ -4,7 +4,7 @@ import "./Windows.css";
 import { MdBrush, MdPerson } from "react-icons/md";
 import { GiArabicDoor, GiAtom } from "react-icons/gi";
 import { FaBomb } from "react-icons/fa6";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Score from "../components/Score";
 import { useGlobalContext } from "../contexts/Global";
@@ -20,29 +20,34 @@ const WINDOW_KEYS = [
 export default function Windows() {
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
   const { DATA, rightsTurn, turned } = useGlobalContext();
+
   const handleKeyDown = useCallback(
     (e) => {
-      console.log(e.key);
-      const nkey = parseInt(e.key);
-      if (nkey >= 0 && nkey <= 5) {
-        if (nkey === active && nkey !== 0) {
-          navigate("/questionpicker/" + WINDOW_KEYS[nkey - 1]);
-        } else setActive(nkey);
-      } else
-        switch (e.key) {
-          default:
-            break;
-        }
+      const nkey = Number(e.key);
+      if (!Number.isInteger(nkey) || nkey < 0 || nkey > WINDOW_KEYS.length) {
+        return;
+      }
+
+      if (nkey === activeRef.current && nkey !== 0) {
+        navigate("/questionpicker/" + WINDOW_KEYS[nkey - 1]);
+        return;
+      }
+
+      activeRef.current = nkey;
+      setActive(nkey);
     },
-    [active, navigate],
+    [navigate],
   );
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
+
   return (
     <motion.div
       className="Windows"
@@ -109,9 +114,7 @@ export default function Windows() {
           color="#D66754"
           danger
           showDangerBadge={false}
-          done={
-            DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done
-          }
+          done={DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done}
           active={active === 5}
           index={4}
         />

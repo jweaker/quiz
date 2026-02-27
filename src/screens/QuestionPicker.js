@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import "./QuestionPicker.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaBomb } from "react-icons/fa6";
 import IconButton from "../components/IconButton";
 import Score from "../components/Score";
@@ -12,35 +12,44 @@ export default function QuestionPicker() {
   const id = params.id;
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
   const { DATA, rightsTurn, turned } = useGlobalContext();
   const isntWindows = id === "puzzles" || id === "quickQuestions";
   const isMinefieldSection = !isntWindows && id === "misc";
   const section = isntWindows ? DATA.parts[id] : DATA.parts.windows[id];
   const sectionLength = section.length;
+
+  useEffect(() => {
+    activeRef.current = 0;
+    setActive(0);
+  }, [id]);
+
   const handleKeyDown = useCallback(
     (e) => {
-      console.log(e.key);
-      const nkey = parseInt(e.key);
+      const nkey = Number(e.key);
+      if (!Number.isInteger(nkey) || nkey < 0 || nkey > sectionLength) {
+        return;
+      }
 
-      if (nkey >= 0 && nkey <= sectionLength) {
-        if (nkey === active && nkey !== 0) {
-          if (isntWindows) navigate("/question/" + id + "/" + (nkey - 1));
-          else navigate("/question/windows/" + id + "/" + (nkey - 1));
-        } else setActive(nkey);
-      } else
-        switch (e.key) {
-          default:
-            break;
-        }
+      if (nkey === activeRef.current && nkey !== 0) {
+        if (isntWindows) navigate("/question/" + id + "/" + (nkey - 1));
+        else navigate("/question/windows/" + id + "/" + (nkey - 1));
+        return;
+      }
+
+      activeRef.current = nkey;
+      setActive(nkey);
     },
-    [active, id, isntWindows, navigate, sectionLength],
+    [id, isntWindows, navigate, sectionLength],
   );
+
   useEffect(() => {
     document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [handleKeyDown]);
+
   const windows = {
     naturalSciences: "العلوم الطبيعية",
     humanSciences: "العلوم الانسانية",
@@ -48,6 +57,7 @@ export default function QuestionPicker() {
     arts: "الادب والفنون",
     religion: "الدين والسيرة",
   };
+
   return (
     <motion.div
       className={

@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import "./Question.css";
 import { useNavigate, useParams } from "react-router-dom";
-import sourceAudio from "../assets/tick.wav";
+import sourceAudioTimer from "../assets/timer_tick_freesound.mp3";
+import sourceAudioChess from "../assets/ticking.mp3";
 import sourceAudio2 from "../assets/boom.mp3";
 import sourceAudioCorrect from "../assets/correct.mp3";
 import sourceAudioWrong from "../assets/wrong.mp3";
@@ -17,6 +18,7 @@ const DEBATE_TURN_COUNT = 2;
 const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac"];
 const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp"];
 const VIDEO_EXTENSIONS = ["mp4", "webm", "mov", "m4v", "ogv"];
+const TIMER_TICK_START_OFFSET = 0;
 const createPreloadedAudio = (source, options = {}) => {
   const sound = new Audio(source);
   sound.preload = "auto";
@@ -27,7 +29,14 @@ const createPreloadedAudio = (source, options = {}) => {
   return sound;
 };
 
-const TICK_AUDIO = createPreloadedAudio(sourceAudio, { loop: true, volume: 0.7 });
+const TIMER_TICK_AUDIO = createPreloadedAudio(sourceAudioTimer, {
+  loop: false,
+  volume: 0.92,
+});
+const CHESS_TICK_AUDIO = createPreloadedAudio(sourceAudioChess, {
+  loop: true,
+  volume: 0.7,
+});
 const BOOM_AUDIO = createPreloadedAudio(sourceAudio2, { volume: 1 });
 const CORRECT_AUDIO = createPreloadedAudio(sourceAudioCorrect, { volume: 1 });
 const WRONG_AUDIO = createPreloadedAudio(sourceAudioWrong, { volume: 1 });
@@ -65,6 +74,7 @@ export default function Question() {
   const [duration, setDuration] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
   const mediaRef = useRef(null);
+  const lastTimerSecondRef = useRef(null);
 
   // --- Poetic Chase: chess clock state ---
   const [leftMs, setLeftMs] = useState(100000);
@@ -142,7 +152,9 @@ export default function Question() {
   }, [hduration, type]);
 
   // Shared preloaded audio objects avoid re-init delays on each question route
-  const audio = TICK_AUDIO;
+  const timerAudio = TIMER_TICK_AUDIO;
+  const chessAudio = CHESS_TICK_AUDIO;
+  const audio = type === "poeticChase" ? chessAudio : timerAudio;
   const audio2 = BOOM_AUDIO;
   const audioCorrect = CORRECT_AUDIO;
   const audioWrong = WRONG_AUDIO;
@@ -150,6 +162,22 @@ export default function Question() {
   const playSfx = useCallback((sound) => {
     sound.currentTime = 0;
     sound.play().catch(() => { });
+  }, []);
+
+  const playTimerTick = useCallback(
+    (urgent = false) => {
+      timerAudio.loop = false;
+      timerAudio.pause();
+      timerAudio.currentTime = TIMER_TICK_START_OFFSET;
+      timerAudio.playbackRate = urgent ? 1.04 : 1;
+      timerAudio.volume = urgent ? 1 : 0.92;
+      timerAudio.play().catch(() => { });
+    },
+    [timerAudio],
+  );
+
+  const resetTimerTickSync = useCallback(() => {
+    lastTimerSecondRef.current = null;
   }, []);
 
   useEffect(() => {
@@ -178,7 +206,7 @@ export default function Question() {
   }, [audio]);
 
   const stopAllSounds = useCallback(() => {
-    [audio, audio2, audioCorrect, audioWrong, WHOOSH_AUDIO].forEach(
+    [timerAudio, chessAudio, audio2, audioCorrect, audioWrong, WHOOSH_AUDIO].forEach(
       stopAndResetSound,
     );
 
@@ -187,15 +215,16 @@ export default function Question() {
       media.pause();
       media.currentTime = 0;
     }
-  }, [audio, audio2, audioCorrect, audioWrong]);
+  }, [timerAudio, chessAudio, audio2, audioCorrect, audioWrong]);
 
   const triggerComplete = useCallback(() => {
     setIsComplete(true);
     audio.volume = 1;
     audio.playbackRate = 1;
     audio.currentTime = 0;
+    resetTimerTickSync();
     setTimeout(() => setIsComplete(false), 0);
-  }, [audio]);
+  }, [audio, resetTimerTickSync]);
 
   // --- Chess clock helpers ---
   const clearChessTimer = useCallback(() => {
@@ -289,6 +318,7 @@ export default function Question() {
             if (!isPlaying) {
               const startTeam = rightsTurn ? "right" : "left";
               startChessInterval(startTeam);
+              audio.loop = true;
               audio.currentTime = 0;
               audio.play().catch(() => { });
               setIsPlaying(true);
@@ -303,8 +333,10 @@ export default function Question() {
           if (isPlaying) {
             pauseAudio();
           } else {
-            if (type !== "speedQuestions" && type !== "audienceQuestions")
-              audio.play().catch(() => { });
+            if (type !== "speedQuestions" && type !== "audienceQuestions") {
+              audio.loop = false;
+              resetTimerTickSync();
+            }
             setIsPlaying(true);
           }
           break;
@@ -514,12 +546,15 @@ export default function Question() {
       audioCorrect,
       audioWrong,
       playSfx,
+      resetTimerTickSync,
     ],
   );
 
   useEffect(() => {
-    audio.loop = true;
-    audio.volume = 0.7;
+    timerAudio.loop = false;
+    timerAudio.volume = 0.92;
+    chessAudio.loop = true;
+    chessAudio.volume = 0.7;
     audio2.volume = 1;
     audioCorrect.volume = 1;
     audioWrong.volume = 1;
@@ -543,13 +578,27 @@ export default function Question() {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [
-    audio,
+    timerAudio,
+    chessAudio,
     audio2,
     audioCorrect,
     audioWrong,
     fileLoc,
     handleKeyDown,
   ]);
+
+  useEffect(() => {
+    if (!isPlaying) {
+      resetTimerTickSync();
+    }
+  }, [isPlaying, resetTimerTickSync]);
+
+  useEffect(() => {
+    if (!isPlaying) return;
+    if (type === "poeticChase") return;
+    if (type === "speedQuestions" || type === "audienceQuestions") return;
+    playTimerTick(false);
+  }, [isPlaying, type, playTimerTick]);
 
   const formatChessTime = (ms) => Math.ceil(ms / 1000);
   const timerColors = isMinefieldQuestion
@@ -680,17 +729,21 @@ export default function Question() {
             trailStrokeWidth={25}
             size={600}
             onUpdate={(remaining) => {
-              if (remaining === 14) audio.currentTime = 0;
-              audio.playbackRate =
-                duration === 0
-                  ? 0
-                  : remaining <= 15
-                    ? 2 - (remaining + duration - 15) / duration
-                    : 0.75;
-              audio.volume = 1;
+              if (!isPlaying) return;
+              const second = Math.ceil(remaining);
+              if (second <= 0) return;
+              if (lastTimerSecondRef.current === null) {
+                lastTimerSecondRef.current = second;
+                return;
+              }
+              if (second === lastTimerSecondRef.current) return;
+
+              playTimerTick(second <= 5);
+              lastTimerSecondRef.current = second;
             }}
             onComplete={() => {
               pauseAudio();
+              resetTimerTickSync();
               playSfx(audio2);
             }}
           >
