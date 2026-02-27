@@ -125,7 +125,17 @@ export default function App() {
       const editable = isEditableElement(e.target);
       switch (e.key) {
         case "Escape":
-          if (window.location.pathname !== "/") navigate(-1);
+          if (e.repeat) break;
+          e.preventDefault();
+          if (showViewportControls) {
+            setShowViewportControls(false);
+            break;
+          }
+          if (showShortcutHelp) {
+            setShowShortcutHelp(false);
+            break;
+          }
+          if (location.pathname !== "/") navigate(-1);
           break;
         case "u":
         case "U":
@@ -153,7 +163,14 @@ export default function App() {
           break;
       }
     },
-    [navigate, setRightsTurn, setTurned],
+    [
+      navigate,
+      location.pathname,
+      setRightsTurn,
+      setTurned,
+      showViewportControls,
+      showShortcutHelp,
+    ],
   );
 
   const shortcutSections = useMemo(() => {
@@ -200,6 +217,7 @@ export default function App() {
         { keys: "Enter", action: "Start/pause timer" },
         { keys: "Z", action: "Correct / advance" },
         { keys: "X", action: "Wrong / advance" },
+        { keys: "N", action: "Next question/set" },
         { keys: "1", action: "Next round / reset / phase change" },
         { keys: "E", action: "Rating/finalize action" },
         { keys: "F", action: "Show/hide media overlay" },
@@ -208,6 +226,9 @@ export default function App() {
       ];
       if (questionType === "poeticChase") {
         rows.push({ keys: "C", action: "Switch active clock/team" });
+      }
+      if (questionType === "windows") {
+        rows.push({ keys: "C", action: "Show answer (no sound)" });
       }
       if (questionType === "puzzles" || questionType === "windows") {
         rows.push({ keys: "M", action: "Toggle done state" });
@@ -227,9 +248,9 @@ export default function App() {
   }, [currentRoute, questionType]);
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown, true);
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown, true);
     };
   }, [handleKeyDown]);
   return (

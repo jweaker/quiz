@@ -4,10 +4,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2.2rem;
+  justify-content: flex-start;
+  gap: clamp(0.8rem, 2vh, 2rem);
   overflow: hidden;
-  padding: 2rem clamp(1rem, 4vw, 4rem);
+  padding: clamp(1.2rem, 3vh, 3rem) clamp(1rem, 4vw, 4rem);
   box-sizing: border-box;
 }
 
@@ -43,27 +43,137 @@
   animation-delay: -3.5s;
 }
 
-.Finale-logo,
+.Finale-logoMark,
 .Finale-title,
 .Finale-board,
-.Finale-winnerLabel {
+.Finale-winnerLabel,
+.Finale-message {
   position: relative;
   z-index: 1;
 }
 
-.Finale-logo {
-  width: clamp(11rem, 21vw, 24rem);
-  max-height: 28vh;
-  object-fit: contain;
-  filter:
-    drop-shadow(0 0 22px rgba(255, 221, 140, 0.45))
-    drop-shadow(0 18px 36px rgba(0, 0, 0, 0.45));
+.Finale-logoMark {
+  font-size: clamp(5.6rem, 11vw, 12rem);
+  margin: 0;
+  border: none;
+  background: transparent;
+  padding: 0.12em 0.85em 0.36em;
+  border-radius: 0;
+  position: relative;
+  filter: drop-shadow(0 0 18px rgba(240, 199, 94, 0.35));
+  animation: finale-logo-breathe 4.2s ease-in-out infinite;
+  box-shadow: none;
+  line-height: 1;
+}
+
+.Finale-logoMark::before {
+  content: "☾";
+  position: absolute;
+  top: 41%;
+  right: calc(100% + 0.2em);
+  transform: translateY(-50%);
+  color: rgba(240, 199, 94, 0.86);
+  font-size: 0.46em;
+  text-shadow:
+    0 0 12px rgba(240, 199, 94, 0.62),
+    0 0 24px rgba(212, 168, 83, 0.3);
+  pointer-events: none;
+}
+
+.Finale-logoText {
+  direction: rtl;
+  display: inline-block;
+  position: relative;
+  font-family: "Aref Ruqaa", "Amiri", "Scheherazade New", "Noto Naskh Arabic",
+    serif;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1.2;
+  padding-bottom: 0.08em;
+  color: #f9e3a4;
+  background-image: linear-gradient(
+    180deg,
+    #fff5d0 0%,
+    #f6dc9a 40%,
+    #dfb45e 72%,
+    #fff0bd 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 18px rgba(240, 199, 94, 0.46),
+    0 0 40px rgba(212, 168, 83, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.Finale-logoLantern {
+  position: absolute;
+  top: 1.45em;
+  right: 43.2%;
+  width: clamp(16px, 0.18em, 24px);
+  height: clamp(34px, 0.4em, 56px);
+  border: 1px solid rgba(255, 227, 164, 0.68);
+  border-radius: 0.08em;
+  background: linear-gradient(
+      180deg,
+      rgba(140, 89, 24, 0.86) 0 11%,
+      transparent 11% 16%,
+      rgba(140, 89, 24, 0.86) 16% 19%,
+      transparent 19% 81%,
+      rgba(140, 89, 24, 0.86) 81% 84%,
+      transparent 84% 89%,
+      rgba(120, 72, 21, 0.88) 89% 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(133, 88, 22, 0.78) 0 17%,
+      transparent 17% 83%,
+      rgba(133, 88, 22, 0.78) 83% 100%
+    ),
+    linear-gradient(180deg, #ffe3a0 0%, #efc068 52%, #c88d36 100%);
+  box-shadow:
+    0 0 6px rgba(255, 221, 146, 0.52),
+    0 0 14px rgba(240, 199, 94, 0.24);
+  transform-origin: 50% 0;
+  animation: finale-lantern-sway 4.2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.Finale-logoLantern::before {
+  content: "";
+  position: absolute;
+  top: -0.18em;
+  left: 50%;
+  width: 2px;
+  height: 0.18em;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 225, 154, 0.85) 0%,
+    rgba(191, 136, 49, 0.65) 100%
+  );
+  box-shadow: 0 0 8px rgba(240, 199, 94, 0.4);
+}
+
+.Finale-logoLantern::after {
+  content: "";
+  position: absolute;
+  inset: 0.17em 0.06em 0.16em;
+  border-radius: 0.08em;
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(255, 245, 194, 0.9) 0%,
+    rgba(240, 191, 88, 0.58) 60%,
+    rgba(240, 191, 88, 0) 100%
+  );
 }
 
 .Finale-title {
   margin: 0;
   font-family: "Aref Ruqaa", "Amiri", serif;
-  font-size: clamp(4rem, 6.4vw, 9.2rem);
+  font-size: clamp(3.4rem, 5.8vw, 7.2rem);
   font-weight: 700;
   color: var(--ramadan-cream);
   text-align: center;
@@ -74,11 +184,12 @@
 }
 
 .Finale-board {
-  width: min(135rem, 100%);
+  width: min(128rem, 100%);
+  margin-top: clamp(0.2rem, 1vh, 0.8rem);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: stretch;
-  column-gap: clamp(0.6rem, 2vw, 2rem);
+  column-gap: clamp(0.6rem, 1.5vw, 1.4rem);
 }
 
 .Finale-divider {
@@ -126,7 +237,7 @@
 .Finale-teamName {
   width: 100%;
   text-align: center;
-  font-size: clamp(2.4rem, 3vw, 4rem);
+  font-size: clamp(2rem, 2.5vw, 3.6rem);
   color: var(--ramadan-cream-soft);
   margin-bottom: 0.4rem;
   text-wrap: balance;
@@ -138,8 +249,10 @@
   text-align: center;
   font-family: "Cairo", sans-serif;
   font-weight: 900;
-  font-size: clamp(12rem, 16vw, 25rem);
+  font-size: clamp(8.4rem, 14vw, 19rem);
   line-height: 0.9;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
   text-shadow:
     0 0 24px rgba(255, 255, 255, 0.12),
     0 12px 24px rgba(0, 0, 0, 0.35);
@@ -160,6 +273,34 @@
   text-shadow: 0 5px 16px rgba(0, 0, 0, 0.42);
 }
 
+.Finale-message {
+  width: min(100rem, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: auto;
+  margin-bottom: 0.6rem;
+  padding: 1rem 1.4rem 1.2rem;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(255, 228, 156, 0.3);
+  background: linear-gradient(
+    180deg,
+    rgba(8, 20, 38, 0.72) 0%,
+    rgba(6, 15, 28, 0.56) 100%
+  );
+  backdrop-filter: blur(2px);
+}
+
+.Finale-message p {
+  margin: 0;
+  text-align: center;
+  color: #ffefc6;
+  font-size: clamp(2.1rem, 2.5vw, 3.3rem);
+  line-height: 1.24;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
 @keyframes finale-aurora-float {
   0%,
   100% {
@@ -170,23 +311,99 @@
   }
 }
 
+@keyframes finale-lantern-sway {
+  0% {
+    transform: rotate(3deg) translateY(0);
+  }
+
+  50% {
+    transform: rotate(-3deg) translateY(0.01em);
+  }
+
+  100% {
+    transform: rotate(3deg) translateY(0);
+  }
+}
+
+@keyframes finale-logo-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-2px) scale(1.01);
+  }
+}
+
 @media (max-width: 1024px) {
   .Finale {
     gap: 1.8rem;
   }
 
+  .Finale-logoMark {
+    font-size: clamp(4.4rem, 10vw, 8rem);
+  }
+
   .Finale-board {
     grid-template-columns: 1fr;
-    row-gap: 0.8rem;
+    row-gap: 0.5rem;
+    margin-top: 0;
+    width: min(64rem, 100%);
   }
 
   .Finale-divider {
     justify-self: center;
     transform: rotate(90deg);
-    line-height: 0.6;
+    line-height: 0.55;
+    font-size: clamp(3rem, 8vw, 5rem);
   }
 
   .Finale-teamCard-winner {
     transform: none;
+  }
+}
+
+@media (max-width: 700px) {
+  .Finale {
+    padding-top: clamp(0.8rem, 2.5vh, 1.4rem);
+    gap: 1.1rem;
+  }
+
+  .Finale-logoMark {
+    font-size: clamp(3.8rem, 12vw, 6rem);
+    padding: 0.1em 0.72em 0.31em;
+  }
+
+  .Finale-logoMark::before {
+    right: calc(100% + 0.16em);
+    font-size: 0.4em;
+  }
+
+  .Finale-logoLantern {
+    top: 1.4em;
+    right: 40%;
+    width: clamp(12px, 0.15em, 18px);
+    height: clamp(26px, 0.33em, 34px);
+  }
+
+  .Finale-title {
+    font-size: clamp(2.8rem, 9vw, 4.2rem);
+  }
+
+  .Finale-teamScore {
+    font-size: clamp(7rem, 20vw, 10.5rem);
+  }
+
+  .Finale-teamName {
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+  }
+
+  .Finale-winnerLabel {
+    font-size: clamp(1.8rem, 5vw, 2.4rem);
+  }
+
+  .Finale-message p {
+    font-size: clamp(1.8rem, 4.6vw, 2.3rem);
   }
 }

@@ -15,10 +15,14 @@ import { GiInfinity } from "react-icons/gi";
 
 const DEBATE_TURN_DURATION = 100;
 const DEBATE_TURN_COUNT = 2;
+const POETIC_CHASE_TURN_DURATION_SECONDS = 90;
+const POETIC_CHASE_TURN_DURATION_MS = POETIC_CHASE_TURN_DURATION_SECONDS * 1000;
 const AUDIO_EXTENSIONS = ["mp3", "wav", "ogg", "m4a", "aac", "flac"];
 const IMAGE_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg", "bmp"];
 const VIDEO_EXTENSIONS = ["mp4", "webm", "mov", "m4v", "ogv"];
 const TIMER_TICK_START_OFFSET = 0;
+const TIMER_TICK_VOLUME = 0.96;
+const CHESS_TICK_VOLUME = 0.75;
 const createPreloadedAudio = (source, options = {}) => {
   const sound = new Audio(source);
   sound.preload = "auto";
@@ -31,11 +35,11 @@ const createPreloadedAudio = (source, options = {}) => {
 
 const TIMER_TICK_AUDIO = createPreloadedAudio(sourceAudioTimer, {
   loop: false,
-  volume: 0.92,
+  volume: TIMER_TICK_VOLUME,
 });
 const CHESS_TICK_AUDIO = createPreloadedAudio(sourceAudioChess, {
   loop: true,
-  volume: 0.7,
+  volume: CHESS_TICK_VOLUME,
 });
 const BOOM_AUDIO = createPreloadedAudio(sourceAudio2, { volume: 1 });
 const CORRECT_AUDIO = createPreloadedAudio(sourceAudioCorrect, { volume: 1 });
@@ -68,20 +72,23 @@ export default function Question() {
   const [isComplete, setIsComplete] = useState(false);
   const id = params.id;
   const isMinefieldQuestion = type === "windows" && id === "misc";
+  const isArtsLiteratureFirstQuestion =
+    type === "windows" && id === "arts" && params.index === "0";
   const [index, setIndex] = useState(parseInt(params.index ?? 0));
   const [zdone, setZdone] = useState(false);
   const [file, setFile] = useState(null);
   const [duration, setDuration] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
   const mediaRef = useRef(null);
   const lastTimerSecondRef = useRef(null);
 
   // --- Poetic Chase: chess clock state ---
-  const [leftMs, setLeftMs] = useState(100000);
-  const [rightMs, setRightMs] = useState(100000);
+  const [leftMs, setLeftMs] = useState(POETIC_CHASE_TURN_DURATION_MS);
+  const [rightMs, setRightMs] = useState(POETIC_CHASE_TURN_DURATION_MS);
   const [chessActive, setChessActive] = useState(null); // 'right' | 'left' | null
-  const leftMsRef = useRef(100000);
-  const rightMsRef = useRef(100000);
+  const leftMsRef = useRef(POETIC_CHASE_TURN_DURATION_MS);
+  const rightMsRef = useRef(POETIC_CHASE_TURN_DURATION_MS);
   const chessActiveRef = useRef(null);
   const chessIntervalRef = useRef(null);
 
@@ -103,8 +110,11 @@ export default function Question() {
             : currentWindow
         : (DATA.parts[type] ??
           (type === "poeticChase"
-            ? { text: "المطاردة الشعرية", duration: 100 }
-          : type === "askSmartly"
+            ? {
+              text: "المطاردة الشعرية",
+              duration: POETIC_CHASE_TURN_DURATION_SECONDS,
+            }
+            : type === "askSmartly"
               ? {
                 text: "اسأل بذكاء",
                 duration: 120,
@@ -139,6 +149,10 @@ export default function Question() {
       : null);
   const hasVisualMedia = Boolean(file) && mediaType !== "audio";
   const isAudioMedia = Boolean(file) && mediaType === "audio";
+  const quickSubQuestionsCount = Array.isArray(currentWindow?.questions)
+    ? currentWindow.questions.length
+    : 0;
+  const quickSetTitle = currentWindow?.title ?? DATA.parts.quickQuestions?.[0]?.title;
 
   // Set initial duration
   useEffect(() => {
@@ -166,14 +180,15 @@ export default function Question() {
 
   const playTimerTick = useCallback(
     (urgent = false) => {
+      if (isVideoPlaying) return;
       timerAudio.loop = false;
       timerAudio.pause();
       timerAudio.currentTime = TIMER_TICK_START_OFFSET;
       timerAudio.playbackRate = urgent ? 1.04 : 1;
-      timerAudio.volume = urgent ? 1 : 0.92;
+      timerAudio.volume = urgent ? 1 : TIMER_TICK_VOLUME;
       timerAudio.play().catch(() => { });
     },
-    [timerAudio],
+    [isVideoPlaying, timerAudio],
   );
 
   const resetTimerTickSync = useCallback(() => {
@@ -291,6 +306,39 @@ export default function Question() {
     startChessInterval(next);
   }, [rightsTurn, startChessInterval]);
 
+  const goToNextQuestion = useCallback(() => {
+    if (
+      !["quickQuestions", "puzzles", "speedQuestions", "audienceQuestions"].includes(
+        type,
+      )
+    ) {
+      return;
+    }
+
+    const section = DATA.parts[type];
+    if (!Array.isArray(section) || section.length === 0) {
+      return;
+    }
+
+    const currentId = Number.parseInt(id ?? "0", 10);
+    const normalizedId = Number.isNaN(currentId) ? 0 : currentId;
+    const nextId = (normalizedId + 1) % section.length;
+
+    setIsPlaying(false);
+    setIsComplete(false);
+    pauseAudio();
+    resetTimerTickSync();
+
+    if (type === "quickQuestions") {
+      setIndex(0);
+      setQuickPhase("A");
+      setZdone(false);
+      setDuration(60);
+    }
+
+    navigate(`/question/${type}/${nextId}`, { replace: true });
+  }, [DATA.parts, id, navigate, pauseAudio, resetTimerTickSync, type]);
+
   // Cleanup chess timer on unmount
   useEffect(() => {
     return () => clearChessTimer();
@@ -362,8 +410,7 @@ export default function Question() {
             playSfx(audioCorrect);
             switchChessClock();
           } else if (type === "quickQuestions") {
-            const totalSubQuestions =
-              DATA.parts.quickQuestions[0].questions.length;
+            const totalSubQuestions = quickSubQuestionsCount;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
               if (rightsTurn) setRightScore((prev) => prev + 1);
@@ -399,8 +446,7 @@ export default function Question() {
             playSfx(audioWrong);
             switchChessClock();
           } else if (type === "quickQuestions") {
-            const totalSubQuestions =
-              DATA.parts.quickQuestions[0].questions.length;
+            const totalSubQuestions = quickSubQuestionsCount;
             if (index + 1 < totalSubQuestions) {
               setIndex((prev) => prev + 1);
             } else {
@@ -418,6 +464,10 @@ export default function Question() {
         case "C":
           if (type === "poeticChase") {
             switchChessClock();
+          } else if (type === "windows") {
+            setTurned(true);
+            pauseAudio();
+            setIsComplete((prev) => !prev);
           }
           break;
 
@@ -514,6 +564,11 @@ export default function Question() {
           break;
         }
 
+        case "n":
+        case "N":
+          goToNextQuestion();
+          break;
+
         default:
           break;
       }
@@ -525,7 +580,7 @@ export default function Question() {
       index,
       id,
       zdone,
-      DATA,
+      quickSubQuestionsCount,
       question,
       navigate,
       pauseAudio,
@@ -547,14 +602,15 @@ export default function Question() {
       audioWrong,
       playSfx,
       resetTimerTickSync,
+      goToNextQuestion,
     ],
   );
 
   useEffect(() => {
     timerAudio.loop = false;
-    timerAudio.volume = 0.92;
+    timerAudio.volume = TIMER_TICK_VOLUME;
     chessAudio.loop = true;
-    chessAudio.volume = 0.7;
+    chessAudio.volume = CHESS_TICK_VOLUME;
     audio2.volume = 1;
     audioCorrect.volume = 1;
     audioWrong.volume = 1;
@@ -597,8 +653,24 @@ export default function Question() {
     if (!isPlaying) return;
     if (type === "poeticChase") return;
     if (type === "speedQuestions" || type === "audienceQuestions") return;
+    if (isVideoPlaying) return;
     playTimerTick(false);
-  }, [isPlaying, type, playTimerTick]);
+  }, [isPlaying, type, isVideoPlaying, playTimerTick]);
+
+  useEffect(() => {
+    if (mediaType === "video" && showOverlay && file) return;
+    setIsVideoPlaying(false);
+  }, [mediaType, showOverlay, file]);
+
+  const handleVideoPlay = useCallback(() => {
+    setIsVideoPlaying(true);
+    timerAudio.pause();
+    chessAudio.pause();
+  }, [timerAudio, chessAudio]);
+
+  const handleVideoPause = useCallback(() => {
+    setIsVideoPlaying(false);
+  }, []);
 
   const formatChessTime = (ms) => Math.ceil(ms / 1000);
   const timerColors = isMinefieldQuestion
@@ -643,6 +715,7 @@ export default function Question() {
         className={
           "Question-title" +
           (isMinefieldQuestion ? " Question-title-danger" : "") +
+          (isArtsLiteratureFirstQuestion ? " Question-title-left" : "") +
           (["poeticChase", "debate", "askSmartly"].includes(type) ||
             (["quickQuestions", "speedQuestions"].includes(type) && !isPlaying)
             ? " Question-title-6"
@@ -652,7 +725,7 @@ export default function Question() {
       >
         {!isPlaying
           ? type === "quickQuestions"
-            ? DATA.parts.quickQuestions[0].title
+            ? quickSetTitle
             : type === "speedQuestions"
               ? "سؤال السرعة"
               : text
@@ -770,6 +843,9 @@ export default function Question() {
             autoPlay
             loop
             playsInline
+            onPlay={handleVideoPlay}
+            onPause={handleVideoPause}
+            onEnded={handleVideoPause}
           />
         )}
       </div>

@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { useGlobalContext } from "../contexts/Global";
 import "@fontsource/aref-ruqaa/arabic-700.css";
-import logo from "../assets/logom.png";
 import "./Finale.css";
 
 const getScore = (value) => {
@@ -23,6 +22,13 @@ export default function Finale() {
   const winnerLabel = winner
     ? `الفائز: ${winner === "right" ? DATA.rightTeamName : DATA.leftTeamName}`
     : "تعادل";
+  const winnerTeamName =
+    winner === "right"
+      ? DATA.rightTeamName
+      : winner === "left"
+        ? DATA.leftTeamName
+        : "الفريقين";
+  const closingMessage = `مبارك لفريق ${winnerTeamName} بالفوز!`;
 
   return (
     <motion.div
@@ -35,14 +41,15 @@ export default function Finale() {
       <div className="Finale-aurora Finale-aurora-left" />
       <div className="Finale-aurora Finale-aurora-right" />
 
-      <motion.img
-        className="Finale-logo"
-        src={logo}
-        alt="شعار بشائر المعرفة"
+      <motion.span
+        className="Finale-logoMark"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1, duration: 0.5 }}
-      />
+      >
+        <span className="Finale-logoText">بشائر المعرفة</span>
+        <span className="Finale-logoLantern" aria-hidden="true" />
+      </motion.span>
 
       <motion.h1
         className="Finale-title"
@@ -90,6 +97,16 @@ export default function Finale() {
       >
         {winnerLabel}
       </motion.p>
+
+      <motion.div
+        className="Finale-message"
+        initial={{ opacity: 0, y: 18 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.45 }}
+      >
+        <p>{closingMessage}</p>
+        <p>شكرا لحضوركم نراكم في الحلقة القادمة</p>
+      </motion.div>
     </motion.div>
   );
 }
