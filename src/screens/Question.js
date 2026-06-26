@@ -270,8 +270,6 @@ export default function Question() {
             chessActiveRef.current = null;
             setChessActive(null);
             pauseAudio();
-            const bonus = Math.round(leftMsRef.current / 5000);
-            if (bonus > 0) setLeftScore((prev) => prev + bonus);
             setTurned(true);
           }
         } else {
@@ -283,8 +281,6 @@ export default function Question() {
             chessActiveRef.current = null;
             setChessActive(null);
             pauseAudio();
-            const bonus = Math.round(rightMsRef.current / 5000);
-            if (bonus > 0) setRightScore((prev) => prev + bonus);
             setTurned(true);
           }
         }

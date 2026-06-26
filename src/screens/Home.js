@@ -43,10 +43,7 @@ export default function Home() {
       },
       2: () => navigate(`/windows`),
       3: () => navigate(`/question/poeticChase`),
-      4: () => {
-        if (DATA.parts.puzzles.length > 1) navigate(`/questionpicker/puzzles`);
-        else navigate(`/question/puzzles/0`);
-      },
+      4: () => navigate(`/question/puzzles/0`),
       5: () => navigate(`/question/debate`),
       6: () => navigate(`/question/askSmartly`),
       7: () => navigate(`/question/quickQuestions/0`),

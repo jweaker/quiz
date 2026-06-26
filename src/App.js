@@ -3,6 +3,9 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import "./App.css";
 import { useGlobalContext } from "./contexts/Global";
+import sourceAudioClap from "./assets/shortcut_clap.mp3";
+import sourceAudioDisappointedAudience from "./assets/shortcut_disappointed_audience.mp3";
+import sourceAudioWhoo from "./assets/shortcut_whoo.mp3";
 import Home from "./screens/Home";
 import Question from "./screens/Question";
 import QuestionPicker from "./screens/QuestionPicker";
@@ -79,6 +82,33 @@ const isEditableElement = (target) =>
     target.tagName === "TEXTAREA" ||
     target.tagName === "SELECT" ||
     target.isContentEditable);
+
+const createPreloadedAudio = (source, options = {}) => {
+  const sound = new Audio(source);
+  sound.preload = "auto";
+  sound.volume = options.volume ?? 1;
+  sound.playbackRate = options.playbackRate ?? 1;
+  sound.load();
+  return sound;
+};
+
+const APPLAUSE_AUDIO = createPreloadedAudio(sourceAudioClap, {
+  volume: 1,
+  playbackRate: 1.12,
+});
+const WHOO_AUDIO = createPreloadedAudio(sourceAudioWhoo, { volume: 1 });
+const DISAPPOINTMENT_AUDIO = createPreloadedAudio(
+  sourceAudioDisappointedAudience,
+  {
+    volume: 0.95,
+  },
+);
+
+const playOneShot = (sound) => {
+  sound.pause();
+  sound.currentTime = 0;
+  sound.play().catch(() => {});
+};
 
 export default function App() {
   const [hideCursor, setHideCursor] = useState(false);
@@ -159,6 +189,19 @@ export default function App() {
           if (editable) break;
           setShowShortcutHelp((current) => !current);
           break;
+        case "a":
+        case "A":
+          if (editable || e.repeat) break;
+          e.preventDefault();
+          playOneShot(APPLAUSE_AUDIO);
+          window.setTimeout(() => playOneShot(WHOO_AUDIO), 240);
+          break;
+        case "b":
+        case "B":
+          if (editable || e.repeat) break;
+          e.preventDefault();
+          playOneShot(DISAPPOINTMENT_AUDIO);
+          break;
         default:
           break;
       }
@@ -183,6 +226,8 @@ export default function App() {
           { keys: "H", action: "Show/hide cheat sheet" },
           { keys: "V", action: "Show/hide viewport settings" },
           { keys: "U", action: "Show/hide cursor" },
+          { keys: "A", action: "Play clap + whoo" },
+          { keys: "B", action: "Play boo" },
         ],
       },
     ];
