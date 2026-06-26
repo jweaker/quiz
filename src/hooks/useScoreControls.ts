@@ -26,7 +26,11 @@ import { useShowStore } from '@/state'
 export function useScoreControls(): void {
   // Helper to add score to active team
   const addActiveScore = (points: number) => {
-    const { rightsTurn, addRightScore, addLeftScore } = useShowStore.getState()
+    const { rightsTurn, addRightScore, addLeftScore, currentSection } = useShowStore.getState()
+
+    // In Windows section, number keys are used for category/question selection.
+    if (currentSection === 'windows') return
+
     if (rightsTurn) {
       addRightScore(points)
     } else {

@@ -26,7 +26,7 @@ export function PassControls() {
       {passActive && (
         <div className="p-3 border border-amber-500/50 bg-amber-500/10 rounded-lg">
           <p className="text-sm font-medium text-amber-600 dark:text-amber-400 text-center">
-            تمرير نشط — الدور لـ {passedToTeamName}
+            تمرير نشط — الدور لـ {passedToTeamName} (بدون نقاط)
           </p>
         </div>
       )}
@@ -69,6 +69,12 @@ export function PassControls() {
             <kbd className="px-1.5 py-0.5 text-xs bg-muted rounded ms-2">x</kbd>
           </Button>
         </div>
+      </div>
+
+      <div className="rounded border border-border bg-muted/30 p-2 text-[10px] text-muted-foreground space-y-0.5">
+        <p>صحيح: +1</p>
+        <p>خطأ: +0</p>
+        <p>تمرير: +0</p>
       </div>
 
       {/* Verse count display */}

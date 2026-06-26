@@ -181,6 +181,10 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
+.hide-cursor {
+  cursor: none;
+}
+
 /*
  * Score animations
  */

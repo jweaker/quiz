@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useShowStore, useTimerStore } from '@/state'
 import { ThemeToggle } from '@/components/operator/ThemeToggle'
 import { ScoringPanel } from '@/components/operator/ScoringPanel'
@@ -64,6 +64,8 @@ export default function OperatorControls() {
 
   // Subscribe to current section to conditionally enable letter display
   const currentSection = useShowStore((s) => s.currentSection)
+  const data = useShowStore((s) => s.data)
+  const previousSectionRef = useRef<string | null>(null)
 
   // Letter display (a-z hotkeys) only active during poetic-chase
   useLetterDisplay(currentSection === 'poetic-chase')
@@ -76,6 +78,57 @@ export default function OperatorControls() {
       setAdaptiveMode('section')
     }
   }, [currentSection])
+
+  // Section-change timer normalization:
+  // ensure timers/letters do not bleed between sections.
+  useEffect(() => {
+    if (previousSectionRef.current === currentSection) return
+    previousSectionRef.current = currentSection
+
+    const timer = useTimerStore.getState()
+    const puzzleDuration = data?.settings?.puzzleDuration ?? 90
+    const debateDuration = data?.settings?.debateDuration ?? 60
+    const rapidDuration = data?.settings?.rapidQuestionsDuration ?? 60
+    const askDuration = data?.settings?.askIntelligentlyDuration ?? 120
+    const poeticDurationMs = (data?.settings?.poeticChaseDuration ?? 100) * 1000
+
+    // Reset running state and transient overlays on every section jump.
+    timer.setCountdownRunning(false)
+    timer.setActiveTimer(null)
+    timer.setRequiredLetter(null)
+
+    if (!currentSection) {
+      timer.resetTimer()
+      timer.resetChessClock(poeticDurationMs)
+      return
+    }
+
+    switch (currentSection) {
+      case 'poetic-chase':
+        timer.resetTimer()
+        timer.resetChessClock(poeticDurationMs)
+        break
+      case 'ask-intelligently':
+        timer.setCountdown(askDuration)
+        break
+      case 'rapid-questions':
+        timer.setCountdown(rapidDuration)
+        break
+      case 'puzzle':
+        timer.setCountdown(puzzleDuration)
+        break
+      case 'debate':
+        timer.setCountdown(debateDuration)
+        break
+      case 'windows':
+      case 'speed-question':
+      case 'audience-questions':
+      default:
+        timer.resetTimer()
+        timer.resetChessClock(poeticDurationMs)
+        break
+    }
+  }, [currentSection, data?.settings?.askIntelligentlyDuration, data?.settings?.debateDuration, data?.settings?.poeticChaseDuration, data?.settings?.puzzleDuration, data?.settings?.rapidQuestionsDuration])
 
   // Tab cycling: backtick cycles through scoring -> countdown -> chess-clock -> audio -> scoring
   // (section mode activates automatically, not via backtick)
@@ -117,7 +170,6 @@ export default function OperatorControls() {
   // Show store
   const leftScore = useShowStore((s) => s.leftScore)
   const rightScore = useShowStore((s) => s.rightScore)
-  const data = useShowStore((s) => s.data)
   const rightsTurn = useShowStore((s) => s.rightsTurn)
   const turned = useShowStore((s) => s.turned)
 

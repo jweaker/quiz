@@ -14,7 +14,7 @@ export function PuzzlePanel() {
   const puzzles = data?.parts.puzzles ?? []
   const puzzleIndex = sectionState.questionIndex
   const currentPuzzle = puzzles[puzzleIndex]
-  const duration = currentPuzzle?.duration ?? 90
+  const duration = currentPuzzle?.duration ?? data?.settings?.puzzleDuration ?? 90
 
   // T: toggle timer (start/stop). Only resets if at 0 (supports pause/resume).
   useHotkeys('t', () => {

@@ -7,7 +7,7 @@ import { useShowStore } from "../state";
 const WINDOW_NAMES: Record<string, string> = {
   naturalSciences: "العلوم الطبيعية",
   humanSciences: "العلوم الانسانية",
-  misc: "اسئلة عامة",
+  misc: "حقل الالغام",
   arts: "الادب والفنون",
   religion: "الدين والسيرة",
 };

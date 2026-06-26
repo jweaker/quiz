@@ -76,11 +76,10 @@ export const useTimerStore = create<TimerState>()(
       {
         name: 'timer-storage', // localStorage key (different from show-storage)
         storage: createJSONStorage(() => localStorage),
-        partialize: (state) => {
-          // Exclude requiredLetter from persistence — it's ephemeral UI state
-          // that should not survive page reloads (causes stuck letter overlay)
-          const { requiredLetter, ...rest } = state
-          return rest
+        partialize: () => {
+          // Timer/chess-clock values are runtime-only and should never survive reloads.
+          // Persisting them causes stale timers to appear at incorrect moments.
+          return {}
         },
       }
     ),

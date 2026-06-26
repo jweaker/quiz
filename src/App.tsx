@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { useCallback, useEffect, useState } from "react";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useShowStore } from "./state";
 import type { Episode } from "./lib/episodeSchema";
 import defaultData from "./config/data.json";
@@ -19,6 +19,12 @@ const Settings = lazy(() => import("./screens/operator/Settings"));
 const EpisodeEditor = lazy(() => import("./screens/editor/EpisodeEditor"));
 
 export default function App() {
+  const [hideCursor, setHideCursor] = useState(false);
+  const swapSides = useShowStore((s) => s.swapSides);
+  const setTurned = useShowStore((s) => s.setTurned);
+  const location = useLocation();
+  const navigate = useNavigate();
+
   // Load default episode data if store has none (first load or after reset)
   useEffect(() => {
     if (useShowStore.getState().data === null) {
@@ -26,9 +32,53 @@ export default function App() {
     }
   }, []);
 
+  const isLegacyPath =
+    !location.pathname.startsWith("/operator") &&
+    !location.pathname.startsWith("/audience") &&
+    !location.pathname.startsWith("/editor");
+
+  const handleGlobalKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isLegacyPath) return;
+
+      const target = e.target as HTMLElement | null;
+      const isTyping =
+        target?.tagName === "INPUT" ||
+        target?.tagName === "TEXTAREA" ||
+        target?.isContentEditable;
+      if (isTyping) return;
+
+      switch (e.key) {
+        case "Escape":
+          if (window.location.pathname !== "/") navigate(-1);
+          break;
+        case "c":
+        case "C":
+          setHideCursor((prev) => !prev);
+          break;
+        case "s":
+        case "S":
+          swapSides();
+          setTurned(true);
+          break;
+        default:
+          break;
+      }
+    },
+    [isLegacyPath, navigate, setTurned, swapSides],
+  );
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleGlobalKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleGlobalKeyDown);
+    };
+  }, [handleGlobalKeyDown]);
+
   return (
     <Suspense fallback={null}>
-      <Routes>
+      <div className={hideCursor ? "hide-cursor" : ""}>
+        <Routes>
         {/* Root redirects to operator panel */}
         <Route path="/" element={<Navigate to="/operator" replace />} />
 
@@ -92,7 +142,8 @@ export default function App() {
             <Rate />
           </div>
         } />
-      </Routes>
+        </Routes>
+      </div>
     </Suspense>
   );
 }

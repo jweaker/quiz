@@ -7,7 +7,7 @@ import { useTimerStore } from '@/state'
  */
 export function TimerDisplay() {
   const countdownRemaining = useTimerStore((s) => s.countdownRemaining)
-  const countdownRunning = useTimerStore((s) => s.countdownRunning)
+  const countdownDuration = useTimerStore((s) => s.countdownDuration)
   const rightTimeMs = useTimerStore((s) => s.rightTimeMs)
   const leftTimeMs = useTimerStore((s) => s.leftTimeMs)
   const activeTimer = useTimerStore((s) => s.activeTimer)
@@ -15,7 +15,7 @@ export function TimerDisplay() {
 
   // Determine which mode to display
   const isChessClockActive = activeTimer !== null || rightTimeMs < 100_000 || leftTimeMs < 100_000
-  const isCountdownActive = countdownRunning
+  const isCountdownActive = countdownDuration > 0 && countdownRemaining > 0
 
   // If nothing is active, don't render
   if (!isChessClockActive && !isCountdownActive) {

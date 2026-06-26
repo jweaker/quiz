@@ -9,7 +9,7 @@ export function DebatePanel() {
   const isActive = currentSection === 'debate'
 
   const debateTopic = data?.parts.debate?.text ?? 'النقاش'
-  const debateDuration = data?.parts.debate?.duration ?? 60
+  const debateDuration = data?.parts.debate?.duration ?? data?.settings?.debateDuration ?? 60
 
   // Local state for vote entry (before confirmation)
   const [judgesRight, setJudgesRight] = useState(0)

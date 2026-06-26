@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useShowStore, useTimerStore } from '@/state'
 import { useChessClock } from '@/hooks/useChessClock'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -19,6 +20,12 @@ export function PoeticChasePanel() {
   const isActive = currentSection === 'poetic-chase'
   const verseCount = useTimerStore((s) => s.verseCount)
   const requiredLetter = useTimerStore((s) => s.requiredLetter)
+  const addRightScore = useShowStore((s) => s.addRightScore)
+  const addLeftScore = useShowStore((s) => s.addLeftScore)
+  const setTurned = useShowStore((s) => s.setTurned)
+  const rightTimeMs = useTimerStore((s) => s.rightTimeMs)
+  const leftTimeMs = useTimerStore((s) => s.leftTimeMs)
+  const [timeBonusApplied, setTimeBonusApplied] = useState(false)
 
   const {
     activeTimer,
@@ -30,28 +37,58 @@ export function PoeticChasePanel() {
     switchClock,
     pauseClock,
     resetClock,
-  } = useChessClock()
+  } = useChessClock({
+    onTimerExpired: (expiredTeam) => {
+      if (timeBonusApplied) return
+      const timer = useTimerStore.getState()
+      const opponentRemainingMs = expiredTeam === 'right' ? timer.leftTimeMs : timer.rightTimeMs
+      const bonus = Math.floor(opponentRemainingMs / 5000)
+      if (bonus > 0) {
+        if (expiredTeam === 'right') addLeftScore(bonus)
+        else addRightScore(bonus)
+      }
+      setTurned(true)
+      setTimeBonusApplied(true)
+    },
+  })
 
   // Chess clock keyboard shortcuts
   useHotkeys('BracketLeft', () => {
     startClock('right')
-  }, { enabled: isActive, enableOnFormTags: false }, [isActive])
+  }, { enabled: isActive, enableOnFormTags: false }, [isActive, startClock])
 
   useHotkeys('BracketRight', () => {
     startClock('left')
-  }, { enabled: isActive, enableOnFormTags: false }, [isActive])
+  }, { enabled: isActive, enableOnFormTags: false }, [isActive, startClock])
 
   useHotkeys('Backslash', () => {
     switchClock()
-  }, { enabled: isActive, enableOnFormTags: false }, [isActive])
+  }, { enabled: isActive, enableOnFormTags: false }, [isActive, switchClock])
 
   useHotkeys('p', () => {
     pauseClock()
-  }, { enabled: isActive, enableOnFormTags: false }, [isActive])
+  }, { enabled: isActive, enableOnFormTags: false }, [isActive, pauseClock])
 
-  useHotkeys('shift+p', () => {
+  const handleResetClock = () => {
     resetClock()
-  }, { enabled: isActive, enableOnFormTags: false }, [isActive])
+    setTimeBonusApplied(false)
+  }
+
+  useHotkeys('shift+p', handleResetClock, { enabled: isActive, enableOnFormTags: false }, [isActive, handleResetClock])
+
+  const finalizePoeticChase = () => {
+    if (timeBonusApplied) return
+    pauseClock()
+    const timer = useTimerStore.getState()
+    const rightBonus = Math.floor(timer.rightTimeMs / 5000)
+    const leftBonus = Math.floor(timer.leftTimeMs / 5000)
+    if (rightBonus > 0) addRightScore(rightBonus)
+    if (leftBonus > 0) addLeftScore(leftBonus)
+    setTurned(true)
+    setTimeBonusApplied(true)
+  }
+
+  useHotkeys('e', finalizePoeticChase, { enabled: isActive, enableOnFormTags: false }, [isActive, finalizePoeticChase])
 
   // Format time display
   const formatTime = (seconds: number) => {
@@ -157,7 +194,7 @@ export function PoeticChasePanel() {
         <Button
           variant="outline"
           className="h-7 px-2 text-xs"
-          onClick={() => resetClock()}
+          onClick={handleResetClock}
         >
           <RotateCcw className="size-3 me-1" />
           إعادة
@@ -167,6 +204,19 @@ export function PoeticChasePanel() {
 
       {/* Pass mechanic controls */}
       <PassControls />
+
+      <Button
+        variant="outline"
+        className="h-7 px-2 text-xs"
+        onClick={finalizePoeticChase}
+      >
+        إنهاء واحتساب الوقت
+        <kbd className="px-1 py-0 text-[9px] bg-muted rounded ms-1">E</kbd>
+      </Button>
+
+      <div className="rounded border border-border bg-muted/30 p-2 text-[10px] text-muted-foreground">
+        تحويل الوقت إلى نقاط: الأيمن {Math.floor(rightTimeMs / 5000)} · الأيسر {Math.floor(leftTimeMs / 5000)}
+      </div>
 
       {/* Letter hint */}
       <div className="rounded border border-border bg-muted/30 p-2 text-[10px] text-muted-foreground space-y-0.5">

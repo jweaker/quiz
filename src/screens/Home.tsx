@@ -49,7 +49,7 @@ export default function Home() {
         4: () => navigate(`/question/debate`),
         5: () => navigate(`/question/poeticChase`),
         6: () => navigate(`/question/askSmartly`),
-        7: () => navigate(`/questionpicker/quickQuestions`),
+        7: () => navigate(`/question/quickQuestions/0`),
         8: () => {
           if (audienceQuestion < DATA.parts.audienceQuestions?.length) {
             navigate(`/question/audienceQuestions/${audienceQuestion}`);
@@ -98,7 +98,7 @@ export default function Home() {
   // Configuration for icon buttons to avoid repetitive code.
   const iconButtons = [
     { key: 1, title: "سؤال السرعة", Icon: MdSports, color: "tomato" },
-    { key: 2, title: "النوافذ", Icon: MdWindow },
+    { key: 2, title: "نوافذ المعرفة", Icon: MdWindow },
     { key: 3, title: "اللغز", Icon: IoExtensionPuzzle },
     { key: 4, title: "المناظرة", Icon: MdQuestionAnswer },
     {

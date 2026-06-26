@@ -48,7 +48,7 @@ export default function Windows() {
     <div className="w-screen h-screen m-0 p-0 flex flex-col items-center justify-center [animation:starta_0.5s_ease-in-out_forwards_1] scale-0 translate-y-[500px] blur-[1.5rem]">
       <Score right turn={rightsTurn && turned} />
       <Score turn={!rightsTurn && turned} />
-      <h1 className="text-white text-[15rem] m-0 mt-[4rem] [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)]">النوافذ</h1>
+      <h1 className="text-white text-[15rem] m-0 mt-[4rem] [text-shadow:0px_5px_10px_rgba(0,0,0,0.6)]">نوافذ المعرفة</h1>
       <div className="w-full m-0 p-0 flex justify-center items-center flex-row-reverse">
         <IconButton
           title="الدين و السيرة"
@@ -88,7 +88,7 @@ export default function Windows() {
           active={active === 4}
         />
         <IconButton
-          title="اسئلة عامة"
+          title="حقل الالغام"
           Icon={FaShapes}
           done={
             DATA.parts.windows.misc[0]?.done && DATA.parts.windows.misc[1]?.done
